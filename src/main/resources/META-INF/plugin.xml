@@ -5,14 +5,18 @@
     <vendor email="ggastald@redhat.com" url="http://forge.jboss.org">Red Hat, Inc</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <small>most HTML tags may be used</small>
+      JBoss Forge 2.x Support<br>
+      <small>Execute wizards and interact with the container</small>
       ]]></description>
 
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
-      ]]>
+    <change-notes>   <![CDATA[
+          v0.0.1<br>
+          <small>
+            <ul>
+              <li>Initial Distribution</li>
+            </ul>
+          </small>
+          ]]>
     </change-notes>
 
     <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
@@ -25,7 +29,6 @@
     -->
 
     <application-components>
-        <!-- Add your application components here -->
         <component>
             <implementation-class>org.jboss.forge.plugin.idea.loader.ForgeLoader</implementation-class>
         </component>
@@ -37,6 +40,10 @@
 
     <actions>
         <!-- Add your actions here -->
+        <action id="org.jboss.forge.idea.show_menu" class="org.jboss.forge.plugin.idea.actions.ShowForgeMenuAction"
+                text="Show Forge Menu">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl 5"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
