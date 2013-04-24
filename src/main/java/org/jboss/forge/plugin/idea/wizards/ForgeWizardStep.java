@@ -6,12 +6,13 @@
  */
 package org.jboss.forge.plugin.idea.wizards;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 
-public class ForgeWizardStep extends WizardStep<ForgeWizardModel> {
+public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
+{
 
    @Override
    public JComponent prepare(WizardNavigationState state)

@@ -57,7 +57,11 @@
          <version>${idea.version}</version>
          <scope>provided</scope>
       </dependency>
-
+      <dependency>
+         <groupId>org.jboss.logmanager</groupId>
+         <artifactId>jboss-logmanager</artifactId>
+         <version>1.4.1.Final</version>
+      </dependency>
 
       <!-- Forge dependencies -->
       <dependency>

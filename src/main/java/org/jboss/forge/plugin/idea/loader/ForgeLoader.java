@@ -6,12 +6,20 @@
  */
 package org.jboss.forge.plugin.idea.loader;
 
-import com.intellij.openapi.components.ApplicationComponent;
+import java.io.File;
+
+import org.jboss.forge.container.Forge;
+import org.jboss.forge.container.ForgeImpl;
+import org.jboss.forge.container.repositories.AddonRepositoryMode;
+import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.components.ApplicationComponent;
 
 public class ForgeLoader implements ApplicationComponent
 {
 
+   private Forge forge;
 
    public ForgeLoader()
    {
@@ -20,13 +28,15 @@ public class ForgeLoader implements ApplicationComponent
    @Override
    public void initComponent()
    {
-      // TODO: insert component initialization logic here
+      forge = new ForgeImpl();
+      forge.addRepository(AddonRepositoryMode.MUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
+      forge.startAsync();
    }
 
    @Override
    public void disposeComponent()
    {
-      // TODO: insert component disposal logic here
+      forge.stop();
    }
 
    @Override

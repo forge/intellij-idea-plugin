@@ -6,9 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.components;
 
-import java.awt.Container;
+import java.awt.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import org.jboss.forge.plugin.idea.wizards.ForgeWizardStep;
 import org.jboss.forge.proxy.Proxies;
@@ -21,7 +21,7 @@ public abstract class ComponentBuilder
 
    /**
     * Builds a UI Component object based on the input
-    *
+    * 
     * @param page TODO
     * @param input
     * @return
@@ -31,28 +31,28 @@ public abstract class ComponentBuilder
 
    /**
     * Returns the supported type this control may produce
-    *
+    * 
     * @return
     */
    protected abstract Class<?> getProducedType();
 
    /**
     * Returns the supported input type for this component
-    *
+    * 
     * @return
     */
    protected abstract InputType getSupportedInputType();
 
    /**
     * Returns the subclasses of {@link InputComponent}
-    *
+    * 
     * @return
     */
    protected abstract Class<?>[] getSupportedInputComponentTypes();
 
    /**
     * Tests if this builder may handle this specific input
-    *
+    * 
     * @param input
     * @return
     */
