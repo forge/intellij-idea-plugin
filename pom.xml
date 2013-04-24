@@ -21,7 +21,6 @@
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <jdk.min.version>1.6</jdk.min.version>
 
       <idea.version>12.1.1</idea.version>
       <forge.version>2.0.0-SNAPSHOT</forge.version>
@@ -36,7 +35,7 @@
       </dependency>
       <dependency>
          <groupId>com.intellij</groupId>
-         <artifactId>util</artifactId>
+         <artifactId>idea</artifactId>
          <version>${idea.version}</version>
          <scope>provided</scope>
       </dependency>
@@ -54,10 +53,11 @@
       </dependency>
       <dependency>
          <groupId>com.intellij</groupId>
-         <artifactId>forms_rt</artifactId>
+         <artifactId>util</artifactId>
          <version>${idea.version}</version>
-         <scope>compile</scope>
+         <scope>provided</scope>
       </dependency>
+
 
       <!-- Forge dependencies -->
       <dependency>
@@ -79,6 +79,7 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
+
    <build>
       <resources>
          <resource>
@@ -93,20 +94,17 @@
 
       <plugins>
          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-               <descriptors>
-                  <descriptor>${project.basedir}/src/main/assembly/forge-intellij-plugin-assembly.xml</descriptor>
-               </descriptors>
-            </configuration>
+            <artifactId>maven-dependency-plugin</artifactId>
             <executions>
                <execution>
-                  <id>distribution-package</id>
-                  <phase>package</phase>
+                  <phase>prepare-package</phase>
                   <goals>
-                     <goal>single</goal>
+                     <goal>copy-dependencies</goal>
                   </goals>
+                  <configuration>
+                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                     <scope>runtime</scope>
+                  </configuration>
                </execution>
             </executions>
          </plugin>
@@ -114,9 +112,9 @@
    </build>
 
    <scm>
-      <connection>scm:git:git://github.com/forge/core.git</connection>
-      <developerConnection>scm:git:git@github.com:forge/core.git</developerConnection>
-      <url>http://github.com/forge/core</url>
+      <connection>scm:git:git://github.com/gastaldi/forge-intellij-idea-plugin.git</connection>
+      <developerConnection>scm:git:git@github.com:gastaldi/forge-intellij-idea-plugin.git</developerConnection>
+      <url>http://github.com/gastaldi/forge-intellij-idea-plugin</url>
    </scm>
 
 </project>
