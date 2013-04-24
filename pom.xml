@@ -98,6 +98,37 @@
 
       <plugins>
          <plugin>
+            <groupId>org.jboss.forge</groupId>
+            <artifactId>forge-maven-plugin</artifactId>
+            <version>1.0.0.Alpha2</version>
+            <executions>
+               <execution>
+                  <id>deploy-addons</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>addon-install</goal>
+                  </goals>
+                  <inherited>false</inherited>
+                  <configuration>
+                     <addonRepository>${project.build.directory}/addon-repository</addonRepository>
+                     <addonIds>
+                        <addonId>org.jboss.forge:addons,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:convert,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:facets,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:environment,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:resources,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:dependencies,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:addon-manager,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:maven,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:projects,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:ui,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:ui-hints,${forge.version}</addonId>
+                     </addonIds>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
