@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-parent</artifactId>
+      <version>10</version>
+   </parent>
+
+   <groupId>org.jboss.forge</groupId>
+   <artifactId>forge-idea-plugin</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <name>Forge IDEA Plugin</name>
+
+   <description>Integration of the UI API in Intellij IDEA</description>
+
+   <issueManagement>
+      <system>Github</system>
+      <url>https://github.com/gastaldi/forge-intellij-plugin/issues</url>
+   </issueManagement>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <jdk.min.version>1.6</jdk.min.version>
+
+      <idea.version>12.1.1</idea.version>
+      <forge.version>2.0.0-SNAPSHOT</forge.version>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>com.intellij</groupId>
+         <artifactId>openapi</artifactId>
+         <version>${idea.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.intellij</groupId>
+         <artifactId>util</artifactId>
+         <version>${idea.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.intellij</groupId>
+         <artifactId>extensions</artifactId>
+         <version>${idea.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.intellij</groupId>
+         <artifactId>annotations</artifactId>
+         <version>${idea.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.intellij</groupId>
+         <artifactId>forms_rt</artifactId>
+         <version>${idea.version}</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- Forge dependencies -->
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>forge-bootstrap</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>ui-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+
+      <!-- Test -->
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>4.10</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+   <build>
+      <resources>
+         <resource>
+            <directory>src/main/resources/</directory>
+            <includes>
+               <include>META-INF/plugin.xml</include>
+               <include>icons/</include>
+            </includes>
+            <filtering>true</filtering>
+         </resource>
+      </resources>
+
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <descriptors>
+                  <descriptor>${project.basedir}/src/main/assembly/forge-intellij-plugin-assembly.xml</descriptor>
+               </descriptors>
+            </configuration>
+            <executions>
+               <execution>
+                  <id>distribution-package</id>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+   <scm>
+      <connection>scm:git:git://github.com/forge/core.git</connection>
+      <developerConnection>scm:git:git@github.com:forge/core.git</developerConnection>
+      <url>http://github.com/forge/core</url>
+   </scm>
+
+</project>
