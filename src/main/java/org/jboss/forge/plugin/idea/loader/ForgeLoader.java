@@ -9,20 +9,28 @@ package org.jboss.forge.plugin.idea.loader;
 import com.intellij.openapi.components.ApplicationComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class ForgeLoader implements ApplicationComponent {
-    public ForgeLoader() {
-    }
+public class ForgeLoader implements ApplicationComponent
+{
+   public ForgeLoader()
+   {
+   }
 
-    public void initComponent() {
-        // TODO: insert component initialization logic here
-    }
+   @Override
+   public void initComponent()
+   {
+      // TODO: insert component initialization logic here
+   }
 
-    public void disposeComponent() {
-        // TODO: insert component disposal logic here
-    }
+   @Override
+   public void disposeComponent()
+   {
+      // TODO: insert component disposal logic here
+   }
 
-    @NotNull
-    public String getComponentName() {
-        return "org.jboss.forge.plugin.idea.loader.ForgeLoader";
-    }
+   @Override
+   @NotNull
+   public String getComponentName()
+   {
+      return "org.jboss.forge.plugin.idea.loader.ForgeLoader";
+   }
 }
