@@ -102,7 +102,7 @@
                      <goal>copy-dependencies</goal>
                   </goals>
                   <configuration>
-                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                     <outputDirectory>${project.build.outputDirectory}/lib</outputDirectory>
                      <scope>runtime</scope>
                   </configuration>
                </execution>
