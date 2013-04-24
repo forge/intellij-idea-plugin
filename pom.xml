@@ -94,17 +94,21 @@
 
       <plugins>
          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+               <appendAssemblyId>false</appendAssemblyId>
+               <descriptors>
+                  <descriptor>${project.basedir}/src/main/assembly/forge-intellij-plugin-assembly.xml</descriptor>
+               </descriptors>
+            </configuration>
             <executions>
                <execution>
-                  <phase>prepare-package</phase>
+                  <id>distribution-package</id>
+                  <phase>package</phase>
                   <goals>
-                     <goal>copy-dependencies</goal>
+                     <goal>single</goal>
                   </goals>
-                  <configuration>
-                     <outputDirectory>${project.build.outputDirectory}/lib</outputDirectory>
-                     <scope>runtime</scope>
-                  </configuration>
                </execution>
             </executions>
          </plugin>
