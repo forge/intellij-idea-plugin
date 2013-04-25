@@ -12,37 +12,43 @@ import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.ForgeImpl;
 import org.jboss.forge.container.repositories.AddonRepositoryMode;
 import org.jboss.forge.container.util.OperatingSystemUtils;
+import org.jboss.forge.plugin.idea.ForgeService;
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.components.ApplicationComponent;
 
+/**
+ * Loaded when the plugin initializes
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ *
+ */
 public class ForgeLoader implements ApplicationComponent
 {
-
-   private Forge forge;
-
-   public ForgeLoader()
-   {
-   }
-
    @Override
    public void initComponent()
    {
-      forge = new ForgeImpl();
+      Forge forge = new ForgeImpl();
+      // TODO: Change this
       forge.addRepository(AddonRepositoryMode.MUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
-      forge.startAsync();
+      ForgeService.INSTANCE.setForge(forge);
+
+      // Starting Forge
+      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+      ForgeService.INSTANCE.start(classLoader);
    }
 
    @Override
    public void disposeComponent()
    {
-      forge.stop();
+      ForgeService.INSTANCE.stop();
+      ForgeService.INSTANCE.setForge(null);
    }
 
    @Override
    @NotNull
    public String getComponentName()
    {
-      return "org.jboss.forge.plugin.idea.loader.ForgeLoader";
+      return "ForgeLoader";
    }
 }

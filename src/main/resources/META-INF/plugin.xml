@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.jboss.forge.plugin.idea</id>
     <name>JBoss Forge IDEA Plugin</name>
-    <version>1.0</version>
+    <version>${project.version}</version>
     <vendor email="ggastald@redhat.com" url="http://forge.jboss.org">Red Hat, Inc</vendor>
 
     <description><![CDATA[
@@ -27,6 +27,7 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
+  	<depends>com.intellij.properties</depends>
 
     <application-components>
         <component>
@@ -48,5 +49,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+      	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.extensions.ForgePreferencePage"/>
     </extensions>
 </idea-plugin>
