@@ -15,7 +15,10 @@ import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.extensions.PluginId;
 
 /**
  * Loaded when the plugin initializes
@@ -29,7 +32,10 @@ public class ForgeLoader implements ApplicationComponent
    public void initComponent()
    {
       Forge forge = new ForgeImpl();
-      // TODO: Change this
+      PluginId pluginId = PluginManager.getPluginByClassName(getClass().getName());
+      File pluginHome = new File(PathManager.getPluginsPath(), pluginId.getIdString());
+      File addonRepo = new File(pluginHome, "addon-repository");
+      forge.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
       forge.addRepository(AddonRepositoryMode.MUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
       ForgeService.INSTANCE.setForge(forge);
 

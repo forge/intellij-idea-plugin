@@ -9,14 +9,14 @@
    <dependencySets>
       <!-- Libraries -->
       <dependencySet>
-         <outputDirectory>${project.artifactId}-${project.version}/lib</outputDirectory>
+         <outputDirectory>org.jboss.forge.plugin.idea/lib</outputDirectory>
          <scope>runtime</scope>
       </dependencySet>
    </dependencySets>
    <fileSets>
       <fileSet>
          <directory>${project.build.directory}/addon-repository</directory>
-         <outputDirectory>${project.artifactId}-${project.version}/addon-repository</outputDirectory>
+         <outputDirectory>org.jboss.forge.plugin.idea/addon-repository</outputDirectory>
       </fileSet>
    </fileSets>
 </assembly>
