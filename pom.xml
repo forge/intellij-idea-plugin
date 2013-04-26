@@ -100,7 +100,7 @@
          <plugin>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-maven-plugin</artifactId>
-            <version>1.0.0.Alpha2</version>
+            <version>1.0.0.Alpha3</version>
             <executions>
                <execution>
                   <id>deploy-addons</id>
