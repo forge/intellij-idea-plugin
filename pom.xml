@@ -23,7 +23,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
       <idea.version>12.1.1</idea.version>
-      <forge.version>2.0.0-SNAPSHOT</forge.version>
+      <forge.version>2.0.0.Alpha3</forge.version>
    </properties>
 
    <dependencies>
@@ -66,13 +66,42 @@
       <!-- Forge dependencies -->
       <dependency>
          <groupId>org.jboss.forge</groupId>
-         <artifactId>forge-bootstrap</artifactId>
+         <artifactId>forge-se</artifactId>
+         <version>${forge.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>facets-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>environment-api</artifactId>
          <version>${forge.version}</version>
       </dependency>
       <dependency>
          <groupId>org.jboss.forge</groupId>
          <artifactId>ui-api</artifactId>
          <version>${forge.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.jboss.forge</groupId>
+               <artifactId>facets-impl</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.jboss.forge</groupId>
+               <artifactId>environment-impl</artifactId>
+            </exclusion>
+            <exclusion>
+               <artifactId>facets</artifactId>
+               <groupId>org.jboss.forge</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>environment</artifactId>
+               <groupId>org.jboss.forge</groupId>
+            </exclusion>
+         </exclusions>
       </dependency>
 
       <!-- Test -->
