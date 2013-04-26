@@ -6,16 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.loader;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.repositories.AddonRepositoryMode;
 import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
+import org.jboss.forge.se.init.BootstrapClassLoader;
 import org.jboss.forge.se.init.ForgeFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,18 +33,19 @@ public class ForgeLoader implements ApplicationComponent
    @Override
    public void initComponent()
    {
-      final String logDir = System.getProperty("org.jboss.forge.log.file",
-               new File(OperatingSystemUtils.getUserForgeDir(), "log/forge.log").getAbsolutePath());
-      // Ensure this value is always set
-      System.setProperty("org.jboss.forge.log.file", logDir);
-      // Look for a logmanager before any logging takes place
-      final String logManagerName = getServiceName(getClass().getClassLoader(), "java.util.logging.LogManager");
-      if (logManagerName != null)
+      final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
+      Forge forge;
+      try
       {
-         System.setProperty("java.util.logging.manager", logManagerName);
+         Class<?> bootstrapType = loader.loadClass("org.jboss.forge.container.ForgeImpl");
+         forge = (Forge) ClassLoaderAdapterCallback.enhance(ForgeFactory.class.getClassLoader(), loader,
+                  bootstrapType.newInstance(), Forge.class);
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException(e);
       }
 
-      Forge forge = ForgeFactory.getInstance();
       PluginId pluginId = PluginManager.getPluginByClassName(getClass().getName());
       File pluginHome = new File(PathManager.getPluginsPath(), pluginId.getIdString());
       File addonRepo = new File(pluginHome, "addon-repository");
@@ -55,8 +54,7 @@ public class ForgeLoader implements ApplicationComponent
       ForgeService.INSTANCE.setForge(forge);
 
       // Starting Forge
-      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-      ForgeService.INSTANCE.start(classLoader);
+      ForgeService.INSTANCE.start(loader);
    }
 
    @Override
@@ -72,48 +70,4 @@ public class ForgeLoader implements ApplicationComponent
    {
       return "ForgeLoader";
    }
-
-   @SuppressWarnings("resource")
-   private static String getServiceName(final ClassLoader classLoader, final String className)
-   {
-      final InputStream stream = classLoader.getResourceAsStream("META-INF/services/" + className);
-      if (stream != null)
-      {
-         try
-         {
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-               final int i = line.indexOf('#');
-               if (i != -1)
-               {
-                  line = line.substring(0, i);
-               }
-               line = line.trim();
-               if (line.length() == 0)
-                  continue;
-               return line;
-            }
-
-         }
-         catch (IOException ignored)
-         {
-            // ignore
-         }
-         finally
-         {
-            try
-            {
-               stream.close();
-            }
-            catch (IOException ignored)
-            {
-               // ignore
-            }
-         }
-      }
-      return null;
-   }
-
 }
