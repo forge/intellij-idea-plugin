@@ -16,6 +16,8 @@ import javax.swing.JList;
 import org.jboss.forge.container.addons.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.wizards.ForgeWizardDialog;
+import org.jboss.forge.plugin.idea.wizards.ForgeWizardModel;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.wizard.UIWizardStep;
 
@@ -44,9 +46,7 @@ public class ShowForgeMenuAction extends AnAction
    @Override
    public void actionPerformed(AnActionEvent e)
    {
-      final VirtualFile virtualFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
-      System.out.println("IT WORKS !");
-      System.out.println("SELECTED DIRECTORY: " + virtualFile);
+      final VirtualFile[] selectedFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
       final JBList list = new JBList();
       DefaultListModel model = new DefaultListModel();
@@ -92,14 +92,16 @@ public class ShowForgeMenuAction extends AnAction
          {
             int selectedIndex = list.getSelectedIndex();
             UICommand selectedCommand = allCandidates.get(selectedIndex);
-            openWizard(selectedCommand);
+            openWizard(selectedCommand, selectedFiles);
          }
       }).createPopup().showCenteredInCurrentWindow(project);
    }
 
-   private void openWizard(UICommand command)
+   private void openWizard(UICommand command, VirtualFile[] files)
    {
-
+      ForgeWizardModel model = new ForgeWizardModel("Forge Wizard Dialog", command, files);
+      ForgeWizardDialog dialog = new ForgeWizardDialog(model);
+      dialog.show();
    }
 
    private List<UICommand> getAllCandidates()

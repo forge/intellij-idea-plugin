@@ -27,6 +27,63 @@
    </properties>
 
    <dependencies>
+      <!-- Forge dependencies -->
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>forge-se</artifactId>
+         <version>${forge.version}</version>
+         <scope>compile</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.logmanager</groupId>
+         <artifactId>jboss-logmanager</artifactId>
+         <version>1.4.1.Final</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>facets-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>resources-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>environment-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>convert-api</artifactId>
+         <version>${forge.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.forge</groupId>
+         <artifactId>ui-api</artifactId>
+         <version>${forge.version}</version>
+         <exclusions>
+            <exclusion>
+               <groupId>org.jboss.forge</groupId>
+               <artifactId>facets-impl</artifactId>
+            </exclusion>
+            <exclusion>
+               <groupId>org.jboss.forge</groupId>
+               <artifactId>environment-impl</artifactId>
+            </exclusion>
+            <exclusion>
+               <artifactId>facets</artifactId>
+               <groupId>org.jboss.forge</groupId>
+            </exclusion>
+            <exclusion>
+               <artifactId>environment</artifactId>
+               <groupId>org.jboss.forge</groupId>
+            </exclusion>
+         </exclusions>
+      </dependency>
+
+      <!-- IntelliJ Dependencies -->
       <dependency>
          <groupId>com.intellij</groupId>
          <artifactId>openapi</artifactId>
@@ -56,52 +113,6 @@
          <artifactId>util</artifactId>
          <version>${idea.version}</version>
          <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.logmanager</groupId>
-         <artifactId>jboss-logmanager</artifactId>
-         <version>1.4.1.Final</version>
-      </dependency>
-
-      <!-- Forge dependencies -->
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>forge-se</artifactId>
-         <version>${forge.version}</version>
-         <scope>compile</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>facets-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>environment-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>ui-api</artifactId>
-         <version>${forge.version}</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.jboss.forge</groupId>
-               <artifactId>facets-impl</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.jboss.forge</groupId>
-               <artifactId>environment-impl</artifactId>
-            </exclusion>
-            <exclusion>
-               <artifactId>facets</artifactId>
-               <groupId>org.jboss.forge</groupId>
-            </exclusion>
-            <exclusion>
-               <artifactId>environment</artifactId>
-               <groupId>org.jboss.forge</groupId>
-            </exclusion>
-         </exclusions>
       </dependency>
 
       <!-- Test -->
