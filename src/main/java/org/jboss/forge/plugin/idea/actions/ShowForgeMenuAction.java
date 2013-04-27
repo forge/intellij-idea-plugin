@@ -28,6 +28,8 @@ import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.JBPopupListener;
+import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ListCellRendererWrapper;
@@ -41,9 +43,14 @@ import com.intellij.ui.components.JBList;
  */
 public class ShowForgeMenuAction extends AnAction
 {
+   volatile boolean active;
+
    @Override
    public void actionPerformed(final AnActionEvent e)
    {
+      if (active)
+         return;
+      active = true;
       final VirtualFile[] selectedFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
       final JBList list = new JBList();
@@ -82,6 +89,21 @@ public class ShowForgeMenuAction extends AnAction
 
       final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
       listPopupBuilder.setTitle("Select a command to execute");
+      listPopupBuilder.addListener(new JBPopupListener()
+      {
+         @Override
+         public void beforeShown(LightweightWindowEvent event)
+         {
+            // TODO Auto-generated method stub
+
+         }
+
+         @Override
+         public void onClosed(LightweightWindowEvent event)
+         {
+            ShowForgeMenuAction.this.active = false;
+         }
+      });
       listPopupBuilder.setItemChoosenCallback(new Runnable()
       {
          @Override

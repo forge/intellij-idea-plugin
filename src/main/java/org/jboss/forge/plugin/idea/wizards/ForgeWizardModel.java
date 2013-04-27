@@ -42,9 +42,11 @@ public class ForgeWizardModel extends WizardModel
       addWizardSteps();
    }
 
+
    private void addWizardSteps()
    {
       add(new ForgeWizardStep(originalCommand, context));
+
       // TODO: Add more steps
    }
 

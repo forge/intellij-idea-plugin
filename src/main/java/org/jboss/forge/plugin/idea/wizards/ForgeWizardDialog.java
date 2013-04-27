@@ -11,4 +11,9 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
       super((Project) null, false, model);
    }
 
+   @Override
+   public String getTitle()
+   {
+      return super.getTitle();
+   }
 }
