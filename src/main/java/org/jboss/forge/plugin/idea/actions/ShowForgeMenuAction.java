@@ -21,13 +21,11 @@ import org.jboss.forge.plugin.idea.wizards.ForgeWizardModel;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.wizard.UIWizardStep;
 
-import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
@@ -44,14 +42,13 @@ import com.intellij.ui.components.JBList;
 public class ShowForgeMenuAction extends AnAction
 {
    @Override
-   public void actionPerformed(AnActionEvent e)
+   public void actionPerformed(final AnActionEvent e)
    {
       final VirtualFile[] selectedFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
       final JBList list = new JBList();
       DefaultListModel model = new DefaultListModel();
 
-      final Editor editor = e.getData(DataKeys.EDITOR);
       final Project project = e.getData(DataKeys.PROJECT);
 
       final List<UICommand> allCandidates = getAllCandidates();
@@ -67,11 +64,11 @@ public class ShowForgeMenuAction extends AnAction
                setIcon(AllIcons.Nodes.Plugin);
                setText(data.getMetadata().getName());
 
-               if (hasFocus && editor != null)
-               {
-                  HintManager.getInstance().showInformationHint(editor,
-                           data.getMetadata().getDescription());
-               }
+               // if (hasFocus)
+               // {
+               // HintManager.getInstance().showInformationHint(editor,
+               // data.getMetadata().getDescription());
+               // }
             }
          }
       });
