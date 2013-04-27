@@ -29,6 +29,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
    public ForgeWizardStep(UICommand command, UIContext context)
    {
+      super(command.getMetadata().getDescription());
       this.command = command;
    }
 

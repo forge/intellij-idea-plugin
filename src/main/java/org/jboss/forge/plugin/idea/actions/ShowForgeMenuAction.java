@@ -27,8 +27,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopupAdapter;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -89,15 +89,8 @@ public class ShowForgeMenuAction extends AnAction
 
       final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
       listPopupBuilder.setTitle("Select a command to execute");
-      listPopupBuilder.addListener(new JBPopupListener()
+      listPopupBuilder.addListener(new JBPopupAdapter()
       {
-         @Override
-         public void beforeShown(LightweightWindowEvent event)
-         {
-            // TODO Auto-generated method stub
-
-         }
-
          @Override
          public void onClosed(LightweightWindowEvent event)
          {
@@ -118,7 +111,7 @@ public class ShowForgeMenuAction extends AnAction
 
    private void openWizard(UICommand command, VirtualFile[] files)
    {
-      ForgeWizardModel model = new ForgeWizardModel("Forge Wizard Dialog", command, files);
+      ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
       ForgeWizardDialog dialog = new ForgeWizardDialog(model);
       dialog.show();
    }
