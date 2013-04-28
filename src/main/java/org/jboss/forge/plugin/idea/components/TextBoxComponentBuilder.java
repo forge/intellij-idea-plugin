@@ -8,11 +8,9 @@
 package org.jboss.forge.plugin.idea.components;
 
 import java.awt.Container;
-import java.awt.GridLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -34,9 +32,6 @@ public class TextBoxComponentBuilder extends ComponentBuilder
    public JComponent build(ForgeWizardStep step, final InputComponent<?, Object> input, Container container)
    {
       final JTextField textField = new JTextField();
-      JPanel panel = new JPanel(new GridLayout(1, 2));
-      panel.setOpaque(false);
-      container.add(panel);
       // Set Default Value
       final ConverterFactory converterFactory = ForgeService.INSTANCE.lookup(ConverterFactory.class);
       Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
@@ -64,9 +59,9 @@ public class TextBoxComponentBuilder extends ComponentBuilder
          }
       });
       String labelValue = input.getLabel() == null ? input.getName() : input.getLabel();
-      panel.add(new JLabel(labelValue));
-      panel.add(textField);
-      return panel;
+      container.add(new JLabel(labelValue));
+      container.add(textField);
+      return textField;
    }
 
    @Override

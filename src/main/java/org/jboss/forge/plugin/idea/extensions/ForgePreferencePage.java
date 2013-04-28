@@ -7,12 +7,13 @@
 package org.jboss.forge.plugin.idea.extensions;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.container.util.Strings;
@@ -47,7 +48,7 @@ public class ForgePreferencePage implements Configurable
                "Specifies the directory that addons will be deployed", null,
                FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
-      JPanel panel = new JPanel(new GridLayout(1, 2));
+      JPanel panel = new JPanel(new MigLayout("fillx,wrap 2", "[left]rel[grow,fill]"));
       panel.setOpaque(false);
 
       panel.add(new JLabel("Addons Installation Location:"));

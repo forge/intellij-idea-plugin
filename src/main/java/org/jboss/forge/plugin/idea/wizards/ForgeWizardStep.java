@@ -6,10 +6,10 @@
  */
 package org.jboss.forge.plugin.idea.wizards;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.jboss.forge.plugin.idea.components.ComponentBuilder;
 import org.jboss.forge.plugin.idea.components.ComponentBuilderRegistry;
@@ -18,7 +18,6 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.context.UIContext;
 import org.jboss.forge.ui.input.InputComponent;
 
-import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 
@@ -53,14 +52,11 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
       }
 
       // Build panel
-      JPanel container = new JPanel(new BorderLayout());
-      VerticalBox box = new VerticalBox();
-      container.add(box, BorderLayout.NORTH);
-
+      JPanel container = new JPanel(new MigLayout("fillx,wrap 2", "[left]rel[grow,fill]", "[]10[]"));
       for (InputComponent input : uiBuilder.getInputs())
       {
          ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
-         builder.build(this, input, box);
+         builder.build(this, input, container);
       }
       return container;
    }
