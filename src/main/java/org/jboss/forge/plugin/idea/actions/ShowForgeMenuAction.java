@@ -88,7 +88,7 @@ public class ShowForgeMenuAction extends AnAction
       list.setModel(model);
 
       final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
-      listPopupBuilder.setTitle("Select a command to execute");
+      listPopupBuilder.setTitle("Run a Forge command");
       listPopupBuilder.addListener(new JBPopupAdapter()
       {
          @Override
