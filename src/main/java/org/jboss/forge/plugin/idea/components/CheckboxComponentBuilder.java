@@ -9,11 +9,10 @@ package org.jboss.forge.plugin.idea.components;
 
 import java.awt.Container;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
@@ -25,54 +24,51 @@ import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.util.InputComponents;
 
-public class TextBoxComponentBuilder extends ComponentBuilder {
+/**
+ * Creates a Checkbox
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ *
+ */
+public class CheckboxComponentBuilder extends ComponentBuilder {
 
 	@Override
 	public JComponent build(ForgeWizardStep step,
 			final InputComponent<?, Object> input, Container container) {
-		final JTextField textField = new JTextField();
+		// Create the label
+		String text = (input.getLabel() == null ? input.getName() : input
+				.getLabel());
+		final JCheckBox checkbox = new JCheckBox(text);
 		// Set Default Value
 		final ConverterFactory converterFactory = ForgeService.INSTANCE
 				.lookup(ConverterFactory.class);
-		Converter<Object, String> converter = converterFactory.getConverter(
-				input.getValueType(), String.class);
-		String value = converter.convert(InputComponents.getValueFor(input));
-		textField.setText(value == null ? "" : value);
+		if (converterFactory != null) {
+			Converter<Object, Boolean> converter = converterFactory
+					.getConverter(input.getValueType(), Boolean.class);
+			Boolean value = converter.convert(InputComponents
+					.getValueFor(input));
+			checkbox.setSelected(value == null ? false : value);
+		}
 
-		textField.getDocument().addDocumentListener(new DocumentListener() {
+		checkbox.addChangeListener(new ChangeListener() {
 			@Override
-			public void removeUpdate(DocumentEvent e) {
+			public void stateChanged(ChangeEvent e) {
 				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
+						checkbox.isSelected());
 			}
 		});
-		String labelValue = input.getLabel() == null ? input.getName() : input
-				.getLabel();
-		container.add(new JLabel(labelValue));
-		container.add(textField);
-		return textField;
+		container.add(checkbox, "span 2");
+		return checkbox;
 	}
 
 	@Override
-	protected Class<String> getProducedType() {
-		return String.class;
+	protected Class<Boolean> getProducedType() {
+		return Boolean.class;
 	}
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.TEXTBOX;
+		return InputTypes.CHECKBOX;
 	}
 
 	@Override

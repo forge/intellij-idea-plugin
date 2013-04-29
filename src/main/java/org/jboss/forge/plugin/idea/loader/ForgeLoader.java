@@ -24,50 +24,48 @@ import com.intellij.openapi.extensions.PluginId;
 
 /**
  * Loaded when the plugin initializes
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public class ForgeLoader implements ApplicationComponent
-{
-   @Override
-   public void initComponent()
-   {
-      final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
-      Forge forge;
-      try
-      {
-         Class<?> bootstrapType = loader.loadClass("org.jboss.forge.container.ForgeImpl");
-         forge = (Forge) ClassLoaderAdapterCallback.enhance(ForgeFactory.class.getClassLoader(), loader,
-                  bootstrapType.newInstance(), Forge.class);
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
+public class ForgeLoader implements ApplicationComponent {
+	@Override
+	public void initComponent() {
+		final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
+		Forge forge;
+		try {
+			Class<?> bootstrapType = loader
+					.loadClass("org.jboss.forge.container.ForgeImpl");
+			forge = (Forge) ClassLoaderAdapterCallback.enhance(
+					ForgeFactory.class.getClassLoader(), loader,
+					bootstrapType.newInstance(), Forge.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 
-      PluginId pluginId = PluginManager.getPluginByClassName(getClass().getName());
-      File pluginHome = new File(PathManager.getPluginsPath(), pluginId.getIdString());
-      File addonRepo = new File(pluginHome, "addon-repository");
-      forge.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
-      forge.addRepository(AddonRepositoryMode.MUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
-      ForgeService.INSTANCE.setForge(forge);
+		PluginId pluginId = PluginManager.getPluginByClassName(getClass()
+				.getName());
+		File pluginHome = new File(PathManager.getPluginsPath(),
+				pluginId.getIdString());
+		File addonRepo = new File(pluginHome, "addon-repository");
+		forge.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
+		forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
+				OperatingSystemUtils.getUserForgeDir(), "addons"));
+		ForgeService.INSTANCE.setForge(forge);
 
-      // Starting Forge
-      ForgeService.INSTANCE.start(loader);
-   }
+		// Starting Forge
+		ForgeService.INSTANCE.start(loader);
+	}
 
-   @Override
-   public void disposeComponent()
-   {
-      ForgeService.INSTANCE.stop();
-      ForgeService.INSTANCE.setForge(null);
-   }
+	@Override
+	public void disposeComponent() {
+		ForgeService.INSTANCE.stop();
+		ForgeService.INSTANCE.setForge(null);
+	}
 
-   @Override
-   @NotNull
-   public String getComponentName()
-   {
-      return "ForgeLoader";
-   }
+	@Override
+	@NotNull
+	public String getComponentName() {
+		return "ForgeLoader";
+	}
 }

@@ -11,20 +11,17 @@ import org.jetbrains.annotations.NotNull;
 
 import com.intellij.util.xmlb.annotations.Tag;
 
-public class ForgeSettings
-{
-   private String addonHome;
+public class ForgeSettings {
+	private String addonHome;
 
-   @NotNull
-   @Tag("addon-home")
-   public String getAddonHome()
-   {
-      return addonHome;
-   }
+	@NotNull
+	@Tag("addon-home")
+	public String getAddonHome() {
+		return addonHome;
+	}
 
-   public void setAddonHome(String addonHome)
-   {
-      this.addonHome = addonHome;
-   }
+	public void setAddonHome(String addonHome) {
+		this.addonHome = addonHome;
+	}
 
 }

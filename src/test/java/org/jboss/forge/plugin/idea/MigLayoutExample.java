@@ -16,24 +16,22 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class MigLayoutExample
-{
+public class MigLayoutExample {
 
-   public static void main(String[] args) throws Exception
-   {
-      MigLayout layout = new MigLayout("fillx,wrap 2", "[left]rel[grow,fill]");
-      JPanel panel = new JPanel(layout);
-      panel.add(new JLabel("Label One:"));
-      panel.add(new JTextField());
-      panel.add(new JLabel("Label Two:"));
-      panel.add(new JTextField());
-      panel.add(new JLabel("Label Three:"), "span 2");
-      panel.add(new JTextField(), "span 2,grow");
-      JFrame jf = new JFrame();
-      jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      jf.setLayout(new BorderLayout());
-      jf.add(panel, BorderLayout.CENTER);
-      jf.setSize(300, 300);
-      jf.setVisible(true);
-   }
+	public static void main(String[] args) throws Exception {
+		MigLayout layout = new MigLayout("fillx,wrap 2", "[left]rel[grow,fill]");
+		JPanel panel = new JPanel(layout);
+		panel.add(new JLabel("Label One:"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Label Two:"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Label Three:"), "span 2");
+		panel.add(new JTextField(), "span 2,grow");
+		JFrame jf = new JFrame();
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jf.setLayout(new BorderLayout());
+		jf.add(panel, BorderLayout.CENTER);
+		jf.setSize(300, 300);
+		jf.setVisible(true);
+	}
 }

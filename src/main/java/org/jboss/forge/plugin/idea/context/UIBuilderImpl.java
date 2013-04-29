@@ -15,32 +15,27 @@ import org.jboss.forge.ui.context.UIBuilder;
 import org.jboss.forge.ui.context.UIContext;
 import org.jboss.forge.ui.input.InputComponent;
 
-public class UIBuilderImpl implements UIBuilder
-{
-   private List<InputComponent<?, ?>> inputs = new ArrayList<InputComponent<?, ?>>();
-   private UIContext context;
+public class UIBuilderImpl implements UIBuilder {
+	private List<InputComponent<?, ?>> inputs = new ArrayList<InputComponent<?, ?>>();
+	private UIContext context;
 
-   public UIBuilderImpl(UIContext context)
-   {
-      this.context = context;
-   }
+	public UIBuilderImpl(UIContext context) {
+		this.context = context;
+	}
 
-   @Override
-   public UIBuilder add(InputComponent<?, ?> input)
-   {
-      Assert.notNull(input, "Input must not be null");
-      inputs.add(input);
-      return this;
-   }
+	@Override
+	public UIBuilder add(InputComponent<?, ?> input) {
+		Assert.notNull(input, "Input must not be null");
+		inputs.add(input);
+		return this;
+	}
 
-   public List<InputComponent<?, ?>> getInputs()
-   {
-      return inputs;
-   }
+	public List<InputComponent<?, ?>> getInputs() {
+		return inputs;
+	}
 
-   @Override
-   public UIContext getUIContext()
-   {
-      return context;
-   }
+	@Override
+	public UIContext getUIContext() {
+		return context;
+	}
 }

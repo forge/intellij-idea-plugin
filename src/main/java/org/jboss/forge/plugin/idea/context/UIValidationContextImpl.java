@@ -14,30 +14,26 @@ import org.jboss.forge.ui.context.UIContext;
 import org.jboss.forge.ui.context.UIValidationContext;
 import org.jboss.forge.ui.input.InputComponent;
 
-public class UIValidationContextImpl implements UIValidationContext
-{
-   private List<String> errors = new ArrayList<String>();
-   private UIContext context;
+public class UIValidationContextImpl implements UIValidationContext {
+	private List<String> errors = new ArrayList<String>();
+	private UIContext context;
 
-   public UIValidationContextImpl(UIContext context)
-   {
-      this.context = context;
-   }
+	public UIValidationContextImpl(UIContext context) {
+		this.context = context;
+	}
 
-   @Override
-   public void addValidationError(InputComponent<?, ?> input, String errorMessage)
-   {
-      errors.add(errorMessage);
-   }
+	@Override
+	public void addValidationError(InputComponent<?, ?> input,
+			String errorMessage) {
+		errors.add(errorMessage);
+	}
 
-   public List<String> getErrors()
-   {
-      return errors;
-   }
+	public List<String> getErrors() {
+		return errors;
+	}
 
-   @Override
-   public UIContext getUIContext()
-   {
-      return context;
-   }
+	@Override
+	public UIContext getUIContext() {
+		return context;
+	}
 }

@@ -25,84 +25,70 @@ import com.intellij.ui.wizard.WizardModel;
 
 /**
  * Represents the model of a wizard
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public class ForgeWizardModel extends WizardModel
-{
-   private UICommand originalCommand;
-   private UIContextImpl context;
+public class ForgeWizardModel extends WizardModel {
+	private UICommand originalCommand;
+	private UIContextImpl context;
 
-   public ForgeWizardModel(String title, UICommand command, VirtualFile[] files)
-   {
-      super(title);
-      context = new UIContextImpl(getSelection(files));
-      this.originalCommand = command;
-      addWizardSteps();
-   }
+	public ForgeWizardModel(String title, UICommand command, VirtualFile[] files) {
+		super(title);
+		context = new UIContextImpl(getSelection(files));
+		this.originalCommand = command;
+		addWizardSteps();
+	}
 
+	private void addWizardSteps() {
+		add(new ForgeWizardStep(originalCommand, context));
 
-   private void addWizardSteps()
-   {
-      add(new ForgeWizardStep(originalCommand, context));
+		// TODO: Add more steps
+	}
 
-      // TODO: Add more steps
-   }
+	@SuppressWarnings("rawtypes")
+	private UISelectionImpl<Resource<?>> getSelection(VirtualFile[] files) {
+		UISelectionImpl<Resource<?>> selection = null;
+		if (files != null) {
+			List<Resource<?>> result = new LinkedList<Resource<?>>();
+			ConverterFactory converterFactory = ForgeService.INSTANCE
+					.lookup(ConverterFactory.class);
+			Converter<File, Resource> converter = converterFactory
+					.getConverter(File.class, locateNativeClass(Resource.class));
 
-   @SuppressWarnings("rawtypes")
-   private UISelectionImpl<Resource<?>> getSelection(VirtualFile[] files)
-   {
-      UISelectionImpl<Resource<?>> selection = null;
-      if (files != null)
-      {
-         List<Resource<?>> result = new LinkedList<Resource<?>>();
-         ConverterFactory converterFactory = ForgeService.INSTANCE.lookup(ConverterFactory.class);
-         Converter<File, Resource> converter = converterFactory.getConverter(File.class,
-                  locateNativeClass(Resource.class));
+			for (VirtualFile virtualFile : files) {
+				File file = new File(virtualFile.getPath());
+				Resource<?> resource = converter.convert(file);
+				result.add(resource);
+			}
+			if (!result.isEmpty()) {
+				selection = new UISelectionImpl<Resource<?>>(result);
+			}
+		}
+		return selection;
+	}
 
-         for (VirtualFile virtualFile : files)
-         {
-            File file = new File(virtualFile.getPath());
-            Resource<?> resource = converter.convert(file);
-            result.add(resource);
-         }
-         if (!result.isEmpty())
-         {
-            selection = new UISelectionImpl<Resource<?>>(result);
-         }
-      }
-      return selection;
-   }
+	@SuppressWarnings("unchecked")
+	private <T> Class<T> locateNativeClass(Class<T> type) {
+		Class<T> result = type;
+		AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
+		for (Addon addon : registry.getAddons()) {
+			try {
+				ClassLoader classLoader = addon.getClassLoader();
+				result = (Class<T>) classLoader.loadClass(type.getName());
+				break;
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		return result;
+	}
 
-   @SuppressWarnings("unchecked")
-   private <T> Class<T> locateNativeClass(Class<T> type)
-   {
-      Class<T> result = type;
-      AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
-      for (Addon addon : registry.getAddons())
-      {
-         try
-         {
-            ClassLoader classLoader = addon.getClassLoader();
-            result = (Class<T>) classLoader.loadClass(type.getName());
-            break;
-         }
-         catch (ClassNotFoundException e)
-         {
-         }
-      }
-      return result;
-   }
+	public UIContext getContext() {
+		return context;
+	}
 
-   public UIContext getContext()
-   {
-      return context;
-   }
-
-   public UICommand getOriginalCommand()
-   {
-      return originalCommand;
-   }
+	public UICommand getOriginalCommand() {
+		return originalCommand;
+	}
 
 }

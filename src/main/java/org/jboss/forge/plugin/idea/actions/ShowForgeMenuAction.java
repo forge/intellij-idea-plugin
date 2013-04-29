@@ -36,100 +36,92 @@ import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
 
 /**
- * Creates a popup list and displays all the currently registered {@link UICommand} instances
- *
+ * Creates a popup list and displays all the currently registered
+ * {@link UICommand} instances
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public class ShowForgeMenuAction extends AnAction
-{
-   volatile boolean active;
+public class ShowForgeMenuAction extends AnAction {
+	volatile boolean active;
 
-   @Override
-   public void actionPerformed(final AnActionEvent e)
-   {
-      if (active)
-         return;
-      active = true;
-      final VirtualFile[] selectedFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
+	@Override
+	public void actionPerformed(final AnActionEvent e) {
+		if (active)
+			return;
+		active = true;
+		final VirtualFile[] selectedFiles = e
+				.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
-      final JBList list = new JBList();
-      DefaultListModel model = new DefaultListModel();
+		final JBList list = new JBList();
+		DefaultListModel model = new DefaultListModel();
 
-      final Project project = e.getData(DataKeys.PROJECT);
+		final Project project = e.getData(DataKeys.PROJECT);
 
-      final List<UICommand> allCandidates = getAllCandidates();
-      model.setSize(allCandidates.size());
+		final List<UICommand> allCandidates = getAllCandidates();
+		model.setSize(allCandidates.size());
 
-      list.setCellRenderer(new ListCellRendererWrapper<UICommand>()
-      {
-         @Override
-         public void customize(JList list, UICommand data, int index, boolean selected, boolean hasFocus)
-         {
-            if (data != null)
-            {
-               setIcon(AllIcons.Nodes.Plugin);
-               setText(data.getMetadata().getName());
+		list.setCellRenderer(new ListCellRendererWrapper<UICommand>() {
+			@Override
+			public void customize(JList list, UICommand data, int index,
+					boolean selected, boolean hasFocus) {
+				if (data != null) {
+					setIcon(AllIcons.Nodes.Plugin);
+					setText(data.getMetadata().getName());
 
-               // if (hasFocus)
-               // {
-               // HintManager.getInstance().showInformationHint(editor,
-               // data.getMetadata().getDescription());
-               // }
-            }
-         }
-      });
+					// if (hasFocus)
+					// {
+					// HintManager.getInstance().showInformationHint(editor,
+					// data.getMetadata().getDescription());
+					// }
+				}
+			}
+		});
 
-      for (int i = 0; i < allCandidates.size(); i++)
-      {
-         model.set(i, allCandidates.get(i));
-      }
+		for (int i = 0; i < allCandidates.size(); i++) {
+			model.set(i, allCandidates.get(i));
+		}
 
-      list.setModel(model);
+		list.setModel(model);
 
-      final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
-      listPopupBuilder.setTitle("Run a Forge command");
-      listPopupBuilder.addListener(new JBPopupAdapter()
-      {
-         @Override
-         public void onClosed(LightweightWindowEvent event)
-         {
-            ShowForgeMenuAction.this.active = false;
-         }
-      });
-      listPopupBuilder.setItemChoosenCallback(new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            int selectedIndex = list.getSelectedIndex();
-            UICommand selectedCommand = allCandidates.get(selectedIndex);
-            openWizard(selectedCommand, selectedFiles);
-         }
-      }).createPopup().showCenteredInCurrentWindow(project);
-   }
+		final PopupChooserBuilder listPopupBuilder = JBPopupFactory
+				.getInstance().createListPopupBuilder(list);
+		listPopupBuilder.setTitle("Run a Forge command");
+		listPopupBuilder.addListener(new JBPopupAdapter() {
+			@Override
+			public void onClosed(LightweightWindowEvent event) {
+				ShowForgeMenuAction.this.active = false;
+			}
+		});
+		listPopupBuilder.setItemChoosenCallback(new Runnable() {
+			@Override
+			public void run() {
+				int selectedIndex = list.getSelectedIndex();
+				UICommand selectedCommand = allCandidates.get(selectedIndex);
+				openWizard(selectedCommand, selectedFiles);
+			}
+		}).createPopup().showCenteredInCurrentWindow(project);
+	}
 
-   private void openWizard(UICommand command, VirtualFile[] files)
-   {
-      ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
-      ForgeWizardDialog dialog = new ForgeWizardDialog(model);
-      dialog.show();
-   }
+	private void openWizard(UICommand command, VirtualFile[] files) {
+		ForgeWizardModel model = new ForgeWizardModel(command.getMetadata()
+				.getName(), command, files);
+		ForgeWizardDialog dialog = new ForgeWizardDialog(model);
+		dialog.show();
+	}
 
-   private List<UICommand> getAllCandidates()
-   {
-      List<UICommand> result = new ArrayList<UICommand>();
-      AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
-      Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
-      for (ExportedInstance<UICommand> instance : exportedInstances)
-      {
-         UICommand uiCommand = instance.get();
-         if (!(uiCommand instanceof UIWizardStep))
-         {
-            result.add(uiCommand);
-         }
-      }
-      return result;
-   }
+	private List<UICommand> getAllCandidates() {
+		List<UICommand> result = new ArrayList<UICommand>();
+		AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
+		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
+				.getExportedInstances(UICommand.class);
+		for (ExportedInstance<UICommand> instance : exportedInstances) {
+			UICommand uiCommand = instance.get();
+			if (!(uiCommand instanceof UIWizardStep)) {
+				result.add(uiCommand);
+			}
+		}
+		return result;
+	}
 
 }

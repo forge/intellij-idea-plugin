@@ -9,20 +9,17 @@ package org.jboss.forge.plugin.idea.context;
 
 import org.jboss.forge.ui.context.AbstractUIContext;
 
-public class UIContextImpl extends AbstractUIContext
-{
-   private UISelectionImpl<?> currentSelection;
+public class UIContextImpl extends AbstractUIContext {
+	private UISelectionImpl<?> currentSelection;
 
-   public UIContextImpl(UISelectionImpl<?> selection)
-   {
-      this.currentSelection = selection;
-   }
+	public UIContextImpl(UISelectionImpl<?> selection) {
+		this.currentSelection = selection;
+	}
 
-   @SuppressWarnings("unchecked")
-   @Override
-   public UISelectionImpl<?> getInitialSelection()
-   {
-      return currentSelection;
-   }
+	@SuppressWarnings("unchecked")
+	@Override
+	public UISelectionImpl<?> getInitialSelection() {
+		return currentSelection;
+	}
 
 }
