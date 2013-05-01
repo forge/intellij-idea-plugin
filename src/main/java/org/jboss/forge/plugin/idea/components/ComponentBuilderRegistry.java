@@ -15,28 +15,32 @@ import org.jboss.forge.ui.input.InputComponent;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public enum ComponentBuilderRegistry {
-	INSTANCE;
+public enum ComponentBuilderRegistry
+{
+   INSTANCE;
 
-	private ComponentBuilder[] componentBuilders = {
-			new CheckboxComponentBuilder(),
-			// new ComboEnumControlBuilder(),
-			// new ComboControlBuilder(),
-			// new RadioControlBuilder(),
-			// new FileChooserControlBuilder(),
-			// new CheckboxTableControlBuilder(),
-			new TextBoxComponentBuilder(),
-			// new PasswordTextBoxControlBuilder(),
-			new FallbackTextBoxComponentBuilder() };
+   private ComponentBuilder[] componentBuilders = {
+            new CheckboxComponentBuilder(),
+            new ComboEnumComponentBuilder(),
+            new ComboComponentBuilder(),
+             new RadioComponentBuilder(),
+            // new FileChooserControlBuilder(),
+            // new CheckboxTableControlBuilder(),
+            new TextBoxComponentBuilder(),
+            // new PasswordTextBoxControlBuilder(),
+            new FallbackTextBoxComponentBuilder() };
 
-	public ComponentBuilder getBuilderFor(InputComponent<?, ?> input) {
-		for (ComponentBuilder builder : componentBuilders) {
-			if (builder.handles(input)) {
-				return builder;
-			}
-		}
-		throw new IllegalArgumentException(
-				"No UI component found for input type of "
-						+ input.getValueType());
-	}
+   public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)
+   {
+      for (ComponentBuilder builder : componentBuilders)
+      {
+         if (builder.handles(input))
+         {
+            return builder;
+         }
+      }
+      throw new IllegalArgumentException(
+               "No UI component found for input type of "
+                        + input.getValueType());
+   }
 }

@@ -17,7 +17,6 @@ import javax.swing.event.ChangeListener;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.plugin.idea.ForgeService;
-import org.jboss.forge.plugin.idea.wizards.ForgeWizardStep;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
@@ -33,8 +32,8 @@ import org.jboss.forge.ui.util.InputComponents;
 public class CheckboxComponentBuilder extends ComponentBuilder {
 
 	@Override
-	public JComponent build(ForgeWizardStep step,
-			final InputComponent<?, Object> input, Container container) {
+	public JComponent build(final InputComponent<?, Object> input,
+			Container container) {
 		// Create the label
 		String text = (input.getLabel() == null ? input.getName() : input
 				.getLabel());
