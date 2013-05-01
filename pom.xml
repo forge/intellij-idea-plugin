@@ -169,6 +169,7 @@
                         <addonId>org.jboss.forge:projects,${forge.version}</addonId>
                         <addonId>org.jboss.forge:ui,${forge.version}</addonId>
                         <addonId>org.jboss.forge:ui-hints,${forge.version}</addonId>
+                        <addonId>org.jboss.forge:ui-example,${forge.version}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
