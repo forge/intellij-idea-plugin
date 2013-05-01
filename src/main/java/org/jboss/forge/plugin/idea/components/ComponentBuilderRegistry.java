@@ -23,11 +23,11 @@ public enum ComponentBuilderRegistry
             new CheckboxComponentBuilder(),
             new ComboEnumComponentBuilder(),
             new ComboComponentBuilder(),
-             new RadioComponentBuilder(),
+            new RadioComponentBuilder(),
             // new FileChooserControlBuilder(),
             // new CheckboxTableControlBuilder(),
             new TextBoxComponentBuilder(),
-            // new PasswordTextBoxControlBuilder(),
+            new PasswordComponentBuilder(),
             new FallbackTextBoxComponentBuilder() };
 
    public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)
