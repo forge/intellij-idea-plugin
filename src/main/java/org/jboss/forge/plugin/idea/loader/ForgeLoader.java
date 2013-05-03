@@ -24,13 +24,15 @@ import com.intellij.openapi.extensions.PluginId;
 
 /**
  * Loaded when the plugin initializes
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class ForgeLoader implements ApplicationComponent {
 	@Override
 	public void initComponent() {
+		// MODULES-136
+		System.setProperty("modules.ignore.jdk.factory", "true");
 		final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
 		Forge forge;
 		try {
