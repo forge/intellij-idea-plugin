@@ -32,102 +32,88 @@ import com.intellij.ui.wizard.WizardNavigationState;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ForgeWizardModel extends WizardModel
-{
-   private UICommand originalCommand;
-   private UIContextImpl context;
-   private List<ForgeWizardStep> steps;
+public class ForgeWizardModel extends WizardModel {
+	private UICommand originalCommand;
+	private UIContextImpl context;
+	private List<ForgeWizardStep> steps;
 
-   @SuppressWarnings("unchecked")
-   public ForgeWizardModel(String title, UICommand command, VirtualFile[] files)
-   {
-      super(title);
-      context = new UIContextImpl(getSelection(files));
-      this.originalCommand = command;
-      try
-      {
-         Field field = WizardModel.class.getDeclaredField("mySteps");
-         field.setAccessible(true);
-         steps = (List<ForgeWizardStep>) field.get(this);
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
+	@SuppressWarnings("unchecked")
+	public ForgeWizardModel(String title, UICommand command, VirtualFile[] files) {
+		super(title);
+		context = new UIContextImpl(getSelection(files));
+		this.originalCommand = command;
+		try {
+			Field field = WizardModel.class.getDeclaredField("mySteps");
+			field.setAccessible(true);
+			steps = (List<ForgeWizardStep>) field.get(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-      addWizardSteps();
-      WizardNavigationState navState = getCurrentNavigationState();
-      boolean isWizard = originalCommand instanceof UIWizard;
-      navState.setEnabledToAll(isWizard);
-      navState.PREVIOUS.setEnabled(false);
-   }
+		addWizardSteps();
+		resetNavigationState();
+	}
 
-   private void addWizardSteps()
-   {
-      add(new ForgeWizardStep(originalCommand, context));
+	private void resetNavigationState() {
+		WizardNavigationState navState = getCurrentNavigationState();
+		boolean isWizard = originalCommand instanceof UIWizard;
+		navState.setEnabledToAll(isWizard);
+		navState.PREVIOUS.setEnabled(false);
+	}
 
-      // TODO: Add more steps
-   }
+	private void addWizardSteps() {
+		add(new ForgeWizardStep(originalCommand, context));
 
-   public List<ForgeWizardStep> getSteps()
-   {
-      return steps;
-   }
+		// TODO: Add more steps
+	}
 
-   @SuppressWarnings("rawtypes")
-   private UISelectionImpl<Resource<?>> getSelection(VirtualFile[] files)
-   {
-      UISelectionImpl<Resource<?>> selection = null;
-      if (files != null)
-      {
-         List<Resource<?>> result = new LinkedList<Resource<?>>();
-         ConverterFactory converterFactory = ForgeService.INSTANCE
-                  .lookup(ConverterFactory.class);
-         Converter<File, Resource> converter = converterFactory
-                  .getConverter(File.class, locateNativeClass(Resource.class));
+	public List<ForgeWizardStep> getSteps() {
+		return steps;
+	}
 
-         for (VirtualFile virtualFile : files)
-         {
-            File file = new File(virtualFile.getPath());
-            Resource<?> resource = converter.convert(file);
-            result.add(resource);
-         }
-         if (!result.isEmpty())
-         {
-            selection = new UISelectionImpl<Resource<?>>(result);
-         }
-      }
-      return selection;
-   }
+	@SuppressWarnings("rawtypes")
+	private UISelectionImpl<Resource<?>> getSelection(VirtualFile[] files) {
+		UISelectionImpl<Resource<?>> selection = null;
+		if (files != null) {
+			List<Resource<?>> result = new LinkedList<Resource<?>>();
+			ConverterFactory converterFactory = ForgeService.INSTANCE
+					.lookup(ConverterFactory.class);
+			Converter<File, Resource> converter = converterFactory
+					.getConverter(File.class, locateNativeClass(Resource.class));
 
-   @SuppressWarnings("unchecked")
-   private <T> Class<T> locateNativeClass(Class<T> type)
-   {
-      Class<T> result = type;
-      AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
-      for (Addon addon : registry.getAddons())
-      {
-         try
-         {
-            ClassLoader classLoader = addon.getClassLoader();
-            result = (Class<T>) classLoader.loadClass(type.getName());
-            break;
-         }
-         catch (ClassNotFoundException e)
-         {
-         }
-      }
-      return result;
-   }
+			for (VirtualFile virtualFile : files) {
+				File file = new File(virtualFile.getPath());
+				Resource<?> resource = converter.convert(file);
+				result.add(resource);
+			}
+			if (!result.isEmpty()) {
+				selection = new UISelectionImpl<Resource<?>>(result);
+			}
+		}
+		return selection;
+	}
 
-   public UIContext getContext()
-   {
-      return context;
-   }
+	@SuppressWarnings("unchecked")
+	private <T> Class<T> locateNativeClass(Class<T> type) {
+		Class<T> result = type;
+		AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
+		for (Addon addon : registry.getAddons()) {
+			try {
+				ClassLoader classLoader = addon.getClassLoader();
+				result = (Class<T>) classLoader.loadClass(type.getName());
+				break;
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		return result;
+	}
 
-   public UICommand getOriginalCommand()
-   {
-      return originalCommand;
-   }
+	public UIContext getContext() {
+		return context;
+	}
+
+	public UICommand getOriginalCommand() {
+		return originalCommand;
+	}
 
 }
