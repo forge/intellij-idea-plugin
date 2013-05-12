@@ -24,8 +24,8 @@ public enum ComponentBuilderRegistry
             new ComboEnumComponentBuilder(),
             new ComboComponentBuilder(),
             new RadioComponentBuilder(),
-            // new FileChooserControlBuilder(),
-            // new CheckboxTableControlBuilder(),
+            new FileChooserComponentBuilder(),
+            // new CheckboxTableComponentBuilder(),
             new TextBoxComponentBuilder(),
             new PasswordComponentBuilder(),
             new FallbackTextBoxComponentBuilder() };

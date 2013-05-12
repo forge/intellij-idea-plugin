@@ -8,11 +8,11 @@
 package org.jboss.forge.plugin.idea.components;
 
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
@@ -25,9 +25,9 @@ import org.jboss.forge.ui.util.InputComponents;
 
 /**
  * Creates a Checkbox
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public class CheckboxComponentBuilder extends ComponentBuilder {
 
@@ -48,10 +48,9 @@ public class CheckboxComponentBuilder extends ComponentBuilder {
 					.getValueFor(input));
 			checkbox.setSelected(value == null ? false : value);
 		}
-
-		checkbox.addChangeListener(new ChangeListener() {
+		checkbox.addActionListener(new ActionListener() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				InputComponents.setValueFor(converterFactory, input,
 						checkbox.isSelected());
 			}

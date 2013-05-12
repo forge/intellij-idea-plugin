@@ -23,7 +23,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
       <idea.version>12.1.1</idea.version>
-      <forge.version>2.0.0.Alpha3</forge.version>
+      <forge.version>2.0.0-SNAPSHOT</forge.version>
    </properties>
 
    <dependencies>
