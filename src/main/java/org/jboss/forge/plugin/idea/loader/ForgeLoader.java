@@ -8,13 +8,13 @@ package org.jboss.forge.plugin.idea.loader;
 
 import java.io.File;
 
-import org.jboss.forge.container.Forge;
-import org.jboss.forge.container.repositories.AddonRepositoryMode;
-import org.jboss.forge.container.util.OperatingSystemUtils;
+import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
+import org.jboss.forge.furnace.se.BootstrapClassLoader;
+import org.jboss.forge.furnace.se.ForgeFactory;
+import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
-import org.jboss.forge.se.init.BootstrapClassLoader;
-import org.jboss.forge.se.init.ForgeFactory;
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.ide.plugins.PluginManager;
@@ -34,13 +34,13 @@ public class ForgeLoader implements ApplicationComponent {
 		// MODULES-136
 		System.setProperty("modules.ignore.jdk.factory", "true");
 		final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
-		Forge forge;
+		Furnace forge;
 		try {
 			Class<?> bootstrapType = loader
-					.loadClass("org.jboss.forge.container.ForgeImpl");
-			forge = (Forge) ClassLoaderAdapterCallback.enhance(
+					.loadClass("org.jboss.forge.furnace.FurnaceImpl");
+			forge = (Furnace) ClassLoaderAdapterCallback.enhance(
 					ForgeFactory.class.getClassLoader(), loader,
-					bootstrapType.newInstance(), Forge.class);
+					bootstrapType.newInstance(), Furnace.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -13,13 +13,13 @@ import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import org.jboss.forge.container.addons.AddonRegistry;
-import org.jboss.forge.container.services.ExportedInstance;
+import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.wizard.UIWizardStep;
+import org.jboss.forge.furnace.addons.AddonRegistry;
+import org.jboss.forge.furnace.services.ExportedInstance;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.plugin.idea.wizards.ForgeWizardDialog;
 import org.jboss.forge.plugin.idea.wizards.ForgeWizardModel;
-import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.wizard.UIWizardStep;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnAction;

@@ -7,7 +7,7 @@
 
 package org.jboss.forge.plugin.idea.components;
 
-import org.jboss.forge.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.InputComponent;
 
 public class FallbackTextBoxComponentBuilder extends TextBoxComponentBuilder {
 	@Override

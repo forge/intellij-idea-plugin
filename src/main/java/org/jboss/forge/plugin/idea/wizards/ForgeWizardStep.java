@@ -13,16 +13,16 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.result.NavigationResult;
+import org.jboss.forge.addon.ui.wizard.UIWizard;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.plugin.idea.components.ComponentBuilder;
 import org.jboss.forge.plugin.idea.components.ComponentBuilderRegistry;
 import org.jboss.forge.plugin.idea.context.UIBuilderImpl;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.context.UIContext;
-import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.forge.ui.result.NavigationResult;
-import org.jboss.forge.ui.wizard.UIWizard;
 
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;

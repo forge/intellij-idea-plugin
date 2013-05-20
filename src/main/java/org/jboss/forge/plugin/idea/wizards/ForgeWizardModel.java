@@ -10,17 +10,17 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jboss.forge.container.addons.Addon;
-import org.jboss.forge.container.addons.AddonRegistry;
-import org.jboss.forge.convert.Converter;
-import org.jboss.forge.convert.ConverterFactory;
+import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.resource.Resource;
+import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.wizard.UIWizard;
+import org.jboss.forge.furnace.addons.Addon;
+import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
 import org.jboss.forge.plugin.idea.context.UISelectionImpl;
-import org.jboss.forge.resource.Resource;
-import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.context.UIContext;
-import org.jboss.forge.ui.wizard.UIWizard;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.wizard.WizardModel;

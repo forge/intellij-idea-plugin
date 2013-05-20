@@ -6,14 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.components;
 
-import java.awt.*;
+import java.awt.Container;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
+import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.forge.ui.hints.InputType;
-import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.forge.ui.util.InputComponents;
 
 public abstract class ComponentBuilder
 {

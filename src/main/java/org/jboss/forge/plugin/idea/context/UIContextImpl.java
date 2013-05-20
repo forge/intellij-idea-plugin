@@ -7,7 +7,7 @@
 
 package org.jboss.forge.plugin.idea.context;
 
-import org.jboss.forge.ui.context.AbstractUIContext;
+import org.jboss.forge.addon.ui.context.AbstractUIContext;
 
 public class UIContextImpl extends AbstractUIContext {
 	private UISelectionImpl<?> currentSelection;

@@ -15,16 +15,16 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.jboss.forge.convert.Converter;
-import org.jboss.forge.convert.ConverterFactory;
+import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.hints.InputTypes;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.input.UISelectOne;
+import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.forge.ui.hints.InputType;
-import org.jboss.forge.ui.hints.InputTypes;
-import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.forge.ui.input.UIInput;
-import org.jboss.forge.ui.input.UISelectOne;
-import org.jboss.forge.ui.util.InputComponents;
 
 import com.intellij.openapi.ui.ComboBox;
 
