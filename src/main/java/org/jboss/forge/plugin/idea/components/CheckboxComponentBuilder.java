@@ -17,7 +17,6 @@ import javax.swing.JComponent;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -66,7 +65,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.CHECKBOX;
+		return InputType.CHECKBOX;
 	}
 
 	@Override

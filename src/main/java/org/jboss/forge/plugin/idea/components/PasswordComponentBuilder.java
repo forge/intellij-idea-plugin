@@ -19,7 +19,6 @@ import javax.swing.event.DocumentListener;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -72,7 +71,7 @@ public class PasswordComponentBuilder extends ComponentBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.SECRET;
+		return InputType.SECRET;
 	}
 
 	@Override
