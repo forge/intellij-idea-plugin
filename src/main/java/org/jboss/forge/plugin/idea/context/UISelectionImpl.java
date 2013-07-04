@@ -38,4 +38,9 @@ public class UISelectionImpl<T> implements UISelection<T> {
 	public int size() {
 		return selection.size();
 	}
+
+	@Override
+	public boolean isEmpty() {
+		return size() == 0;
+	}
 }
