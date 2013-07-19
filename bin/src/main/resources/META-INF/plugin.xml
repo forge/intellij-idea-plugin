@@ -1,0 +1,54 @@
+<idea-plugin version="2">
+    <id>org.jboss.forge.plugin.idea</id>
+    <name>JBoss Forge IDEA Plugin</name>
+    <version>${project.version}</version>
+    <vendor email="ggastald@redhat.com" url="http://forge.jboss.org">Red Hat, Inc</vendor>
+
+    <description><![CDATA[
+      JBoss Forge 2.x Support<br>
+      <small>Execute wizards and interact with the container</small>
+      ]]></description>
+
+    <change-notes>   <![CDATA[
+          v0.0.1<br>
+          <small>
+            <ul>
+              <li>Initial Distribution</li>
+            </ul>
+          </small>
+          ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="107.105"/>
+
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+  	<depends>com.intellij.properties</depends>
+
+    <application-components>
+        <component>
+            <implementation-class>org.jboss.forge.plugin.idea.loader.ForgeLoader</implementation-class>
+        </component>
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="org.jboss.forge.idea.show_menu" class="org.jboss.forge.plugin.idea.actions.ShowForgeMenuAction"
+                text="Show Forge Menu">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt 5"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+      	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.extensions.ForgePreferencePage"/>
+    </extensions>
+</idea-plugin>
