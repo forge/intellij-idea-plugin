@@ -7,14 +7,6 @@
 
 package org.jboss.forge.plugin.idea.components;
 
-import java.awt.Container;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -23,59 +15,73 @@ import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.ForgeService;
 
-public class TextBoxComponentBuilder extends ComponentBuilder {
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 
-	@Override
-	public JComponent build(final InputComponent<?, Object> input,
-			Container container) {
-		final JTextField textField = new JTextField();
-		// Set Default Value
-		final ConverterFactory converterFactory = ForgeService.INSTANCE
-				.lookup(ConverterFactory.class);
-		Converter<Object, String> converter = converterFactory.getConverter(
-				input.getValueType(), String.class);
-		String value = converter.convert(InputComponents.getValueFor(input));
-		textField.setText(value == null ? "" : value);
+public class TextBoxComponentBuilder extends ComponentBuilder
+{
 
-		textField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
-			}
+    @Override
+    public JComponent build(final InputComponent<?, Object> input,
+                            Container container)
+    {
+        final JTextField textField = new JTextField();
+        // Set Default Value
+        final ConverterFactory converterFactory = ForgeService.INSTANCE
+                .lookup(ConverterFactory.class);
+        Converter<Object, String> converter = converterFactory.getConverter(
+                input.getValueType(), String.class);
+        String value = converter.convert(InputComponents.getValueFor(input));
+        textField.setText(value == null ? "" : value);
 
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
-			}
+        textField.getDocument().addDocumentListener(new DocumentListener()
+        {
+            @Override
+            public void removeUpdate(DocumentEvent e)
+            {
+                InputComponents.setValueFor(converterFactory, input,
+                        textField.getText());
+            }
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						textField.getText());
-			}
-		});
-		String labelValue = input.getLabel() == null ? input.getName() : input
-				.getLabel();
-		container.add(new JLabel(labelValue));
-		container.add(textField);
-		return textField;
-	}
+            @Override
+            public void insertUpdate(DocumentEvent e)
+            {
+                InputComponents.setValueFor(converterFactory, input,
+                        textField.getText());
+            }
 
-	@Override
-	protected Class<String> getProducedType() {
-		return String.class;
-	}
+            @Override
+            public void changedUpdate(DocumentEvent e)
+            {
+                InputComponents.setValueFor(converterFactory, input,
+                        textField.getText());
+            }
+        });
+        String labelValue = input.getLabel() == null ? input.getName() : input
+                .getLabel();
+        container.add(new JLabel(labelValue));
+        container.add(textField);
+        return textField;
+    }
 
-	@Override
-	protected InputType getSupportedInputType() {
-		return InputType.TEXTBOX;
-	}
+    @Override
+    protected Class<String> getProducedType()
+    {
+        return String.class;
+    }
 
-	@Override
-	protected Class<?>[] getSupportedInputComponentTypes() {
-		return new Class<?>[] { UIInput.class };
-	}
+    @Override
+    protected String getSupportedInputType()
+    {
+        return InputType.TEXTBOX;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
+    }
 
 }

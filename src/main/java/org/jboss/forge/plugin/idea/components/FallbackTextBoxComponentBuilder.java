@@ -9,10 +9,12 @@ package org.jboss.forge.plugin.idea.components;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
 
-public class FallbackTextBoxComponentBuilder extends TextBoxComponentBuilder {
-	@Override
-	public final boolean handles(InputComponent<?, ?> input) {
-		return true;
-	}
+public class FallbackTextBoxComponentBuilder extends TextBoxComponentBuilder
+{
+    @Override
+    public final boolean handles(InputComponent<?, ?> input)
+    {
+        return true;
+    }
 
 }

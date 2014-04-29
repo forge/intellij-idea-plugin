@@ -6,95 +6,98 @@
  */
 package org.jboss.forge.plugin.idea.extensions;
 
-import java.awt.BorderLayout;
-import java.io.File;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import net.miginfocom.swing.MigLayout;
-
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.forge.furnace.util.Strings;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 
 /**
  * The Forge preferences Page
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
  */
-public class ForgePreferencePage implements Configurable {
-	private TextFieldWithBrowseButton addonsDirField;
-	private String defaultText;
+public class ForgePreferencePage implements Configurable
+{
+    private TextFieldWithBrowseButton addonsDirField;
+    private String defaultText;
 
-	@Override
-	@Nullable
-	public JComponent createComponent() {
-		defaultText = new File(OperatingSystemUtils.getUserForgeDir(), "addons")
-				.getAbsolutePath();
-		addonsDirField = new TextFieldWithBrowseButton();
-		addonsDirField.setText(defaultText);
-		addonsDirField.addBrowseFolderListener(
-				"Select your preferred addon location",
-				"Specifies the directory that addons will be deployed", null,
-				FileChooserDescriptorFactory.createSingleFolderDescriptor());
+    @Override
+    @Nullable
+    public JComponent createComponent()
+    {
+        defaultText = new File(OperatingSystemUtils.getUserForgeDir(), "addons")
+                .getAbsolutePath();
+        addonsDirField = new TextFieldWithBrowseButton();
+        addonsDirField.setText(defaultText);
+        addonsDirField.addBrowseFolderListener(
+                "Select your preferred addon location",
+                "Specifies the directory that addons will be deployed", null,
+                FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
-		JPanel panel = new JPanel(new MigLayout("fillx,wrap 2",
-				"[left]rel[grow,fill]"));
-		panel.setOpaque(false);
+        JPanel panel = new JPanel(new MigLayout("fillx,wrap 2",
+                "[left]rel[grow,fill]"));
+        panel.setOpaque(false);
 
-		panel.add(new JLabel("Addons Installation Location:"));
-		panel.add(addonsDirField);
-		JPanel result = new JPanel(new BorderLayout());
-		result.add(panel, BorderLayout.NORTH);
-		return result;
-	}
+        panel.add(new JLabel("Addons Installation Location:"));
+        panel.add(addonsDirField);
+        JPanel result = new JPanel(new BorderLayout());
+        result.add(panel, BorderLayout.NORTH);
+        return result;
+    }
 
-	@Override
-	public boolean isModified() {
-		return true;
-		// return !defaultText.equals(addonsDirField.getText());
-	}
+    @Override
+    public boolean isModified()
+    {
+        return true;
+        // return !defaultText.equals(addonsDirField.getText());
+    }
 
-	@Override
-	public void apply() throws ConfigurationException {
-		String addonDir = addonsDirField.getText();
-		if (Strings.isNullOrEmpty(addonDir)) {
-			addonDir = defaultText;
-		}
+    @Override
+    public void apply() throws ConfigurationException
+    {
+        String addonDir = addonsDirField.getText();
+        if (Strings.isNullOrEmpty(addonDir))
+        {
+            addonDir = defaultText;
+        }
 
-		// TODO: Store the addonDir value somewhere
-	}
+        // TODO: Store the addonDir value somewhere
+    }
 
-	@Override
-	public void reset() {
-		addonsDirField.setText(defaultText);
-	}
+    @Override
+    public void reset()
+    {
+        addonsDirField.setText(defaultText);
+    }
 
-	@Override
-	public void disposeUIResources() {
-		addonsDirField.dispose();
-	}
+    @Override
+    public void disposeUIResources()
+    {
+        addonsDirField.dispose();
+    }
 
-	@Override
-	@Nls
-	public String getDisplayName() {
-		return "JBoss Forge";
-	}
+    @Override
+    @Nls
+    public String getDisplayName()
+    {
+        return "JBoss Forge";
+    }
 
-	@Override
-	@Nullable
-	@NonNls
-	public String getHelpTopic() {
-		return null;
-	}
+    @Override
+    @Nullable
+    @NonNls
+    public String getHelpTopic()
+    {
+        return null;
+    }
 }
