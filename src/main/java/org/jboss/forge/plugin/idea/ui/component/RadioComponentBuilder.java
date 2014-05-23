@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -14,7 +14,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +35,7 @@ public class RadioComponentBuilder extends ComponentBuilder
 
         JPanel radioContainer = new JPanel(new FlowLayout());
         container.add(radioContainer);
-        final ConverterFactory converterFactory = ForgeService.INSTANCE
+        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                 .getConverterFactory();
         UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
         Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents

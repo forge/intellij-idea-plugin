@@ -24,6 +24,8 @@
        
       <idea.version>13.1.2</idea.version>
       <forge.version>2.5.1-SNAPSHOT</forge.version>
+
+      <ij.plugin>true</ij.plugin>
    </properties>
 
    <dependencies>

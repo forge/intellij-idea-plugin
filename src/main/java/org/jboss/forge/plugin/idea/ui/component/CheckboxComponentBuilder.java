@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -13,7 +13,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +37,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                 .getLabel());
         final JCheckBox checkbox = new JCheckBox(text);
         // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE
+        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                 .lookup(ConverterFactory.class);
         if (converterFactory != null)
         {

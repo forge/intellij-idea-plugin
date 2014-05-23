@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
 

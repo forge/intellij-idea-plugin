@@ -1,4 +1,4 @@
-package org.jboss.forge.plugin.idea.wizards;
+package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.wizard.WizardDialog;

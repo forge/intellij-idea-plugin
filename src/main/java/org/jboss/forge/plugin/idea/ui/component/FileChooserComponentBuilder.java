@@ -5,37 +5,58 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-public class TextBoxComponentBuilder extends ComponentBuilder
+public class FileChooserComponentBuilder extends ComponentBuilder
 {
 
     @Override
     public JComponent build(final InputComponent<?, Object> input,
                             Container container)
     {
-        final JTextField textField = new JTextField();
+        // Added Label
+        container.add(new JLabel(input.getLabel() == null ? input.getName()
+                : input.getLabel()));
+
+        final TextFieldWithBrowseButton fileField = new TextFieldWithBrowseButton(
+                new ActionListener()
+                {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        // TODO Auto-generated method stub
+
+                    }
+                }
+        );
         // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE
-                .lookup(ConverterFactory.class);
+        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                .getConverterFactory();
         Converter<Object, String> converter = converterFactory.getConverter(
                 input.getValueType(), String.class);
         String value = converter.convert(InputComponents.getValueFor(input));
-        textField.setText(value == null ? "" : value);
+        fileField.setText(value == null ? "" : value);
 
+        final JTextField textField = fileField.getTextField();
         textField.getDocument().addDocumentListener(new DocumentListener()
         {
             @Override
@@ -59,23 +80,23 @@ public class TextBoxComponentBuilder extends ComponentBuilder
                         textField.getText());
             }
         });
-        String labelValue = input.getLabel() == null ? input.getName() : input
-                .getLabel();
-        container.add(new JLabel(labelValue));
-        container.add(textField);
-        return textField;
+
+        fileField.addBrowseFolderListener("Select a directory", null, null,
+                FileChooserDescriptorFactory.createSingleFolderDescriptor());
+        container.add(fileField);
+        return null;
     }
 
     @Override
-    protected Class<String> getProducedType()
+    protected Class<File> getProducedType()
     {
-        return String.class;
+        return File.class;
     }
 
     @Override
     protected String getSupportedInputType()
     {
-        return InputType.TEXTBOX;
+        return InputType.FILE_PICKER;
     }
 
     @Override

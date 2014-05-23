@@ -5,27 +5,26 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.ui.ComboBox;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-@SuppressWarnings("rawtypes")
-public class ComboEnumComponentBuilder extends ComponentBuilder
+public class ComboComponentBuilder extends ComponentBuilder
 {
+
     @SuppressWarnings("unchecked")
     @Override
     public JComponent build(final InputComponent<?, Object> input, Container container)
@@ -36,20 +35,25 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
                 .getLabel());
         container.add(label);
 
-        final ConverterFactory converterFactory = ForgeService.INSTANCE
+        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                 .getConverterFactory();
         final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
         final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
                 .getItemLabelConverter(converterFactory, selectOne);
         final DefaultComboBoxModel model = new DefaultComboBoxModel();
-        Enum[] enumConstants = input.getValueType().asSubclass(Enum.class)
-                .getEnumConstants();
-        for (Enum enum1 : enumConstants)
-        {
-            model.addElement(enum1.name());
-        }
 
         ComboBox combo = new ComboBox(model);
+        combo.setRenderer(new ListCellRenderer()
+        {
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                                                          boolean cellHasFocus)
+            {
+                Object obj = model.getElementAt(index);
+                return new JLabel(converter.convert(obj));
+            }
+        });
         container.add(combo);
         String value = converter.convert(InputComponents.getValueFor(input));
         Iterable<Object> valueChoices = selectOne.getValueChoices();
@@ -66,10 +70,8 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
             @Override
             public void itemStateChanged(ItemEvent e)
             {
-                String selectedItem = (String) model.getSelectedItem();
-                Class valueType = input.getValueType();
-                InputComponents.setValueFor(converterFactory, input,
-                        Enum.valueOf(valueType, selectedItem));
+                Object selectedItem = model.getSelectedItem();
+                InputComponents.setValueFor(converterFactory, input, selectedItem);
             }
         });
 
@@ -89,9 +91,9 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
     }
 
     @Override
-    protected Class<Enum> getProducedType()
+    protected Class<Object> getProducedType()
     {
-        return Enum.class;
+        return Object.class;
     }
 
     @Override
@@ -103,6 +105,6 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
     @Override
     protected Class<?>[] getSupportedInputComponentTypes()
     {
-        return new Class<?>[]{UISelectOne.class, UIInput.class};
+        return new Class<?>[]{UISelectOne.class};
     }
 }

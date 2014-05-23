@@ -1,16 +1,7 @@
-/**
- * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * <p/>
- * Licensed under the Eclipse Public License version 1.0, available at
- * http://www.eclipse.org/legal/epl-v10.html
- */
-package org.jboss.forge.plugin.idea.actions;
+package org.jboss.forge.plugin.idea.ui;
 
+import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupAdapter;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -20,38 +11,35 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
 import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.furnace.services.Imported;
-import org.jboss.forge.plugin.idea.ForgeService;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Creates a popup list and displays all the currently registered
- * {@link UICommand} instances
+ * Lists all UI commands.
  *
- * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ * @author Adam Wyłuda
  */
-public class ShowForgeMenuAction extends AnAction
+public class CommandListPopup
 {
+    // TODO Design and implement CommandListPopup
+
     volatile boolean active;
 
-    @Override
-    public void actionPerformed(final AnActionEvent e)
+    public void show()
     {
         if (active)
             return;
         active = true;
-        final VirtualFile[] selectedFiles = e
-                .getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
+        final VirtualFile[] selectedFiles = null;
+//        final VirtualFile[] selectedFiles = e
+//                .getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
         final JBList list = new JBList();
         DefaultListModel model = new DefaultListModel();
 
-        final Project project = e.getData(DataKeys.PROJECT);
+        final Project project = null;
+//        final Project project = e.getData(DataKeys.PROJECT);
 
         final List<UICommand> allCandidates = getAllCandidates();
         model.setSize(allCandidates.size());
@@ -93,7 +81,7 @@ public class ShowForgeMenuAction extends AnAction
             @Override
             public void onClosed(LightweightWindowEvent event)
             {
-                ShowForgeMenuAction.this.active = false;
+                CommandListPopup.this.active = false;
             }
         });
         listPopupBuilder.setItemChoosenCallback(new Runnable()
@@ -108,28 +96,17 @@ public class ShowForgeMenuAction extends AnAction
         }).createPopup().showCenteredInCurrentWindow(project);
     }
 
+    private List<UICommand> getAllCandidates()
+    {
+        // TODO Implement getAllCandidates()
+        return Lists.newArrayList();
+    }
+
     private void openWizard(UICommand command, VirtualFile[] files)
     {
-        // TODO Pass UIContext to getMetadata()
+        // TODO Use CommandController to obtain UICommand metadata
 //        ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
 //        ForgeWizardDialog dialog = new ForgeWizardDialog(model);
 //        dialog.show();
     }
-
-    private List<UICommand> getAllCandidates()
-    {
-        List<UICommand> result = new ArrayList<UICommand>();
-        AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
-        Imported<UICommand> exportedInstances = addonRegistry
-                .getServices(UICommand.class);
-        for (UICommand uiCommand : exportedInstances)
-        {
-            if (!(uiCommand instanceof UIWizardStep))
-            {
-                result.add(uiCommand);
-            }
-        }
-        return result;
-    }
-
 }

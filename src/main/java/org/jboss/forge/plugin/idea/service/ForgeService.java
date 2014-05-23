@@ -1,47 +1,120 @@
-/**
- * Copyright 2013 Red Hat, Inc. and/or its affiliates.
- * <p/>
+/*
+ * Copyright 2012 Red Hat, Inc. and/or its affiliates.
+ *
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.jboss.forge.plugin.idea.loader;
+
+package org.jboss.forge.plugin.idea.service;
 
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.extensions.PluginId;
+import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.command.CommandFactory;
+import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.proxy.ClassLoaderAdapterBuilder;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.BootstrapClassLoader;
 import org.jboss.forge.furnace.se.FurnaceFactory;
+import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
-import org.jboss.forge.plugin.idea.ForgeService;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
 /**
- * Loaded when the plugin initializes
+ * This is a singleton for the {@link Furnace} class.
  *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ * @author Adam Wyłuda
  */
-public class ForgeLoader implements ApplicationComponent
+public class ForgeService implements ApplicationComponent
 {
+    private transient ClassLoader classLoader;
+    private transient Furnace furnace;
+
+    private ForgeService()
+    {
+    }
+
     @Override
     public void initComponent()
     {
+        createFurnace();
+        initiateAddonRepositories();
+    }
+
+    @Override
+    public void disposeComponent()
+    {
+        stop();
+    }
+
+    @NotNull
+    @Override
+    public String getComponentName()
+    {
+        return getClass().getSimpleName();
+    }
+
+    public void start()
+    {
+        furnace.start(classLoader);
+    }
+
+    public void startAsync()
+    {
+        furnace.startAsync(classLoader);
+    }
+
+    public void stop()
+    {
+        furnace.stop();
+    }
+
+    public CommandFactory getCommandFactory()
+    {
+        return lookup(CommandFactory.class);
+    }
+
+    public CommandControllerFactory getCommandControllerFactory()
+    {
+        return lookup(CommandControllerFactory.class);
+    }
+
+    public ConverterFactory getConverterFactory()
+    {
+        return lookup(ConverterFactory.class);
+    }
+
+    public <S> S lookup(Class<S> service)
+    {
+        Imported<S> exportedInstance = null;
+        if (furnace != null)
+        {
+            exportedInstance = furnace.getAddonRegistry().getServices(service);
+        }
+        return (exportedInstance == null) ? null : exportedInstance.get();
+    }
+
+    public boolean isLoaded()
+    {
+        return furnace.getStatus().isStarted();
+    }
+
+    private void createFurnace()
+    {
         // MODULES-136
         System.setProperty("modules.ignore.jdk.factory", "true");
+
         final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
-        Furnace furnace;
         try
         {
             Class<?> bootstrapType = loader
                     .loadClass("org.jboss.forge.furnace.FurnaceImpl");
-//			furnace = (Furnace) ClassLoaderAdapterCallback.enhance(
-//                    FurnaceFactory.class.getClassLoader(), loader,
-//                    , Furnace.class);
             furnace = (Furnace) ClassLoaderAdapterBuilder.callingLoader(FurnaceFactory.class.getClassLoader())
                     .delegateLoader(loader)
                     .enhance(bootstrapType.newInstance(), Furnace.class);
@@ -50,7 +123,10 @@ public class ForgeLoader implements ApplicationComponent
         {
             throw new RuntimeException(e);
         }
+    }
 
+    private void initiateAddonRepositories()
+    {
         PluginId pluginId = PluginManager.getPluginByClassName(getClass()
                 .getName());
         File pluginHome = new File(PathManager.getPluginsPath(),
@@ -59,23 +135,5 @@ public class ForgeLoader implements ApplicationComponent
         furnace.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
         furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
                 OperatingSystemUtils.getUserForgeDir(), "addons"));
-        ForgeService.INSTANCE.setForge(furnace);
-
-        // Starting Forge
-        ForgeService.INSTANCE.start(loader);
-    }
-
-    @Override
-    public void disposeComponent()
-    {
-        ForgeService.INSTANCE.stop();
-        ForgeService.INSTANCE.setForge(null);
-    }
-
-    @Override
-    @NotNull
-    public String getComponentName()
-    {
-        return "ForgeLoader";
     }
 }

@@ -3,7 +3,7 @@
  * <p/>
  * Licensed under the Eclipse Public License version 1.0, available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.jboss.forge.plugin.idea.wizards;
+package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.wizard.WizardModel;
@@ -14,11 +14,9 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
-import org.jboss.forge.furnace.addons.Addon;
-import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.plugin.idea.ForgeService;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
 import org.jboss.forge.plugin.idea.context.UISelectionImpl;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -84,7 +82,7 @@ public class ForgeWizardModel extends WizardModel
         if (files != null)
         {
             List<Resource<?>> result = new LinkedList<Resource<?>>();
-            ConverterFactory converterFactory = ForgeService.INSTANCE
+            ConverterFactory converterFactory = ServiceHelper.getForgeService()
                     .lookup(ConverterFactory.class);
             Converter<File, Resource> converter = converterFactory
                     .getConverter(File.class, locateNativeClass(Resource.class));
@@ -106,20 +104,21 @@ public class ForgeWizardModel extends WizardModel
     @SuppressWarnings("unchecked")
     private <T> Class<T> locateNativeClass(Class<T> type)
     {
+        // TODO Perhaps this should be in ForgeService?
         Class<T> result = type;
-        AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
-        for (Addon addon : registry.getAddons())
-        {
-            try
-            {
-                ClassLoader classLoader = addon.getClassLoader();
-                result = (Class<T>) classLoader.loadClass(type.getName());
-                break;
-            }
-            catch (ClassNotFoundException e)
-            {
-            }
-        }
+//        AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
+//        for (Addon addon : registry.getAddons())
+//        {
+//            try
+//            {
+//                ClassLoader classLoader = addon.getClassLoader();
+//                result = (Class<T>) classLoader.loadClass(type.getName());
+//                break;
+//            }
+//            catch (ClassNotFoundException e)
+//            {
+//            }
+//        }
         return result;
     }
 

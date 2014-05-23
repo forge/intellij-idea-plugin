@@ -4,20 +4,16 @@
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.jboss.forge.plugin.idea.wizards;
+package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.result.NavigationResult;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.components.ComponentBuilder;
-import org.jboss.forge.plugin.idea.components.ComponentBuilderRegistry;
-import org.jboss.forge.plugin.idea.context.UIBuilderImpl;
 
 import javax.swing.*;
 import java.util.List;
@@ -43,25 +39,27 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     @Override
     public JComponent prepare(WizardNavigationState state)
     {
-        UIBuilderImpl uiBuilder = new UIBuilderImpl(context);
-        try
-        {
-            uiCommand.initializeUI(uiBuilder);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-
+//        UIBuilderImpl uiBuilder = new UIBuilderImpl(context);
+//        try
+//        {
+//            uiCommand.initializeUI(uiBuilder);
+//        }
+//        catch (Exception e)
+//        {
+//            throw new RuntimeException(e);
+//        }
+//
         // Build panel
         JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]", "[]10[]"));
-        for (InputComponent input : uiBuilder.getInputs())
-        {
-            ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE
-                    .getBuilderFor(input);
-            builder.build(input, container);
-        }
+
+//        for (InputComponent input : uiBuilder.getInputs())
+//        {
+//            ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE
+//                    .getBuilderFor(input);
+//            builder.build(input, container);
+//        }
+
         return container;
     }
 

@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.components;
+package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -13,24 +13,23 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.ForgeService;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class PasswordComponentBuilder extends ComponentBuilder
+public class TextBoxComponentBuilder extends ComponentBuilder
 {
 
     @Override
     public JComponent build(final InputComponent<?, Object> input,
                             Container container)
     {
-        final JTextField textField = new JPasswordField();
+        final JTextField textField = new JTextField();
         // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE
-                .lookup(ConverterFactory.class);
+        final ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
         Converter<Object, String> converter = converterFactory.getConverter(
                 input.getValueType(), String.class);
         String value = converter.convert(InputComponents.getValueFor(input));
@@ -75,7 +74,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
     @Override
     protected String getSupportedInputType()
     {
-        return InputType.SECRET;
+        return InputType.TEXTBOX;
     }
 
     @Override

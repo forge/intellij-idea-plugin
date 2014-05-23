@@ -29,26 +29,24 @@
     -->
   	<depends>com.intellij.properties</depends>
 
-    <application-components>
-        <component>
-            <implementation-class>org.jboss.forge.plugin.idea.loader.ForgeLoader</implementation-class>
-        </component>
-    </application-components>
-
     <project-components>
         <!-- Add your project components here -->
     </project-components>
 
     <actions>
         <!-- Add your actions here -->
-        <action id="org.jboss.forge.idea.show_menu" class="org.jboss.forge.plugin.idea.actions.ShowForgeMenuAction"
-                text="Show Forge Menu">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt 5"/>
+        <action id="org.jboss.forge.idea.show_commands"
+                class="org.jboss.forge.plugin.idea.action.ShowCommandListAction"
+                text="Show Forge Commands">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl 4"/>
         </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
       	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.extensions.ForgePreferencePage"/>
+
+        <applicationService serviceInterface="org.jboss.forge.plugin.idea.service.ForgeService"
+                            serviceImplementation="org.jboss.forge.plugin.idea.service.ForgeService"/>
     </extensions>
 </idea-plugin>
