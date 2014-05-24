@@ -14,16 +14,11 @@
 
    <description>Integration of the UI API in Intellij IDEA</description>
 
-   <issueManagement>
-      <system>Github</system>
-      <url>https://github.com/gastaldi/forge-intellij-plugin/issues</url>
-   </issueManagement>
-
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
        
       <idea.version>13.1.2</idea.version>
-      <forge.version>2.5.1-SNAPSHOT</forge.version>
+      <forge.version>2.6.1-SNAPSHOT</forge.version>
 
       <ij.plugin>true</ij.plugin>
    </properties>
@@ -84,6 +79,7 @@
             </exclusion>
          </exclusions>
       </dependency>
+
       <!-- Swing MigLayout -->
       <dependency>
          <groupId>com.miglayout</groupId>
@@ -127,7 +123,7 @@
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>4.10</version>
+         <version>4.11</version>
          <scope>test</scope>
       </dependency>
    </dependencies>

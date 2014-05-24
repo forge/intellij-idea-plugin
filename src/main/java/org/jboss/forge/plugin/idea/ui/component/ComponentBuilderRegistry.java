@@ -1,16 +1,15 @@
 /*
- * Copyright 2013 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2014 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
 
 /**
- * A factory for {@link ControlBuilder} instances.
+ * A factory for {@link ComponentBuilder} instances.
  *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  */

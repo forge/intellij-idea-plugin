@@ -1,6 +1,11 @@
+/*
+ * Copyright 2014 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.jboss.forge.plugin.idea.ui;
 
-import com.google.common.collect.Lists;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupAdapter;
@@ -13,6 +18,7 @@ import com.intellij.ui.components.JBList;
 import org.jboss.forge.addon.ui.command.UICommand;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,7 +105,7 @@ public class CommandListPopup
     private List<UICommand> getAllCandidates()
     {
         // TODO Implement getAllCandidates()
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     private void openWizard(UICommand command, VirtualFile[] files)

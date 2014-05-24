@@ -27,7 +27,7 @@
     <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
     -->
-  	<depends>com.intellij.properties</depends>
+  	<!--<depends>com.intellij.properties</depends>-->
 
     <project-components>
         <!-- Add your project components here -->
@@ -48,5 +48,8 @@
 
         <applicationService serviceInterface="org.jboss.forge.plugin.idea.service.ForgeService"
                             serviceImplementation="org.jboss.forge.plugin.idea.service.ForgeService"/>
+
+        <applicationService serviceInterface="org.jboss.forge.plugin.idea.service.UIService"
+                            serviceImplementation="org.jboss.forge.plugin.idea.service.UIService"/>
     </extensions>
 </idea-plugin>
