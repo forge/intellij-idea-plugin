@@ -25,11 +25,6 @@ public class ServiceHelper
         return ServiceManager.getService(ForgeService.class);
     }
 
-    public static UIService getUIService()
-    {
-        return ServiceManager.getService(UIService.class);
-    }
-
     /**
      * Makes sure that Furnace is loaded and then executes given callback on IntelliJ UI thread.
      */

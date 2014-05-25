@@ -38,7 +38,7 @@
         <action id="org.jboss.forge.idea.show_commands"
                 class="org.jboss.forge.plugin.idea.action.ShowCommandListAction"
                 text="Show Forge Commands">
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl 4"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt 4"/>
         </action>
     </actions>
 

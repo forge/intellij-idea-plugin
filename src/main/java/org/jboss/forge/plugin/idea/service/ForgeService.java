@@ -101,7 +101,7 @@ public class ForgeService implements ApplicationComponent
 
     public boolean isLoaded()
     {
-        return furnace.getStatus().isStarted();
+        return furnace != null && furnace.getStatus().isStarted();
     }
 
     private void createFurnace()

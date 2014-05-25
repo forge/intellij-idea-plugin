@@ -10,6 +10,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.ui.CommandListPopup;
 
 /**
  * Creates a popup list and displays all the currently registered
@@ -23,6 +24,13 @@ public class ShowCommandListAction extends AnAction
     @Override
     public void actionPerformed(final AnActionEvent e)
     {
-        ServiceHelper.getUIService().getCommandListPopupMenu().show();
+        ServiceHelper.loadFurnaceAndRun(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                new CommandListPopup().show();
+            }
+        });
     }
 }
