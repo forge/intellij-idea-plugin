@@ -14,9 +14,7 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.furnace.Furnace;
-import org.jboss.forge.furnace.proxy.ClassLoaderAdapterBuilder;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
-import org.jboss.forge.furnace.se.BootstrapClassLoader;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
@@ -32,10 +30,9 @@ import java.io.File;
  */
 public class ForgeService implements ApplicationComponent
 {
-    private transient ClassLoader classLoader;
     private transient Furnace furnace;
 
-    private ForgeService()
+    ForgeService()
     {
     }
 
@@ -61,12 +58,12 @@ public class ForgeService implements ApplicationComponent
 
     public void start()
     {
-        furnace.start(classLoader);
+        furnace.start();
     }
 
     public void startAsync()
     {
-        furnace.startAsync(classLoader);
+        furnace.startAsync();
     }
 
     public void stop()
@@ -109,19 +106,7 @@ public class ForgeService implements ApplicationComponent
         // MODULES-136
         System.setProperty("modules.ignore.jdk.factory", "true");
 
-        final BootstrapClassLoader loader = new BootstrapClassLoader("bootpath");
-        try
-        {
-            Class<?> bootstrapType = loader
-                    .loadClass("org.jboss.forge.furnace.FurnaceImpl");
-            furnace = (Furnace) ClassLoaderAdapterBuilder.callingLoader(FurnaceFactory.class.getClassLoader())
-                    .delegateLoader(loader)
-                    .enhance(bootstrapType.newInstance(), Furnace.class);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        furnace = FurnaceFactory.getInstance();
     }
 
     private void initializeAddonRepositories()

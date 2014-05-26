@@ -19,22 +19,15 @@
           ]]>
     </change-notes>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
     <idea-version since-build="107.105"/>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-         on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
-  	<!--<depends>com.intellij.properties</depends>-->
-
-    <project-components>
-        <!-- Add your project components here -->
-    </project-components>
+    <application-components>
+        <component>
+            <implementation-class>org.jboss.forge.plugin.idea.service.ForgeService</implementation-class>
+        </component>
+    </application-components>
 
     <actions>
-        <!-- Add your actions here -->
         <action id="org.jboss.forge.idea.show_commands"
                 class="org.jboss.forge.plugin.idea.action.ShowCommandListAction"
                 text="Show Forge Commands">
@@ -43,13 +36,9 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
       	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.extensions.ForgePreferencePage"/>
 
-        <applicationService serviceInterface="org.jboss.forge.plugin.idea.service.ForgeService"
-                            serviceImplementation="org.jboss.forge.plugin.idea.service.ForgeService"/>
-
-        <applicationService serviceInterface="org.jboss.forge.plugin.idea.service.UIService"
-                            serviceImplementation="org.jboss.forge.plugin.idea.service.UIService"/>
+        <!--<applicationService serviceInterface="org.jboss.forge.plugin.idea.service.ForgeService"-->
+                            <!--serviceImplementation="org.jboss.forge.plugin.idea.service.ForgeService"/>-->
     </extensions>
 </idea-plugin>
