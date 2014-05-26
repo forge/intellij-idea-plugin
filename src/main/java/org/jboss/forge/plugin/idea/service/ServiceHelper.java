@@ -8,6 +8,11 @@ package org.jboss.forge.plugin.idea.service;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
+import org.jboss.forge.furnace.Furnace;
+
+import java.util.concurrent.Future;
 
 /**
  * IntelliJ service utilities.
@@ -36,26 +41,35 @@ public class ServiceHelper
         }
         else
         {
-            getForgeService().startAsync();
-            startForgeInitTask();
-            runAfterFurnaceLoaded(callback);
+            Future<Furnace> future = getForgeService().startAsync();
+            startForgeInitTask(future, callback);
         }
     }
 
     /**
      * Starts Forge initiation background task.
      */
-    private static void startForgeInitTask()
+    private static void startForgeInitTask(final Future<Furnace> future, final Runnable callback)
     {
-        // TODO Implement startForgeInitTask()
-    }
+        new Task.Backgroundable(null, "Starting Forge", true)
+        {
+            public void run(ProgressIndicator indicator)
+            {
+                indicator.setText("Loading Furnace");
+                indicator.setFraction(0.0);
+                try
+                {
+                    future.get();
+                }
+                catch (Exception e)
+                {
+                    throw new RuntimeException(e);
+                }
+                indicator.setFraction(1.0);
 
-    /**
-     * Binds given action to Furnace lifecycle.
-     */
-    private static void runAfterFurnaceLoaded(Runnable callback)
-    {
-        // TODO Implement runAfterFurnaceLoaded()
+                runOnUIThread(callback);
+            }
+        }.setCancelText("Stop loading").queue();
     }
 
     /**
