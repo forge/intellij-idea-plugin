@@ -21,6 +21,7 @@ import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.concurrent.Future;
 
 /**
  * This is a singleton for the {@link Furnace} class.
@@ -40,7 +41,7 @@ public class ForgeService implements ApplicationComponent
     public void initComponent()
     {
         createFurnace();
-        initializeAddonRepositories();
+        initializeAddonRepositories(true);
     }
 
     @Override
@@ -61,9 +62,9 @@ public class ForgeService implements ApplicationComponent
         furnace.start();
     }
 
-    public void startAsync()
+    public Future<Furnace> startAsync()
     {
-        furnace.startAsync();
+        return furnace.startAsync();
     }
 
     public void stop()
@@ -101,7 +102,7 @@ public class ForgeService implements ApplicationComponent
         return furnace != null && furnace.getStatus().isStarted();
     }
 
-    private void createFurnace()
+    void createFurnace()
     {
         // MODULES-136
         System.setProperty("modules.ignore.jdk.factory", "true");
@@ -109,15 +110,19 @@ public class ForgeService implements ApplicationComponent
         furnace = FurnaceFactory.getInstance();
     }
 
-    private void initializeAddonRepositories()
+    void initializeAddonRepositories(boolean addBundledAddons)
     {
-        PluginId pluginId = PluginManager.getPluginByClassName(getClass()
-                .getName());
-        File pluginHome = new File(PathManager.getPluginsPath(),
-                pluginId.getIdString());
-        File addonRepo = new File(pluginHome, "addon-repository");
-        furnace.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
         furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
                 OperatingSystemUtils.getUserForgeDir(), "addons"));
+
+        if (addBundledAddons)
+        {
+            PluginId pluginId = PluginManager.getPluginByClassName(getClass()
+                    .getName());
+            File pluginHome = new File(PathManager.getPluginsPath(),
+                    pluginId.getIdString());
+            File addonRepo = new File(pluginHome, "addon-repository");
+            furnace.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
+        }
     }
 }
