@@ -6,7 +6,12 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
+import org.jboss.forge.addon.ui.command.CommandFactory;
+import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.furnace.util.Lists;
 import org.junit.*;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -17,16 +22,47 @@ public class ForgeServiceTest //extends LightCodeInsightFixtureTestCase
 {
     // TODO Run test in real IntelliJ environment
 
-    @Test
-    public void testFurnaceLoading() throws Exception
+    private ForgeService service;
+
+    @Before
+    public void prepare()
     {
         // This should be obtained and initialized using IntelliJ API:
-        // ForgeService service = ServiceHelper.getForgeService();
-        ForgeService service = new ForgeService();
+        // service = ServiceHelper.getForgeService();
+        service = new ForgeService();
         service.createFurnace();
         service.initializeAddonRepositories(false);
+    }
 
-        service.startAsync().get();
+    @Test
+    public void testFurnaceLoading()
+    {
+        startFurnace();
+
         assertTrue(service.isLoaded());
+    }
+
+    @Test
+    public void testCommandLoading()
+    {
+        startFurnace();
+
+        CommandFactory factory = service.getCommandFactory();
+        assertNotNull(factory);
+
+        List<UICommand> commands = Lists.toList(factory.getCommands());
+        assertTrue(commands.size() > 0);
+    }
+
+    private void startFurnace()
+    {
+        try
+        {
+            service.startAsync().get();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

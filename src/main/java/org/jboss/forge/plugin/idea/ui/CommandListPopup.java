@@ -15,7 +15,10 @@ import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
+import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.addon.ui.wizard.UIWizardStep;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -104,8 +107,24 @@ public class CommandListPopup
 
     private List<UICommand> getAllCandidates()
     {
-        // TODO Implement getAllCandidates()
-        return new ArrayList<>();
+        List<UICommand> commands = new ArrayList<UICommand>();
+        CommandFactory commandFactory = ServiceHelper.getForgeService().getCommandFactory();
+
+        for (UICommand command : commandFactory.getCommands())
+        {
+            if (isCandidate(command))
+            {
+                commands.add(command);
+            }
+        }
+
+        return commands;
+    }
+
+    private boolean isCandidate(UICommand command)
+    {
+        // TODO Call command.isEnabled() with UIContext
+        return !(command instanceof UIWizardStep);
     }
 
     private void openWizard(UICommand command, VirtualFile[] files)
