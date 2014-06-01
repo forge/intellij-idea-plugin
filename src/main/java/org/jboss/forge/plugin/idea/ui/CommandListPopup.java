@@ -7,12 +7,10 @@
 package org.jboss.forge.plugin.idea.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.ui.popup.JBPopupAdapter;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
+import com.intellij.openapi.ui.popup.*;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
+import com.intellij.util.Function;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -84,9 +82,9 @@ public class CommandListPopup
 
         list.setModel(model);
 
-        final PopupChooserBuilder listPopupBuilder = JBPopupFactory
-                .getInstance().createListPopupBuilder(list);
+        final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
         listPopupBuilder.setTitle("Run a Forge command");
+        listPopupBuilder.setResizable(true);
         listPopupBuilder.addListener(new JBPopupAdapter()
         {
             @Override
@@ -104,7 +102,21 @@ public class CommandListPopup
                 UICommand selectedCommand = allCandidates.get(selectedIndex);
                 openWizard(selectedCommand);
             }
-        }).createPopup().showInFocusCenter();
+        });
+        listPopupBuilder.setFilteringEnabled(new Function<Object, String>()
+        {
+            @Override
+            public String fun(Object object)
+            {
+                UICommand command = (UICommand) object;
+                UICommandMetadata metadata = command.getMetadata(uiContext);
+
+                return metadata.getCategory().toString() + " " + metadata.getName();
+            }
+        });
+
+        JBPopup popup = listPopupBuilder.createPopup();
+        popup.showInFocusCenter();
     }
 
     private List<UICommand> getAllCandidates()
