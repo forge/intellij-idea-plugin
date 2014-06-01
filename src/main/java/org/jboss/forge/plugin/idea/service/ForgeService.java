@@ -14,6 +14,8 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.addons.Addon;
+import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.services.Imported;
@@ -95,6 +97,26 @@ public class ForgeService implements ApplicationComponent
             exportedInstance = furnace.getAddonRegistry().getServices(service);
         }
         return (exportedInstance == null) ? null : exportedInstance.get();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> Class<T> locateNativeClass(Class<T> type)
+    {
+        Class<T> result = type;
+        AddonRegistry registry = furnace.getAddonRegistry();
+        for (Addon addon : registry.getAddons())
+        {
+            try
+            {
+                ClassLoader classLoader = addon.getClassLoader();
+                result = (Class<T>) classLoader.loadClass(type.getName());
+                break;
+            }
+            catch (ClassNotFoundException e)
+            {
+            }
+        }
+        return result;
     }
 
     public boolean isLoaded()

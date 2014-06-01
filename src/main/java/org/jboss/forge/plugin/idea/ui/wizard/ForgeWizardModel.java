@@ -6,23 +6,13 @@
  */
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.wizard.WizardModel;
 import com.intellij.ui.wizard.WizardNavigationState;
-import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
-import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
-import org.jboss.forge.plugin.idea.context.UIContextImpl;
-import org.jboss.forge.plugin.idea.context.UISelectionImpl;
-import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
-import java.io.File;
 import java.lang.reflect.Field;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,14 +23,15 @@ import java.util.List;
 public class ForgeWizardModel extends WizardModel
 {
     private UICommand originalCommand;
-    private UIContextImpl context;
+    private UIContext context;
     private List<ForgeWizardStep> steps;
 
     @SuppressWarnings("unchecked")
-    public ForgeWizardModel(String title, UICommand command, VirtualFile[] files)
+    public ForgeWizardModel(UICommand command, UIContext context)
     {
-        super(title);
-        context = new UIContextImpl(getSelection(files), new UIProviderImpl());
+        super(command.getMetadata(context).getName());
+        this.context = context;
+
         this.originalCommand = command;
         try
         {
@@ -75,53 +66,6 @@ public class ForgeWizardModel extends WizardModel
     public List<ForgeWizardStep> getSteps()
     {
         return steps;
-    }
-
-    @SuppressWarnings("rawtypes")
-    private UISelectionImpl<Resource<?>> getSelection(VirtualFile[] files)
-    {
-        UISelectionImpl<Resource<?>> selection = null;
-        if (files != null)
-        {
-            List<Resource<?>> result = new LinkedList<Resource<?>>();
-            ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                    .lookup(ConverterFactory.class);
-            Converter<File, Resource> converter = converterFactory
-                    .getConverter(File.class, locateNativeClass(Resource.class));
-
-            for (VirtualFile virtualFile : files)
-            {
-                File file = new File(virtualFile.getPath());
-                Resource<?> resource = converter.convert(file);
-                result.add(resource);
-            }
-            if (!result.isEmpty())
-            {
-                selection = new UISelectionImpl<Resource<?>>(result);
-            }
-        }
-        return selection;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Class<T> locateNativeClass(Class<T> type)
-    {
-        // TODO Perhaps this should be in ForgeService?
-        Class<T> result = type;
-//        AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
-//        for (Addon addon : registry.getAddons())
-//        {
-//            try
-//            {
-//                ClassLoader classLoader = addon.getClassLoader();
-//                result = (Class<T>) classLoader.loadClass(type.getName());
-//                break;
-//            }
-//            catch (ClassNotFoundException e)
-//            {
-//            }
-//        }
-        return result;
     }
 
     public UIContext getContext()

@@ -9,6 +9,8 @@ package org.jboss.forge.plugin.idea.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 import org.jboss.forge.plugin.idea.ui.CommandListPopup;
 
@@ -22,14 +24,16 @@ import org.jboss.forge.plugin.idea.ui.CommandListPopup;
 public class ShowCommandListAction extends AnAction
 {
     @Override
-    public void actionPerformed(final AnActionEvent e)
+    public void actionPerformed(final AnActionEvent event)
     {
         ServiceHelper.loadFurnaceAndRun(new Runnable()
         {
             @Override
             public void run()
             {
-                new CommandListPopup().show();
+                UIContext uiContext = UIContextFactory.create(event.getDataContext());
+                CommandListPopup popup = new CommandListPopup(uiContext);
+                popup.show();
             }
         });
     }

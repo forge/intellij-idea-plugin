@@ -7,20 +7,17 @@
 package org.jboss.forge.plugin.idea.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupAdapter;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.plugin.idea.context.UIContextImpl;
-import org.jboss.forge.plugin.idea.context.UISelectionImpl;
-import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
@@ -36,22 +33,22 @@ public class CommandListPopup
 {
     // TODO Design and implement CommandListPopup
 
-    volatile boolean active;
+    private final UIContext uiContext;
+    private volatile boolean active;
+
+    public CommandListPopup(UIContext uiContext)
+    {
+        this.uiContext = uiContext;
+    }
 
     public void show()
     {
         if (active)
             return;
         active = true;
-        final VirtualFile[] selectedFiles = null;
-//        final VirtualFile[] selectedFiles = e
-//                .getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
         final JBList list = new JBList();
         DefaultListModel model = new DefaultListModel();
-
-        final Project project = null;
-//        final Project project = e.getData(DataKeys.PROJECT);
 
         final List<UICommand> allCandidates = getAllCandidates();
         model.setSize(allCandidates.size());
@@ -66,12 +63,9 @@ public class CommandListPopup
                 {
                     setIcon(AllIcons.Nodes.Plugin);
 
-                    // TODO Pass UIContext to getMetadata()
-//                    setText(data.getMetadata().getName());
-                    setText(data.getMetadata(
-                            new UIContextImpl(new UISelectionImpl<Object>(new ArrayList<>()),
-                                    new UIProviderImpl()) )
-                            .getName());
+                    UICommandMetadata metadata = data.getMetadata(uiContext);
+
+                    setText(metadata.getName());
 
                     // if (hasFocus)
                     // {
@@ -107,9 +101,9 @@ public class CommandListPopup
             {
                 int selectedIndex = list.getSelectedIndex();
                 UICommand selectedCommand = allCandidates.get(selectedIndex);
-                openWizard(selectedCommand, selectedFiles);
+                openWizard(selectedCommand);
             }
-        }).createPopup().showInFocusCenter();//showCenteredInCurrentWindow(project);
+        }).createPopup().showInFocusCenter();
     }
 
     private List<UICommand> getAllCandidates()
@@ -134,7 +128,7 @@ public class CommandListPopup
         return !(command instanceof UIWizardStep);
     }
 
-    private void openWizard(UICommand command, VirtualFile[] files)
+    private void openWizard(UICommand command)
     {
         // TODO Use CommandController to obtain UICommand metadata
 //        ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
