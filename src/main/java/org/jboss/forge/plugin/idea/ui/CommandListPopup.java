@@ -33,12 +33,18 @@ public class CommandListPopup
 {
     // TODO Design and implement CommandListPopup
 
+    private static volatile boolean active;
+
     private final UIContext uiContext;
-    private volatile boolean active;
 
     public CommandListPopup(UIContext uiContext)
     {
         this.uiContext = uiContext;
+    }
+
+    public static boolean isActive()
+    {
+        return active;
     }
 
     public void show()

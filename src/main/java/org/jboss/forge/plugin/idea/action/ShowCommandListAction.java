@@ -28,6 +28,11 @@ public class ShowCommandListAction extends AnAction
     @Override
     public void actionPerformed(AnActionEvent event)
     {
+        if (CommandListPopup.isActive())
+        {
+            return;
+        }
+
         final VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
         ServiceHelper.loadFurnaceAndRun(new Runnable()
         {

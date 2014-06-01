@@ -20,7 +20,7 @@ public class UISelectionImpl<T> implements UISelection<T>
     public UISelectionImpl(List<T> selection)
     {
         Assert.notNull(selection, "Selection must not be null.");
-//        Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
+        Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
         this.selection = Collections.unmodifiableList(selection);
     }
 
