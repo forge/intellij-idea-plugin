@@ -6,15 +6,18 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
+import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 
 public class UIContextImpl extends AbstractUIContext
 {
-    private UISelectionImpl<?> currentSelection;
+    private final UISelectionImpl<?> currentSelection;
+    private final UIProvider provider;
 
-    public UIContextImpl(UISelectionImpl<?> selection)
+    public UIContextImpl(UISelectionImpl<?> selection, UIProvider provider)
     {
         this.currentSelection = selection;
+        this.provider = provider;
     }
 
     @SuppressWarnings("unchecked")
@@ -24,4 +27,9 @@ public class UIContextImpl extends AbstractUIContext
         return currentSelection;
     }
 
+    @Override
+    public UIProvider getProvider()
+    {
+        return provider;
+    }
 }

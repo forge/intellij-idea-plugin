@@ -17,6 +17,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
 import org.jboss.forge.plugin.idea.context.UISelectionImpl;
+import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class ForgeWizardModel extends WizardModel
     public ForgeWizardModel(String title, UICommand command, VirtualFile[] files)
     {
         super(title);
-        context = new UIContextImpl(getSelection(files));
+        context = new UIContextImpl(getSelection(files), new UIProviderImpl());
         this.originalCommand = command;
         try
         {

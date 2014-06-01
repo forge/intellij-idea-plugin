@@ -18,6 +18,9 @@ import com.intellij.ui.components.JBList;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
+import org.jboss.forge.plugin.idea.context.UIContextImpl;
+import org.jboss.forge.plugin.idea.context.UISelectionImpl;
+import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
@@ -65,6 +68,10 @@ public class CommandListPopup
 
                     // TODO Pass UIContext to getMetadata()
 //                    setText(data.getMetadata().getName());
+                    setText(data.getMetadata(
+                            new UIContextImpl(new UISelectionImpl<Object>(new ArrayList<>()),
+                                    new UIProviderImpl()) )
+                            .getName());
 
                     // if (hasFocus)
                     // {
@@ -102,7 +109,7 @@ public class CommandListPopup
                 UICommand selectedCommand = allCandidates.get(selectedIndex);
                 openWizard(selectedCommand, selectedFiles);
             }
-        }).createPopup().showCenteredInCurrentWindow(project);
+        }).createPopup().showInFocusCenter();//showCenteredInCurrentWindow(project);
     }
 
     private List<UICommand> getAllCandidates()
