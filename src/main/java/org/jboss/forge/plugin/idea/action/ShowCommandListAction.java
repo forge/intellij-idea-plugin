@@ -8,6 +8,8 @@ package org.jboss.forge.plugin.idea.action;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
@@ -24,14 +26,15 @@ import org.jboss.forge.plugin.idea.ui.CommandListPopup;
 public class ShowCommandListAction extends AnAction
 {
     @Override
-    public void actionPerformed(final AnActionEvent event)
+    public void actionPerformed(AnActionEvent event)
     {
+        final VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
         ServiceHelper.loadFurnaceAndRun(new Runnable()
         {
             @Override
             public void run()
             {
-                UIContext uiContext = UIContextFactory.create(event.getDataContext());
+                UIContext uiContext = UIContextFactory.create(files);
                 CommandListPopup popup = new CommandListPopup(uiContext);
                 popup.show();
             }

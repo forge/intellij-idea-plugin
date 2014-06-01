@@ -6,8 +6,6 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -15,6 +13,7 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
+import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
@@ -29,26 +28,25 @@ import java.util.List;
  */
 public class UIContextFactory
 {
-    public static UIContext create(DataContext dataContext)
+    public static UIContext create(VirtualFile[] files)
     {
         UIProvider provider = new UIProviderImpl();
-        UISelection<?> initialSelection = getSelection(dataContext);
+        UISelection<?> initialSelection = getSelection(files);
 
         return new UIContextImpl(initialSelection, provider);
     }
 
-    private static UISelection<?> getSelection(DataContext dataContext)
+    private static UISelection<?> getSelection(VirtualFile[] files)
     {
-        VirtualFile[] files = DataKeys.VIRTUAL_FILE_ARRAY.getData(dataContext);
-        List<Resource<?>> resources = filesToResources(files);
-        UISelection<Resource<?>> selection = new UISelectionImpl<>(resources);
+        List<Object> resources = filesToResources(files);
+        UISelection<?> selection = new UISelectionImpl<>(resources);
         return selection;
     }
 
     @SuppressWarnings("rawtypes")
-    private static List<Resource<?>> filesToResources(VirtualFile[] files)
+    private static List<Object> filesToResources(VirtualFile[] files)
     {
-        List<Resource<?>> result = new LinkedList<Resource<?>>();
+        List<Object> result = new LinkedList<Object>();
         ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
         Class<Resource> nativeResourceClass = ServiceHelper.getForgeService().locateNativeClass(Resource.class);
         Converter<File, Resource> converter = converterFactory.getConverter(File.class, nativeResourceClass);
@@ -58,7 +56,7 @@ public class UIContextFactory
             for (VirtualFile virtualFile : files)
             {
                 File file = new File(virtualFile.getPath());
-                Resource<?> resource = converter.convert(file);
+                Object resource = Proxies.unwrap(converter.convert(file));
                 result.add(resource);
             }
         }

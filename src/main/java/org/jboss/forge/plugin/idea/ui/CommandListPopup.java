@@ -66,12 +66,7 @@ public class CommandListPopup
                     UICommandMetadata metadata = data.getMetadata(uiContext);
 
                     setText(metadata.getName());
-
-                    // if (hasFocus)
-                    // {
-                    // HintManager.getInstance().showInformationHint(editor,
-                    // data.getMetadata().getDescription());
-                    // }
+                    setToolTipText(metadata.getDescription());
                 }
             }
         });
@@ -124,8 +119,7 @@ public class CommandListPopup
 
     private boolean isCandidate(UICommand command)
     {
-        // TODO Call command.isEnabled() with UIContext
-        return !(command instanceof UIWizardStep);
+        return !(command instanceof UIWizardStep) && command.isEnabled(uiContext);
     }
 
     private void openWizard(UICommand command)
