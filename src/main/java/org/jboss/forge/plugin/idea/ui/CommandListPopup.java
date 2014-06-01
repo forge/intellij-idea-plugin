@@ -106,8 +106,7 @@ public class CommandListPopup
             @Override
             public void run()
             {
-                int selectedIndex = list.getSelectedIndex();
-                Object selectedObject = elements.get(selectedIndex);
+                Object selectedObject = list.getSelectedValue();
                 if (selectedObject instanceof UICommand)
                 {
                     UICommand selectedCommand = (UICommand) selectedObject;
