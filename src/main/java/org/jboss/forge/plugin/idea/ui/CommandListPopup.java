@@ -19,8 +19,7 @@ import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Lists all UI commands.
@@ -54,30 +53,39 @@ public class CommandListPopup
         final JBList list = new JBList();
         DefaultListModel model = new DefaultListModel();
 
-        final List<UICommand> allCandidates = getAllCandidates();
-        model.setSize(allCandidates.size());
+        final Map<String, List<UICommand>> categories = categorizeCommands(getAllCandidates());
+        final List<Object> elements = categoriesToList(organizeIntoCategories(categories));
+        model.setSize(elements.size());
 
-        list.setCellRenderer(new ListCellRendererWrapper<UICommand>()
+        list.setCellRenderer(new ListCellRendererWrapper<Object>()
         {
             @Override
-            public void customize(JList list, UICommand data, int index,
+            public void customize(JList list, Object data, int index,
                                   boolean selected, boolean hasFocus)
             {
-                if (data != null)
+                if (data instanceof UICommand)
                 {
                     setIcon(AllIcons.Nodes.Plugin);
 
-                    UICommandMetadata metadata = data.getMetadata(uiContext);
+                    UICommand command = (UICommand) data;
+                    UICommandMetadata metadata = command.getMetadata(uiContext);
 
                     setText(metadata.getName());
                     setToolTipText(metadata.getDescription());
                 }
+                else if (data instanceof String)
+                {
+                    String string = (String) data;
+
+                    setText(string);
+                    setSeparator();
+                }
             }
         });
 
-        for (int i = 0; i < allCandidates.size(); i++)
+        for (int i = 0; i < elements.size(); i++)
         {
-            model.set(i, allCandidates.get(i));
+            model.set(i, elements.get(i));
         }
 
         list.setModel(model);
@@ -99,8 +107,12 @@ public class CommandListPopup
             public void run()
             {
                 int selectedIndex = list.getSelectedIndex();
-                UICommand selectedCommand = allCandidates.get(selectedIndex);
-                openWizard(selectedCommand);
+                Object selectedObject = elements.get(selectedIndex);
+                if (selectedObject instanceof UICommand)
+                {
+                    UICommand selectedCommand = (UICommand) selectedObject;
+                    openWizard(selectedCommand);
+                }
             }
         });
         listPopupBuilder.setFilteringEnabled(new Function<Object, String>()
@@ -108,10 +120,29 @@ public class CommandListPopup
             @Override
             public String fun(Object object)
             {
-                UICommand command = (UICommand) object;
-                UICommandMetadata metadata = command.getMetadata(uiContext);
+                if (object instanceof UICommand)
+                {
+                    UICommand command = (UICommand) object;
+                    UICommandMetadata metadata = command.getMetadata(uiContext);
 
-                return metadata.getCategory().toString() + " " + metadata.getName();
+                    return metadata.getCategory().toString() + " " + metadata.getName();
+                }
+                else if (object instanceof String)
+                {
+                    StringBuilder categoryStringBuilder = new StringBuilder();
+                    categoryStringBuilder.append(object + " ");
+
+                    for (UICommand command : categories.get(object))
+                    {
+                        categoryStringBuilder.append(command.getMetadata(uiContext).getName() + " ");
+                    }
+
+                    return categoryStringBuilder.toString();
+                }
+                else
+                {
+                    throw new IllegalArgumentException("Unknown object type: " + object.getClass());
+                }
             }
         });
 
@@ -138,6 +169,76 @@ public class CommandListPopup
     private boolean isCandidate(UICommand command)
     {
         return !(command instanceof UIWizardStep) && command.isEnabled(uiContext);
+    }
+
+    /**
+     * Returns a list of pairs: (category name, list of commands). Sorted by category name, also each command list
+     * is sorted by command name.
+     */
+    private List<Map.Entry<String, List<UICommand>>> organizeIntoCategories(Map<String, List<UICommand>> categories)
+    {
+        List<Map.Entry<String, List<UICommand>>> result = new ArrayList<>();
+
+        // Sort each entry and add to the result
+        for (Map.Entry<String, List<UICommand>> entry : categories.entrySet())
+        {
+            Collections.sort(entry.getValue(), new Comparator<UICommand>()
+            {
+                @Override
+                public int compare(UICommand o1, UICommand o2)
+                {
+                    return o1.getMetadata(uiContext).getName().compareTo(
+                            o2.getMetadata(uiContext).getName());
+                }
+            });
+
+            result.add(entry);
+        }
+
+        // Sort result
+        Collections.sort(result, new Comparator<Map.Entry<String, List<UICommand>>>()
+        {
+            @Override
+            public int compare(Map.Entry<String, List<UICommand>> o1, Map.Entry<String, List<UICommand>> o2)
+            {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+        });
+
+        return result;
+    }
+
+    private Map<String, List<UICommand>> categorizeCommands(List<UICommand> commands)
+    {
+        Map<String, List<UICommand>> categories = new HashMap<>();
+
+        for (UICommand command : commands)
+        {
+            UICommandMetadata metadata = command.getMetadata(uiContext);
+            String category = metadata.getCategory().getName();
+
+            if (!categories.containsKey(category))
+            {
+                categories.put(category, new ArrayList<UICommand>());
+            }
+
+            categories.get(category).add(command);
+        }
+
+        return categories;
+    }
+
+    private List<Object> categoriesToList(List<Map.Entry<String, List<UICommand>>> categories)
+    {
+        List<Object> list = new ArrayList<>();
+
+        for (Map.Entry<String, List<UICommand>> entry : categories)
+        {
+            list.add(entry.getKey());
+            list.addAll(entry.getValue());
+        }
+
+        return list;
     }
 
     private void openWizard(UICommand command)
