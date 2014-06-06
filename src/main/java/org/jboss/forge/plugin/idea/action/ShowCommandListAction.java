@@ -33,13 +33,21 @@ public class ShowCommandListAction extends AnAction
             return;
         }
 
-        final VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
+        VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
+
+        // If no file is selected, then set project directory as selection
+        if (files == null || files.length == 0)
+        {
+            files = new VirtualFile[]{event.getData(DataKeys.PROJECT_FILE_DIRECTORY)};
+        }
+
+        final VirtualFile[] selectedFiles = files;
         ServiceHelper.loadFurnaceAndRun(new Runnable()
         {
             @Override
             public void run()
             {
-                UIContext uiContext = UIContextFactory.create(files);
+                UIContext uiContext = UIContextFactory.create(selectedFiles);
                 CommandListPopup popup = new CommandListPopup(uiContext);
                 popup.show();
             }
