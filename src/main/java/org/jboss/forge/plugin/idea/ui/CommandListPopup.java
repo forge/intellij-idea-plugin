@@ -28,7 +28,7 @@ import java.util.*;
  */
 public class CommandListPopup
 {
-    // TODO Design and implement CommandListPopup
+    // TODO Refactor to builder pattern
 
     private static volatile boolean active;
 
@@ -53,8 +53,10 @@ public class CommandListPopup
         final JBList list = new JBList();
         DefaultListModel model = new DefaultListModel();
 
-        final Map<String, List<UICommand>> categories = categorizeCommands(getAllCandidates());
-        final List<Object> elements = categoriesToList(organizeIntoCategories(categories));
+        List<UICommand> candidates = getAllCandidates();
+        final Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(candidates);
+        final Map<String, List<UICommand>> categories = categorizeCommands(candidates, metadataIndex);
+        final List<Object> elements = categoriesToList(sortCategories(categories, metadataIndex));
         model.setSize(elements.size());
 
         list.setCellRenderer(new ListCellRendererWrapper<Object>()
@@ -68,7 +70,7 @@ public class CommandListPopup
                     setIcon(AllIcons.Nodes.Plugin);
 
                     UICommand command = (UICommand) data;
-                    UICommandMetadata metadata = command.getMetadata(uiContext);
+                    UICommandMetadata metadata = metadataIndex.get(command);
 
                     setText(metadata.getName());
                     setToolTipText(metadata.getDescription());
@@ -122,7 +124,7 @@ public class CommandListPopup
                 if (object instanceof UICommand)
                 {
                     UICommand command = (UICommand) object;
-                    UICommandMetadata metadata = command.getMetadata(uiContext);
+                    UICommandMetadata metadata = metadataIndex.get(command);
 
                     return metadata.getCategory().toString() + " " + metadata.getName();
                 }
@@ -133,7 +135,7 @@ public class CommandListPopup
 
                     for (UICommand command : categories.get(object))
                     {
-                        categoryStringBuilder.append(command.getMetadata(uiContext).getName() + " ");
+                        categoryStringBuilder.append(metadataIndex.get(command).getName() + " ");
                     }
 
                     return categoryStringBuilder.toString();
@@ -170,11 +172,25 @@ public class CommandListPopup
         return !(command instanceof UIWizardStep) && command.isEnabled(uiContext);
     }
 
+    private Map<UICommand, UICommandMetadata> indexMetadata(List<UICommand> commands)
+    {
+        Map<UICommand, UICommandMetadata> index = new HashMap<>();
+
+        for (UICommand command : commands)
+        {
+            UICommandMetadata metadata = command.getMetadata(uiContext);
+            index.put(command, metadata);
+        }
+
+        return index;
+    }
+
     /**
      * Returns a list of pairs: (category name, list of commands). Sorted by category name, also each command list
      * is sorted by command name.
      */
-    private List<Map.Entry<String, List<UICommand>>> organizeIntoCategories(Map<String, List<UICommand>> categories)
+    private List<Map.Entry<String, List<UICommand>>> sortCategories(Map<String, List<UICommand>> categories,
+                                                                    final Map<UICommand, UICommandMetadata> index)
     {
         List<Map.Entry<String, List<UICommand>>> result = new ArrayList<>();
 
@@ -186,8 +202,8 @@ public class CommandListPopup
                 @Override
                 public int compare(UICommand o1, UICommand o2)
                 {
-                    return o1.getMetadata(uiContext).getName().compareTo(
-                            o2.getMetadata(uiContext).getName());
+                    return index.get(o1).getName().compareTo(
+                            index.get(o2).getName());
                 }
             });
 
@@ -207,13 +223,14 @@ public class CommandListPopup
         return result;
     }
 
-    private Map<String, List<UICommand>> categorizeCommands(List<UICommand> commands)
+    private Map<String, List<UICommand>> categorizeCommands(List<UICommand> commands,
+                                                            Map<UICommand, UICommandMetadata> index)
     {
         Map<String, List<UICommand>> categories = new HashMap<>();
 
         for (UICommand command : commands)
         {
-            UICommandMetadata metadata = command.getMetadata(uiContext);
+            UICommandMetadata metadata = index.get(command);
             String category = metadata.getCategory().getName();
 
             if (!categories.containsKey(category))
