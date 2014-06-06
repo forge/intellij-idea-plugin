@@ -6,7 +6,6 @@
  */
 package org.jboss.forge.plugin.idea.ui;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.ui.popup.*;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
@@ -30,6 +29,7 @@ public class CommandListPopup
 {
     // TODO Refactor to builder pattern
 
+    private static final Icon FORGE_ICON = new ImageIcon(CommandListPopup.class.getResource("/icons/forge.png"));
     private static volatile boolean active;
 
     private final UIContext uiContext;
@@ -67,7 +67,7 @@ public class CommandListPopup
             {
                 if (data instanceof UICommand)
                 {
-                    setIcon(AllIcons.Nodes.Plugin);
+                    setIcon(FORGE_ICON);
 
                     UICommand command = (UICommand) data;
                     UICommandMetadata metadata = metadataIndex.get(command);
