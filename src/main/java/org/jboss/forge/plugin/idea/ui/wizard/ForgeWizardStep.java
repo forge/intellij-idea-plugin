@@ -22,7 +22,7 @@ import javax.swing.*;
  */
 public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
-    private CommandController controller;
+    private final CommandController controller;
 
     public ForgeWizardStep(CommandController controller)
     {
@@ -67,14 +67,17 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     public ForgeWizardStep onNext(ForgeWizardModel model)
     {
         // If it's not a wizard, we don't care
-        if (!(controller instanceof WizardCommandController))
+        if (!(isWizardController()))
         {
             return null;
         }
 
         try
         {
-            return new ForgeWizardStep(((WizardCommandController) controller).next());
+            CommandController nextController = getWizardCommandController().next();
+            ForgeWizardStep nextStep = new ForgeWizardStep(nextController);
+            refreshNavigationState(model.getCurrentNavigationState(), nextController);
+            return nextStep;
         }
         catch (Exception e)
         {
@@ -88,14 +91,17 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     public WizardStep onPrevious(ForgeWizardModel model)
     {
         // If it's not a wizard, we don't care
-        if (!(controller instanceof WizardCommandController))
+        if (!(isWizardController()))
         {
             return null;
         }
 
         try
         {
-            return new ForgeWizardStep(((WizardCommandController) controller).previous());
+            CommandController previousController = getWizardCommandController().previous();
+            ForgeWizardStep previousStep = new ForgeWizardStep(previousController);
+            refreshNavigationState(model.getCurrentNavigationState(), previousController);
+            return previousStep;
         }
         catch (Exception e)
         {
@@ -119,5 +125,68 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
 
         return true;
+    }
+
+    public void refreshNavigationState(WizardNavigationState navigationState)
+    {
+        refreshNavigationState(navigationState, this.controller);
+    }
+
+    private static void refreshNavigationState(WizardNavigationState navigationState, CommandController controller)
+    {
+        navigationState.CANCEL.setEnabled(true);
+        navigationState.PREVIOUS.setEnabled(isPreviousEnabled(controller));
+        navigationState.NEXT.setEnabled(isNextEnabled(controller));
+        navigationState.FINISH.setEnabled(isFinishEnabled(controller));
+    }
+
+    private static boolean isPreviousEnabled(CommandController controller)
+    {
+        if (!isWizardController(controller))
+        {
+            return false;
+        }
+
+        return getWizardCommandController(controller).canMoveToPreviousStep();
+    }
+
+    private static boolean isNextEnabled(CommandController controller)
+    {
+        if (!isWizardController(controller))
+        {
+            return false;
+        }
+
+        return getWizardCommandController(controller).canMoveToNextStep();
+    }
+
+    private static boolean isFinishEnabled(CommandController controller)
+    {
+        if (!isWizardController(controller))
+        {
+            return false;
+        }
+
+        return getWizardCommandController(controller).canExecute();
+    }
+
+    private boolean isWizardController()
+    {
+        return isWizardController(this.controller);
+    }
+
+    private static boolean isWizardController(CommandController controller)
+    {
+        return controller instanceof WizardCommandController;
+    }
+
+    private WizardCommandController getWizardCommandController()
+    {
+        return getWizardCommandController(this.controller);
+    }
+
+    private static WizardCommandController getWizardCommandController(CommandController controller)
+    {
+        return (WizardCommandController) controller;
     }
 }

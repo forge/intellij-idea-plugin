@@ -7,9 +7,7 @@
 package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.ui.wizard.WizardModel;
-import com.intellij.ui.wizard.WizardStep;
 import org.jboss.forge.addon.ui.controller.CommandController;
-import org.jboss.forge.addon.ui.controller.WizardCommandController;
 
 /**
  * Represents the model of a wizard
@@ -19,41 +17,17 @@ import org.jboss.forge.addon.ui.controller.WizardCommandController;
  */
 public class ForgeWizardModel extends WizardModel
 {
-    private CommandController originalController;
-
     @SuppressWarnings("unchecked")
     public ForgeWizardModel(CommandController originalController)
     {
         super(originalController.getMetadata().getName());
-        this.originalController = originalController;
 
-        addWizardSteps();
+        addWizardSteps(originalController);
+        ((ForgeWizardStep) getCurrentStep()).refreshNavigationState(getCurrentNavigationState());
     }
 
-    private void addWizardSteps()
+    private void addWizardSteps(CommandController originalController)
     {
         add(new ForgeWizardStep(originalController));
-    }
-
-    @Override
-    public boolean isFirst(WizardStep step)
-    {
-        CommandController controller = ((ForgeWizardStep) step).getController();
-        return controller.getCommand() == originalController.getCommand();
-    }
-
-    @Override
-    public boolean isLast(WizardStep step)
-    {
-        CommandController controller = ((ForgeWizardStep) step).getController();
-
-        boolean result = true;
-
-        if (controller instanceof WizardCommandController)
-        {
-            result = ((WizardCommandController) controller).canExecute();
-        }
-
-        return result;
     }
 }
