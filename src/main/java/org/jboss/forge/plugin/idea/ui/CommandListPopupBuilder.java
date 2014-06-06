@@ -10,12 +10,9 @@ import com.intellij.openapi.ui.popup.*;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
-import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
-import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
 import java.util.*;
@@ -25,18 +22,24 @@ import java.util.*;
  *
  * @author Adam Wyłuda
  */
-public class CommandListPopup
+public class CommandListPopupBuilder
 {
-    // TODO Refactor to builder pattern
-
-    private static final Icon FORGE_ICON = new ImageIcon(CommandListPopup.class.getResource("/icons/forge.png"));
+    private static final Icon FORGE_ICON = new ImageIcon(CommandListPopupBuilder.class.getResource("/icons/forge.png"));
     private static volatile boolean active;
 
-    private final UIContext uiContext;
+    private UIContext uiContext;
+    private List<UICommand> commands;
 
-    public CommandListPopup(UIContext uiContext)
+    public CommandListPopupBuilder setUIContext(UIContext uiContext)
     {
         this.uiContext = uiContext;
+        return this;
+    }
+
+    public CommandListPopupBuilder setCommands(List<UICommand> commands)
+    {
+        this.commands = commands;
+        return this;
     }
 
     public static boolean isActive()
@@ -44,19 +47,24 @@ public class CommandListPopup
         return active;
     }
 
-    public void show()
+    public JBPopup build()
     {
-        if (active)
-            return;
         active = true;
 
+        Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(commands);
+        Map<String, List<UICommand>> categories = categorizeCommands(commands, metadataIndex);
+        List<Object> elements = categoriesToList(sortCategories(categories, metadataIndex));
+
+        JBList list = buildJBList(elements, metadataIndex);
+        JBPopup popup = buildPopup(list, categories, metadataIndex);
+
+        return popup;
+    }
+
+    private JBList buildJBList(List<Object> elements, final Map<UICommand, UICommandMetadata> metadataIndex)
+    {
         final JBList list = new JBList();
         DefaultListModel model = new DefaultListModel();
-
-        List<UICommand> candidates = getAllCandidates();
-        final Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(candidates);
-        final Map<String, List<UICommand>> categories = categorizeCommands(candidates, metadataIndex);
-        final List<Object> elements = categoriesToList(sortCategories(categories, metadataIndex));
         model.setSize(elements.size());
 
         list.setCellRenderer(new ListCellRendererWrapper<Object>()
@@ -89,9 +97,15 @@ public class CommandListPopup
         {
             model.set(i, elements.get(i));
         }
-
         list.setModel(model);
 
+        return list;
+    }
+
+    private JBPopup buildPopup(final JBList list,
+                               final Map<String, List<UICommand>> categories,
+                               final Map<UICommand, UICommandMetadata> metadataIndex)
+    {
         final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
         listPopupBuilder.setTitle("Run a Forge command");
         listPopupBuilder.setResizable(true);
@@ -100,7 +114,7 @@ public class CommandListPopup
             @Override
             public void onClosed(LightweightWindowEvent event)
             {
-                CommandListPopup.this.active = false;
+                CommandListPopupBuilder.this.active = false;
             }
         });
         listPopupBuilder.setItemChoosenCallback(new Runnable()
@@ -147,29 +161,7 @@ public class CommandListPopup
             }
         });
 
-        JBPopup popup = listPopupBuilder.createPopup();
-        popup.showInFocusCenter();
-    }
-
-    private List<UICommand> getAllCandidates()
-    {
-        List<UICommand> commands = new ArrayList<UICommand>();
-        CommandFactory commandFactory = ServiceHelper.getForgeService().getCommandFactory();
-
-        for (UICommand command : commandFactory.getCommands())
-        {
-            if (isCandidate(command))
-            {
-                commands.add(command);
-            }
-        }
-
-        return commands;
-    }
-
-    private boolean isCandidate(UICommand command)
-    {
-        return !(command instanceof UIWizardStep) && command.isEnabled(uiContext);
+        return listPopupBuilder.createPopup();
     }
 
     private Map<UICommand, UICommandMetadata> indexMetadata(List<UICommand> commands)
@@ -262,6 +254,6 @@ public class CommandListPopup
         // TODO Use CommandController to obtain UICommand metadata
 //        ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
 //        ForgeWizardDialog dialog = new ForgeWizardDialog(model);
-//        dialog.show();
+//        dialog.build();
     }
 }
