@@ -10,9 +10,15 @@ import com.intellij.openapi.ui.popup.*;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.Function;
+import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
+import org.jboss.forge.plugin.idea.runtime.UIRuntimeImpl;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
 
 import javax.swing.*;
 import java.util.*;
@@ -251,9 +257,11 @@ public class CommandListPopupBuilder
 
     private void openWizard(UICommand command)
     {
-        // TODO Use CommandController to obtain UICommand metadata
-//        ForgeWizardModel model = new ForgeWizardModel(command.getMetadata().getName(), command, files);
-//        ForgeWizardDialog dialog = new ForgeWizardDialog(model);
-//        dialog.build();
+        UIRuntime uiRuntime = new UIRuntimeImpl();
+        CommandControllerFactory controllerFactory = ServiceHelper.getForgeService().getCommandControllerFactory();
+        CommandController controller = controllerFactory.createController(uiContext, uiRuntime, command);
+
+        ForgeWizardDialog dialog = new ForgeWizardDialog(controller);
+        dialog.show();
     }
 }

@@ -7,75 +7,53 @@
 package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.ui.wizard.WizardModel;
-import com.intellij.ui.wizard.WizardNavigationState;
-import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.wizard.UIWizard;
-
-import java.lang.reflect.Field;
-import java.util.List;
+import com.intellij.ui.wizard.WizardStep;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.WizardCommandController;
 
 /**
  * Represents the model of a wizard
  *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ * @author Adam Wyłuda
  */
 public class ForgeWizardModel extends WizardModel
 {
-    private UICommand originalCommand;
-    private UIContext context;
-    private List<ForgeWizardStep> steps;
+    private CommandController originalController;
 
     @SuppressWarnings("unchecked")
-    public ForgeWizardModel(UICommand command, UIContext context)
+    public ForgeWizardModel(CommandController originalController)
     {
-        super(command.getMetadata(context).getName());
-        this.context = context;
-
-        this.originalCommand = command;
-        try
-        {
-            Field field = WizardModel.class.getDeclaredField("mySteps");
-            field.setAccessible(true);
-            steps = (List<ForgeWizardStep>) field.get(this);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        super(originalController.getMetadata().getName());
+        this.originalController = originalController;
 
         addWizardSteps();
-        resetNavigationState();
-    }
-
-    private void resetNavigationState()
-    {
-        WizardNavigationState navState = getCurrentNavigationState();
-        boolean isWizard = originalCommand instanceof UIWizard;
-        navState.setEnabledToAll(isWizard);
-        navState.PREVIOUS.setEnabled(false);
     }
 
     private void addWizardSteps()
     {
-        add(new ForgeWizardStep(originalCommand, context));
-
-        // TODO: Add more steps
+        add(new ForgeWizardStep(originalController));
     }
 
-    public List<ForgeWizardStep> getSteps()
+    @Override
+    public boolean isFirst(WizardStep step)
     {
-        return steps;
+        CommandController controller = ((ForgeWizardStep) step).getController();
+        return controller.getCommand() == originalController.getCommand();
     }
 
-    public UIContext getContext()
+    @Override
+    public boolean isLast(WizardStep step)
     {
-        return context;
-    }
+        CommandController controller = ((ForgeWizardStep) step).getController();
 
-    public UICommand getOriginalCommand()
-    {
-        return originalCommand;
-    }
+        boolean result = true;
 
+        if (controller instanceof WizardCommandController)
+        {
+            result = ((WizardCommandController) controller).canExecute();
+        }
+
+        return result;
+    }
 }

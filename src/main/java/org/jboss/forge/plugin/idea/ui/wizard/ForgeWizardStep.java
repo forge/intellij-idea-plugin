@@ -9,49 +9,49 @@ package org.jboss.forge.plugin.idea.ui.wizard;
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 import net.miginfocom.swing.MigLayout;
-import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.result.NavigationResult;
-import org.jboss.forge.addon.ui.wizard.UIWizard;
-import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.WizardCommandController;
 
 import javax.swing.*;
-import java.util.List;
 
+/**
+ * Represents Forge wizard step.
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ * @author Adam Wyłuda
+ */
 public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
-    private UICommand uiCommand;
-    private UIContext context;
+    private CommandController controller;
 
-    public ForgeWizardStep(UICommand command, UIContext context)
+    public ForgeWizardStep(CommandController controller)
     {
-        // TODO Pass UIContext to getMetadata()
-//      super(command.getMetadata().getDescription());
-        this.uiCommand = command;
+        this.controller = controller;
+
+        try
+        {
+            controller.initialize();
+        }
+        catch (Exception e)
+        {
+            // TODO Handle Wizard exceptions
+            e.printStackTrace();
+        }
     }
 
-    public UICommand getUICommand()
+    public CommandController getController()
     {
-        return uiCommand;
+        return controller;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public JComponent prepare(WizardNavigationState state)
     {
-//        UIBuilderImpl uiBuilder = new UIBuilderImpl(context);
-//        try
-//        {
-//            uiCommand.initializeUI(uiBuilder);
-//        }
-//        catch (Exception e)
-//        {
-//            throw new RuntimeException(e);
-//        }
-//
-        // Build panel
         JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]", "[]10[]"));
+
+        // TODO Build panel for UICommand
 
 //        for (InputComponent input : uiBuilder.getInputs())
 //        {
@@ -67,60 +67,57 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     public ForgeWizardStep onNext(ForgeWizardModel model)
     {
         // If it's not a wizard, we don't care
-        if (!(uiCommand instanceof UIWizard))
+        if (!(controller instanceof WizardCommandController))
         {
             return null;
         }
-        UIWizard wiz = (UIWizard) uiCommand;
-        NavigationResult nextCommand = null;
+
         try
         {
-            // TODO Pass UIContext to getMetadata()
-//         nextCommand = wiz.next(model.getContext());
+            return new ForgeWizardStep(((WizardCommandController) controller).next());
         }
         catch (Exception e)
         {
-            // TODO: Use Eclipse logging mechanism
+            // TODO Handle Wizard exceptions
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public WizardStep onPrevious(ForgeWizardModel model)
+    {
+        // If it's not a wizard, we don't care
+        if (!(controller instanceof WizardCommandController))
+        {
+            return null;
+        }
+
+        try
+        {
+            return new ForgeWizardStep(((WizardCommandController) controller).previous());
+        }
+        catch (Exception e)
+        {
+            // TODO Handle Wizard exceptions
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean onFinish()
+    {
+        try
+        {
+            controller.execute();
+        }
+        catch (Exception e)
+        {
+            // TODO Handle Wizard exceptions
             e.printStackTrace();
         }
-        // No next page
-        if (nextCommand == null)
-        {
-            List<ForgeWizardStep> pageList = model.getSteps();
-            int idx = pageList.indexOf(this);
-            pageList.subList(idx + 1, pageList.size()).clear();
-            return null;
-        }
-        else
-        {
-            // TODO Find succeeding page
-            return null;
-//         Class<? extends UICommand> successor = nextCommand.getNext();
-//         // Do we have any pages already displayed ? (Did we went back
-//         // already ?)
-//         ForgeWizardStep nextPage = (ForgeWizardStep) super.onNext(model);
-//         if (nextPage == null
-//                  || !isNextStepAssignableFrom(nextPage, successor))
-//         {
-//            if (nextPage != null)
-//            {
-//               List<ForgeWizardStep> pageList = model.getSteps();
-//               int idx = pageList.indexOf(nextPage);
-//               // Clean the old pages
-//               pageList.subList(idx, pageList.size()).clear();
-//            }
-//            UICommand nextStep = ForgeService.INSTANCE.lookup(successor);
-//            nextPage = new ForgeWizardStep(nextStep, model.getContext());
-//            model.add(nextPage);
-//         }
-//         return nextPage;
-        }
-    }
 
-    private boolean isNextStepAssignableFrom(ForgeWizardStep nextStep,
-                                             Class<? extends UICommand> successor)
-    {
-        return Proxies.isInstance(successor, nextStep.getUICommand());
+        return true;
     }
-
 }

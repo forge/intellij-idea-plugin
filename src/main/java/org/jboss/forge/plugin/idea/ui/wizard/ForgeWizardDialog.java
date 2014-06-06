@@ -8,13 +8,19 @@ package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.wizard.WizardDialog;
+import org.jboss.forge.addon.ui.controller.CommandController;
 
+/**
+ * Forge wizard (and single command) dialog.
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ * @author Adam Wyłuda
+ */
 public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
 {
-
-    public ForgeWizardDialog(ForgeWizardModel model)
+    public ForgeWizardDialog(CommandController originalController)
     {
-        super((Project) null, false, model);
+        super((Project) null, false, new ForgeWizardModel(originalController));
     }
 
     @Override
