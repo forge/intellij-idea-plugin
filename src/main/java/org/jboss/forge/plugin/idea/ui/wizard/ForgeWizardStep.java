@@ -42,8 +42,6 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
             // TODO Handle Wizard exceptions
             e.printStackTrace();
         }
-
-        refreshNavigationState();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -61,6 +59,8 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
                     .getBuilderFor(input);
             builder.build(input, container);
         }
+
+        refreshNavigationState();
 
         return container;
     }
