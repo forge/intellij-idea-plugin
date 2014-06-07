@@ -124,6 +124,12 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         return true;
     }
 
+    @Override
+    public Icon getIcon()
+    {
+        return null;
+    }
+
     public void refreshNavigationState()
     {
         WizardNavigationState navigationState = model.getCurrentNavigationState();

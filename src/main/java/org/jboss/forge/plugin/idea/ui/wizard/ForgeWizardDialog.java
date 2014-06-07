@@ -10,6 +10,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.wizard.WizardDialog;
 import org.jboss.forge.addon.ui.controller.CommandController;
 
+import java.awt.*;
+
 /**
  * Forge wizard (and single command) dialog.
  *
@@ -27,5 +29,11 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
     public String getTitle()
     {
         return super.getTitle();
+    }
+
+    @Override
+    protected Dimension getWindowPreferredSize()
+    {
+        return new Dimension(500, 500);
     }
 }
