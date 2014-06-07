@@ -22,12 +22,8 @@ public class ForgeWizardModel extends WizardModel
     {
         super(originalController.getMetadata().getName());
 
-        addWizardSteps(originalController);
-        ((ForgeWizardStep) getCurrentStep()).refreshNavigationState(getCurrentNavigationState());
-    }
-
-    private void addWizardSteps(CommandController originalController)
-    {
-        add(new ForgeWizardStep(originalController));
+        ForgeWizardStep step = new ForgeWizardStep(this, originalController);
+        add(step);
+        step.refreshNavigationState();
     }
 }
