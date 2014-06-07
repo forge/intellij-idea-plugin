@@ -21,12 +21,12 @@ public class UIRuntimeImpl implements UIRuntime
     @Override
     public UIProgressMonitor createProgressMonitor(UIContext context)
     {
-        return null;
+         return new UIProgressMonitorImpl();
     }
 
     @Override
     public UIPrompt createPrompt(UIContext context)
     {
-        return null;
+        return new UIPromptImpl();
     }
 }

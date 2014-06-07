@@ -53,6 +53,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         checkbox.isSelected());
+                valueChangeListener.run();
             }
         });
         container.add(checkbox, "span 2");

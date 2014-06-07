@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -42,6 +43,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
 
             @Override
@@ -49,6 +51,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
 
             @Override
@@ -56,11 +59,13 @@ public class PasswordComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
         });
         String labelValue = input.getLabel() == null ? input.getName() : input
                 .getLabel();
-        container.add(new JLabel(labelValue));
+        JBLabel label = new JBLabel(labelValue);
+        container.add(label);
         container.add(textField);
         return textField;
     }

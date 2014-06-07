@@ -8,6 +8,7 @@ package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -32,8 +33,9 @@ public class FileChooserComponentBuilder extends ComponentBuilder
                             Container container)
     {
         // Added Label
-        container.add(new JLabel(input.getLabel() == null ? input.getName()
-                : input.getLabel()));
+        JBLabel label = new JBLabel(input.getLabel() == null ? input.getName()
+                : input.getLabel());
+        container.add(label);
 
         final TextFieldWithBrowseButton fileField = new TextFieldWithBrowseButton(
                 new ActionListener()
@@ -63,6 +65,7 @@ public class FileChooserComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
 
             @Override
@@ -70,6 +73,7 @@ public class FileChooserComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
 
             @Override
@@ -77,6 +81,7 @@ public class FileChooserComponentBuilder extends ComponentBuilder
             {
                 InputComponents.setValueFor(converterFactory, input,
                         textField.getText());
+                valueChangeListener.run();
             }
         });
 

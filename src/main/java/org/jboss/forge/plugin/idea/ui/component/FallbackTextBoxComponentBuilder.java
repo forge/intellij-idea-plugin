@@ -15,5 +15,4 @@ public class FallbackTextBoxComponentBuilder extends TextBoxComponentBuilder
     {
         return true;
     }
-
 }

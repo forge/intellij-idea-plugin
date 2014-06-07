@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -27,7 +28,7 @@ public class RadioComponentBuilder extends ComponentBuilder
     @Override
     public JComponent build(final InputComponent<?, Object> input, Container container)
     {
-        JLabel label = new JLabel();
+        JBLabel label = new JBLabel();
         label.setText(input.getLabel() == null ? input.getName() : input
                 .getLabel());
         container.add(label);
@@ -58,6 +59,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                     {
                         InputComponents.setValueFor(converterFactory,
                                 input, Proxies.unwrap(choice));
+                        valueChangeListener.run();
                     }
                 });
                 radioContainer.add(radio);

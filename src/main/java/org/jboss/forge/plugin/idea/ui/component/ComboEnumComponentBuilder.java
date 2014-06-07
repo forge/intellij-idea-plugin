@@ -7,6 +7,7 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.ui.ComboBox;
+import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -30,7 +31,7 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
     public JComponent build(final InputComponent<?, Object> input, Container container)
     {
         // Create the label
-        JLabel label = new JLabel();
+        JBLabel label = new JBLabel();
         label.setText(input.getLabel() == null ? input.getName() : input
                 .getLabel());
         container.add(label);
@@ -69,6 +70,7 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
                 Class valueType = input.getValueType();
                 InputComponents.setValueFor(converterFactory, input,
                         Enum.valueOf(valueType, selectedItem));
+                valueChangeListener.run();
             }
         });
 

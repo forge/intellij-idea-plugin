@@ -12,10 +12,15 @@ import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Represents Forge wizard step.
@@ -27,6 +32,11 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
     private final ForgeWizardModel model;
     private final CommandController controller;
+
+    /**
+     * Maps component builders by input component name.
+     */
+    private Map<String, ComponentBuilder> components;
 
     public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
     {
@@ -51,13 +61,25 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]", "[]10[]"));
 
-        // TODO Build panel for UICommands
+        components = new HashMap<>();
 
         for (InputComponent input : controller.getInputs().values())
         {
-            ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE
-                    .getBuilderFor(input);
+            ComponentBuilder builder =
+                    ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
             builder.build(input, container);
+
+            components.put(input.getName(), builder);
+
+            builder.setValueChangeListener(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    refreshNavigationState();
+                    validate();
+                }
+            });
         }
 
         refreshNavigationState();
@@ -130,6 +152,12 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         return null;
     }
 
+    @Override
+    public String getExplanation()
+    {
+        return controller.getMetadata().getDescription();
+    }
+
     public void refreshNavigationState()
     {
         WizardNavigationState navigationState = model.getCurrentNavigationState();
@@ -162,12 +190,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
     private boolean isFinishEnabled()
     {
-        if (!isWizardController())
-        {
-            return false;
-        }
-
-        return getWizardCommandController().canExecute();
+        return controller.canExecute();
     }
 
     private boolean isWizardController()
@@ -178,5 +201,48 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     private WizardCommandController getWizardCommandController()
     {
         return (WizardCommandController) controller;
+    }
+
+    private void validate()
+    {
+        List<UIMessage> messages = controller.validate();
+
+        Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
+        List<UIMessage> commandMessages = new ArrayList<>();
+
+        for (String inputName : components.keySet())
+        {
+            messagesByInputName.put(inputName, new ArrayList<UIMessage>());
+        }
+
+        for (UIMessage message : messages)
+        {
+            if (message.getSource() == null)
+            {
+                commandMessages.add(message);
+            }
+            else
+            {
+                InputComponent source = message.getSource();
+                messagesByInputName.get(source.getName()).add(message);
+            }
+        }
+
+        processComponentMessages(messagesByInputName);
+        processCommandMessages(commandMessages);
+    }
+
+    private void processComponentMessages(Map<String, List<UIMessage>> messages)
+    {
+        for (Map.Entry<String, List<UIMessage>> entry : messages.entrySet())
+        {
+            ComponentBuilder builder = components.get(entry.getKey());
+            builder.displayMessages(entry.getValue());
+        }
+    }
+
+    private void processCommandMessages(List<UIMessage> messages)
+    {
+        // TODO Display command validation messages
     }
 }
