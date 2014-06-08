@@ -23,6 +23,8 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
     public ForgeWizardDialog(CommandController originalController)
     {
         super((Project) null, false, new ForgeWizardModel(originalController));
+
+        myModel.setDialog(this);
     }
 
     @Override
@@ -35,5 +37,10 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
     protected Dimension getWindowPreferredSize()
     {
         return new Dimension(500, 500);
+    }
+
+    public void setErrorMessage(String text)
+    {
+        super.setErrorText(text);
     }
 }

@@ -17,6 +17,8 @@ import org.jboss.forge.addon.ui.controller.CommandController;
  */
 public class ForgeWizardModel extends WizardModel
 {
+    private ForgeWizardDialog dialog;
+
     @SuppressWarnings("unchecked")
     public ForgeWizardModel(CommandController originalController)
     {
@@ -25,5 +27,15 @@ public class ForgeWizardModel extends WizardModel
         ForgeWizardStep step = new ForgeWizardStep(this, originalController);
         add(step);
         step.refreshNavigationState();
+    }
+
+    public ForgeWizardDialog getDialog()
+    {
+        return dialog;
+    }
+
+    public void setDialog(ForgeWizardDialog dialog)
+    {
+        this.dialog = dialog;
     }
 }

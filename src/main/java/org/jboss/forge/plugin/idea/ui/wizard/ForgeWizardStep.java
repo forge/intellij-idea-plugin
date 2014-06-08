@@ -205,7 +205,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
     private void validate()
     {
-        List<UIMessage> messages = controller.validate();
+        List<UIMessage> allMessages = controller.validate();
 
         Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
         List<UIMessage> commandMessages = new ArrayList<>();
@@ -215,7 +215,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
             messagesByInputName.put(inputName, new ArrayList<UIMessage>());
         }
 
-        for (UIMessage message : messages)
+        for (UIMessage message : allMessages)
         {
             if (message.getSource() == null)
             {
@@ -229,7 +229,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
 
         processComponentMessages(messagesByInputName);
-        processCommandMessages(commandMessages);
+        processCommandMessages(commandMessages, allMessages);
     }
 
     private void processComponentMessages(Map<String, List<UIMessage>> messages)
@@ -241,8 +241,29 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
     }
 
-    private void processCommandMessages(List<UIMessage> messages)
+    private void processCommandMessages(List<UIMessage> commandMessages, List<UIMessage> allMessages)
     {
-        // TODO Display command validation messages
+        // Messages specific for command (not any input) should be displayed first
+        for (UIMessage message : commandMessages)
+        {
+            if (message.getSeverity() == UIMessage.Severity.ERROR)
+            {
+                model.getDialog().setErrorMessage(message.getDescription());
+                return;
+            }
+        }
+
+        // Display first input validation error
+        for (UIMessage message : allMessages)
+        {
+            if (message.getSeverity() == UIMessage.Severity.ERROR)
+            {
+                model.getDialog().setErrorMessage(message.getDescription());
+                return;
+            }
+        }
+
+        // If there are no errors
+        model.getDialog().setErrorMessage(null);
     }
 }
