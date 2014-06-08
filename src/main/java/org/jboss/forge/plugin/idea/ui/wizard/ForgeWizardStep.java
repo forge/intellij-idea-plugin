@@ -15,6 +15,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
+import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     /**
      * Maps component builders by input component name.
      */
-    private Map<String, ComponentBuilder> components;
+    private Map<String, ForgeComponent> components;
 
     public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
     {
@@ -67,11 +68,12 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         {
             ComponentBuilder builder =
                     ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
-            builder.build(input, container);
+            ForgeComponent component = builder.build(input);
+            component.buildUI(container);
 
-            components.put(input.getName(), builder);
+            components.put(input.getName(), component);
 
-            builder.setValueChangeListener(new Runnable()
+            component.setValueChangeListener(new Runnable()
             {
                 @Override
                 public void run()
@@ -236,7 +238,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     {
         for (Map.Entry<String, List<UIMessage>> entry : messages.entrySet())
         {
-            ComponentBuilder builder = components.get(entry.getKey());
+            ForgeComponent builder = components.get(entry.getKey());
             builder.displayMessages(entry.getValue());
         }
     }

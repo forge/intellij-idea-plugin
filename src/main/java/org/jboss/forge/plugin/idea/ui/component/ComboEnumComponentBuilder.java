@@ -28,65 +28,71 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
 {
     @SuppressWarnings("unchecked")
     @Override
-    public JComponent build(final InputComponent<?, Object> input, Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        // Create the label
-        JBLabel label = new JBLabel();
-        label.setText(input.getLabel() == null ? input.getName() : input
-                .getLabel());
-        container.add(label);
-
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .getConverterFactory();
-        final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-        final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
-                .getItemLabelConverter(converterFactory, selectOne);
-        final DefaultComboBoxModel model = new DefaultComboBoxModel();
-        Enum[] enumConstants = input.getValueType().asSubclass(Enum.class)
-                .getEnumConstants();
-        for (Enum enum1 : enumConstants)
+        return new ForgeComponent()
         {
-            model.addElement(enum1.name());
-        }
-
-        ComboBox combo = new ComboBox(model);
-        container.add(combo);
-        String value = converter.convert(InputComponents.getValueFor(input));
-        Iterable<Object> valueChoices = selectOne.getValueChoices();
-        if (valueChoices != null)
-        {
-            for (Object choice : valueChoices)
-            {
-                model.addElement(Proxies.unwrap(choice));
-            }
-        }
-        combo.addItemListener(new ItemListener()
-        {
-
             @Override
-            public void itemStateChanged(ItemEvent e)
+            public void buildUI(Container container)
             {
-                String selectedItem = (String) model.getSelectedItem();
-                Class valueType = input.getValueType();
-                InputComponents.setValueFor(converterFactory, input,
-                        Enum.valueOf(valueType, selectedItem));
-                valueChangeListener.run();
-            }
-        });
+                // Create the label
+                JBLabel label = new JBLabel();
+                label.setText(input.getLabel() == null ? input.getName() : input
+                        .getLabel());
+                container.add(label);
 
-        // Set Default Value
-        if (value == null)
-        {
-            if (model.getSize() > 0)
-            {
-                model.setSelectedItem(model.getElementAt(0));
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .getConverterFactory();
+                final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+                final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
+                        .getItemLabelConverter(converterFactory, selectOne);
+                final DefaultComboBoxModel model = new DefaultComboBoxModel();
+                Enum[] enumConstants = input.getValueType().asSubclass(Enum.class)
+                        .getEnumConstants();
+                for (Enum enum1 : enumConstants)
+                {
+                    model.addElement(enum1.name());
+                }
+
+                ComboBox combo = new ComboBox(model);
+                container.add(combo);
+                String value = converter.convert(InputComponents.getValueFor(input));
+                Iterable<Object> valueChoices = selectOne.getValueChoices();
+                if (valueChoices != null)
+                {
+                    for (Object choice : valueChoices)
+                    {
+                        model.addElement(Proxies.unwrap(choice));
+                    }
+                }
+                combo.addItemListener(new ItemListener()
+                {
+
+                    @Override
+                    public void itemStateChanged(ItemEvent e)
+                    {
+                        String selectedItem = (String) model.getSelectedItem();
+                        Class valueType = input.getValueType();
+                        InputComponents.setValueFor(converterFactory, input,
+                                Enum.valueOf(valueType, selectedItem));
+                        valueChangeListener.run();
+                    }
+                });
+
+                // Set Default Value
+                if (value == null)
+                {
+                    if (model.getSize() > 0)
+                    {
+                        model.setSelectedItem(model.getElementAt(0));
+                    }
+                }
+                else
+                {
+                    model.setSelectedItem(value);
+                }
             }
-        }
-        else
-        {
-            model.setSelectedItem(value);
-        }
-        return combo;
+        };
     }
 
     @Override

@@ -7,28 +7,20 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
 
-import javax.swing.*;
-import java.awt.*;
-
 public abstract class ComponentBuilder
 {
-    protected Runnable valueChangeListener;
-
     /**
      * Builds a UI Component object based on the input
      * <p/>
      * TODO Write JavaDoc
      *
      * @param input
-     * @param container
      * @return
      */
-    public abstract JComponent build(final InputComponent<?, Object> input,
-                                     final Container container);
+    public abstract ForgeComponent build(InputComponent<?, Object> input);
 
     /**
      * Returns the supported type this control may produce
@@ -87,34 +79,5 @@ public abstract class ComponentBuilder
         }
 
         return handles;
-    }
-
-    public void setValueChangeListener(Runnable valueChangeListener)
-    {
-        this.valueChangeListener = valueChangeListener;
-    }
-
-    /**
-     * Displays validation messages.
-     */
-    public void displayMessages(java.util.List<UIMessage> messages)
-    {
-        for (UIMessage message : messages)
-        {
-            if (message.getSeverity().equals(UIMessage.Severity.ERROR))
-            {
-                setErrorMessage(message);
-                return;
-            }
-        }
-        clearErrorMessage();
-    }
-
-    public void setErrorMessage(UIMessage message)
-    {
-    }
-
-    public void clearErrorMessage()
-    {
     }
 }

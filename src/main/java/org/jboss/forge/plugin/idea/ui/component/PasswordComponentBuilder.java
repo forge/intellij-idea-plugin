@@ -24,50 +24,55 @@ public class PasswordComponentBuilder extends ComponentBuilder
 {
 
     @Override
-    public JComponent build(final InputComponent<?, Object> input,
-                            Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        final JTextField textField = new JPasswordField();
-        // Set Default Value
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .lookup(ConverterFactory.class);
-        Converter<Object, String> converter = converterFactory.getConverter(
-                input.getValueType(), String.class);
-        String value = converter.convert(InputComponents.getValueFor(input));
-        textField.setText(value == null ? "" : value);
-
-        textField.getDocument().addDocumentListener(new DocumentListener()
+        return new ForgeComponent()
         {
             @Override
-            public void removeUpdate(DocumentEvent e)
+            public void buildUI(Container container)
             {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
-            }
+                final JTextField textField = new JPasswordField();
+                // Set Default Value
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .lookup(ConverterFactory.class);
+                Converter<Object, String> converter = converterFactory.getConverter(
+                        input.getValueType(), String.class);
+                String value = converter.convert(InputComponents.getValueFor(input));
+                textField.setText(value == null ? "" : value);
 
-            @Override
-            public void insertUpdate(DocumentEvent e)
-            {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
-            }
+                textField.getDocument().addDocumentListener(new DocumentListener()
+                {
+                    @Override
+                    public void removeUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
 
-            @Override
-            public void changedUpdate(DocumentEvent e)
-            {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
+                    @Override
+                    public void insertUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
+                });
+                String labelValue = input.getLabel() == null ? input.getName() : input
+                        .getLabel();
+                JBLabel label = new JBLabel(labelValue);
+                container.add(label);
+                container.add(textField);
             }
-        });
-        String labelValue = input.getLabel() == null ? input.getName() : input
-                .getLabel();
-        JBLabel label = new JBLabel(labelValue);
-        container.add(label);
-        container.add(textField);
-        return textField;
+        };
     }
 
     @Override

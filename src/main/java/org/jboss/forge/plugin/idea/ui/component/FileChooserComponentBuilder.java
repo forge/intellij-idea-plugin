@@ -29,66 +29,71 @@ public class FileChooserComponentBuilder extends ComponentBuilder
 {
 
     @Override
-    public JComponent build(final InputComponent<?, Object> input,
-                            Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        // Added Label
-        JBLabel label = new JBLabel(input.getLabel() == null ? input.getName()
-                : input.getLabel());
-        container.add(label);
-
-        final TextFieldWithBrowseButton fileField = new TextFieldWithBrowseButton(
-                new ActionListener()
-                {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        // TODO Auto-generated method stub
-
-                    }
-                }
-        );
-        // Set Default Value
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .getConverterFactory();
-        Converter<Object, String> converter = converterFactory.getConverter(
-                input.getValueType(), String.class);
-        String value = converter.convert(InputComponents.getValueFor(input));
-        fileField.setText(value == null ? "" : value);
-
-        final JTextField textField = fileField.getTextField();
-        textField.getDocument().addDocumentListener(new DocumentListener()
+        return new ForgeComponent()
         {
             @Override
-            public void removeUpdate(DocumentEvent e)
+            public void buildUI(Container container)
             {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
-            }
+                // Added Label
+                JBLabel label = new JBLabel(input.getLabel() == null ? input.getName()
+                        : input.getLabel());
+                container.add(label);
 
-            @Override
-            public void insertUpdate(DocumentEvent e)
-            {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
-            }
+                final TextFieldWithBrowseButton fileField = new TextFieldWithBrowseButton(
+                        new ActionListener()
+                        {
 
-            @Override
-            public void changedUpdate(DocumentEvent e)
-            {
-                InputComponents.setValueFor(converterFactory, input,
-                        textField.getText());
-                valueChangeListener.run();
-            }
-        });
+                            @Override
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                // TODO Auto-generated method stub
 
-        fileField.addBrowseFolderListener("Select a directory", null, null,
-                FileChooserDescriptorFactory.createSingleFolderDescriptor());
-        container.add(fileField);
-        return null;
+                            }
+                        }
+                );
+                // Set Default Value
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .getConverterFactory();
+                Converter<Object, String> converter = converterFactory.getConverter(
+                        input.getValueType(), String.class);
+                String value = converter.convert(InputComponents.getValueFor(input));
+                fileField.setText(value == null ? "" : value);
+
+                final JTextField textField = fileField.getTextField();
+                textField.getDocument().addDocumentListener(new DocumentListener()
+                {
+                    @Override
+                    public void removeUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                textField.getText());
+                        valueChangeListener.run();
+                    }
+                });
+
+                fileField.addBrowseFolderListener("Select a directory", null, null,
+                        FileChooserDescriptorFactory.createSingleFolderDescriptor());
+                container.add(fileField);
+            }
+        };
     }
 
     @Override

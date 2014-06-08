@@ -27,68 +27,74 @@ public class ComboComponentBuilder extends ComponentBuilder
 
     @SuppressWarnings("unchecked")
     @Override
-    public JComponent build(final InputComponent<?, Object> input, Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        // Create the label
-        JBLabel label = new JBLabel();
-        label.setText(input.getLabel() == null ? input.getName() : input
-                .getLabel());
-        container.add(label);
-
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .getConverterFactory();
-        final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-        final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
-                .getItemLabelConverter(converterFactory, selectOne);
-        final DefaultComboBoxModel model = new DefaultComboBoxModel();
-
-        ComboBox combo = new ComboBox(model);
-        combo.setRenderer(new ListCellRenderer()
+        return new ForgeComponent()
         {
-
             @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                                                          boolean cellHasFocus)
+            public void buildUI(Container container)
             {
-                Object obj = model.getElementAt(index);
-                return new JLabel(converter.convert(obj));
-            }
-        });
-        container.add(combo);
-        String value = converter.convert(InputComponents.getValueFor(input));
-        Iterable<Object> valueChoices = selectOne.getValueChoices();
-        if (valueChoices != null)
-        {
-            for (Object choice : valueChoices)
-            {
-                model.addElement(Proxies.unwrap(choice));
-            }
-        }
-        combo.addItemListener(new ItemListener()
-        {
+                // Create the label
+                JBLabel label = new JBLabel();
+                label.setText(input.getLabel() == null ? input.getName() : input
+                        .getLabel());
+                container.add(label);
 
-            @Override
-            public void itemStateChanged(ItemEvent e)
-            {
-                Object selectedItem = model.getSelectedItem();
-                InputComponents.setValueFor(converterFactory, input, selectedItem);
-                valueChangeListener.run();
-            }
-        });
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .getConverterFactory();
+                final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+                final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
+                        .getItemLabelConverter(converterFactory, selectOne);
+                final DefaultComboBoxModel model = new DefaultComboBoxModel();
 
-        // Set Default Value
-        if (value == null)
-        {
-            if (model.getSize() > 0)
-            {
-                model.setSelectedItem(model.getElementAt(0));
+                ComboBox combo = new ComboBox(model);
+                combo.setRenderer(new ListCellRenderer()
+                {
+
+                    @Override
+                    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                                                                       boolean cellHasFocus)
+                    {
+                        Object obj = model.getElementAt(index);
+                        return new JLabel(converter.convert(obj));
+                    }
+                });
+                container.add(combo);
+                String value = converter.convert(InputComponents.getValueFor(input));
+                Iterable<Object> valueChoices = selectOne.getValueChoices();
+                if (valueChoices != null)
+                {
+                    for (Object choice : valueChoices)
+                    {
+                        model.addElement(Proxies.unwrap(choice));
+                    }
+                }
+                combo.addItemListener(new ItemListener()
+                {
+
+                    @Override
+                    public void itemStateChanged(ItemEvent e)
+                    {
+                        Object selectedItem = model.getSelectedItem();
+                        InputComponents.setValueFor(converterFactory, input, selectedItem);
+                        valueChangeListener.run();
+                    }
+                });
+
+                // Set Default Value
+                if (value == null)
+                {
+                    if (model.getSize() > 0)
+                    {
+                        model.setSelectedItem(model.getElementAt(0));
+                    }
+                }
+                else
+                {
+                    model.setSelectedItem(value);
+                }
             }
-        }
-        else
-        {
-            model.setSelectedItem(value);
-        }
-        return combo;
+        };
     }
 
     @Override

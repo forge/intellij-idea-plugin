@@ -26,47 +26,53 @@ public class RadioComponentBuilder extends ComponentBuilder
 
     @SuppressWarnings("unchecked")
     @Override
-    public JComponent build(final InputComponent<?, Object> input, Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        JBLabel label = new JBLabel();
-        label.setText(input.getLabel() == null ? input.getName() : input
-                .getLabel());
-        container.add(label);
-
-        JPanel radioContainer = new JPanel(new FlowLayout());
-        container.add(radioContainer);
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .getConverterFactory();
-        UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-        Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
-                .getItemLabelConverter(converterFactory, selectOne);
-        Object originalValue = InputComponents.getValueFor(input);
-        Iterable<Object> valueChoices = selectOne.getValueChoices();
-        ButtonGroup group = new ButtonGroup();
-        if (valueChoices != null)
+        return new ForgeComponent()
         {
-            for (final Object choice : valueChoices)
+            @Override
+            public void buildUI(Container container)
             {
-                final String itemLabel = itemLabelConverter.convert(choice);
-                JRadioButton radio = new JRadioButton();
+                JBLabel label = new JBLabel();
+                label.setText(input.getLabel() == null ? input.getName() : input
+                        .getLabel());
+                container.add(label);
 
-                radio.setText(itemLabel);
-                radio.setSelected(choice.equals(originalValue));
-                radio.addActionListener(new ActionListener()
+                JPanel radioContainer = new JPanel(new FlowLayout());
+                container.add(radioContainer);
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .getConverterFactory();
+                UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+                Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
+                        .getItemLabelConverter(converterFactory, selectOne);
+                Object originalValue = InputComponents.getValueFor(input);
+                Iterable<Object> valueChoices = selectOne.getValueChoices();
+                ButtonGroup group = new ButtonGroup();
+                if (valueChoices != null)
                 {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
+                    for (final Object choice : valueChoices)
                     {
-                        InputComponents.setValueFor(converterFactory,
-                                input, Proxies.unwrap(choice));
-                        valueChangeListener.run();
+                        final String itemLabel = itemLabelConverter.convert(choice);
+                        JRadioButton radio = new JRadioButton();
+
+                        radio.setText(itemLabel);
+                        radio.setSelected(choice.equals(originalValue));
+                        radio.addActionListener(new ActionListener()
+                        {
+                            @Override
+                            public void actionPerformed(ActionEvent e)
+                            {
+                                InputComponents.setValueFor(converterFactory,
+                                        input, Proxies.unwrap(choice));
+                                valueChangeListener.run();
+                            }
+                        });
+                        radioContainer.add(radio);
+                        group.add(radio);
                     }
-                });
-                radioContainer.add(radio);
-                group.add(radio);
+                }
             }
-        }
-        return radioContainer;
+        };
     }
 
     @Override

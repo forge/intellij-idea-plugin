@@ -28,36 +28,41 @@ public class CheckboxComponentBuilder extends ComponentBuilder
 {
 
     @Override
-    public JComponent build(final InputComponent<?, Object> input,
-                            Container container)
+    public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        // Create the label
-        String text = (input.getLabel() == null ? input.getName() : input
-                .getLabel());
-        final JCheckBox checkbox = new JCheckBox(text);
-        // Set Default Value
-        final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                .lookup(ConverterFactory.class);
-        if (converterFactory != null)
-        {
-            Converter<Object, Boolean> converter = converterFactory
-                    .getConverter(input.getValueType(), Boolean.class);
-            Boolean value = converter.convert(InputComponents
-                    .getValueFor(input));
-            checkbox.setSelected(value == null ? false : value);
-        }
-        checkbox.addActionListener(new ActionListener()
+        return new ForgeComponent()
         {
             @Override
-            public void actionPerformed(ActionEvent e)
+            public void buildUI(Container container)
             {
-                InputComponents.setValueFor(converterFactory, input,
-                        checkbox.isSelected());
-                valueChangeListener.run();
+                // Create the label
+                String text = (input.getLabel() == null ? input.getName() : input
+                        .getLabel());
+                final JCheckBox checkbox = new JCheckBox(text);
+                // Set Default Value
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .lookup(ConverterFactory.class);
+                if (converterFactory != null)
+                {
+                    Converter<Object, Boolean> converter = converterFactory
+                            .getConverter(input.getValueType(), Boolean.class);
+                    Boolean value = converter.convert(InputComponents
+                            .getValueFor(input));
+                    checkbox.setSelected(value == null ? false : value);
+                }
+                checkbox.addActionListener(new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                checkbox.isSelected());
+                        valueChangeListener.run();
+                    }
+                });
+                container.add(checkbox, "span 2");
             }
-        });
-        container.add(checkbox, "span 2");
-        return checkbox;
+        };
     }
 
     @Override
