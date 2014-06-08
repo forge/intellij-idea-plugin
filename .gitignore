@@ -10,7 +10,8 @@ target/
 /*/src/main/java/META-INF
 .gitignore.swp
 docs/reference/src/main/docbook/en-US/version_info.xml
-.idea
+.idea/*
+!.idea/codeStyleSettings.xml
 .forge_settings
 .factorypath
 atlassian-ide-plugin.xml
