@@ -40,10 +40,10 @@ public class ForgeNotifications
 
         if (result instanceof Failed)
         {
-            return SUCCESS_MESSAGE;
+            return FAILURE_MESSAGE;
         }
 
-        return FAILURE_MESSAGE;
+        return SUCCESS_MESSAGE;
     }
 
     private static MessageType messageTypeOf(Result result)
