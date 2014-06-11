@@ -13,9 +13,11 @@ import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
+import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
+import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -137,7 +139,8 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     {
         try
         {
-            controller.execute();
+            Result result = controller.execute();
+            ForgeNotifications.showExecutionResult(result);
         }
         catch (Exception e)
         {
