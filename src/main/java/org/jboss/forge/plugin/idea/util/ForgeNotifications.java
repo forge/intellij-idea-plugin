@@ -31,6 +31,11 @@ public class ForgeNotifications
         NOTIFICATION_GROUP.createNotification(messageFrom(result), messageTypeOf(result)).notify(null);
     }
 
+    public static void showErrorMessage(Exception ex)
+    {
+        NOTIFICATION_GROUP.createNotification(ex.getMessage(), MessageType.ERROR).notify(null);
+    }
+
     private static String messageFrom(Result result)
     {
         if (result.getMessage() != null && !result.getMessage().isEmpty())

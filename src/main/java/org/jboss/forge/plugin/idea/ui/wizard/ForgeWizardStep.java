@@ -52,8 +52,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
         catch (Exception e)
         {
-            // TODO Handle Wizard exceptions
-            e.printStackTrace();
+            ForgeNotifications.showErrorMessage(e);
         }
     }
 
@@ -128,9 +127,8 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
         catch (Exception e)
         {
-            // TODO Handle Wizard exceptions
-            e.printStackTrace();
-            return null;
+            model.getDialog().setErrorMessage(e.getMessage());
+            return this;
         }
     }
 
@@ -144,8 +142,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
         catch (Exception e)
         {
-            // TODO Handle Wizard exceptions
-            e.printStackTrace();
+            ForgeNotifications.showErrorMessage(e);
         }
 
         return true;
