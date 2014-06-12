@@ -10,19 +10,17 @@ import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.ui.controller.CommandController;
-import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.plugin.idea.ui.NavigationState;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
+import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +33,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
     private final ForgeWizardModel model;
     private final CommandController controller;
+    private final NavigationState navigationState;
 
     /**
      * Maps component builders by input component name.
@@ -45,6 +44,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     {
         this.model = model;
         this.controller = controller;
+        this.navigationState = new NavigationState(model, controller);
 
         try
         {
@@ -71,22 +71,10 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
                     ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
             ForgeComponent component = builder.build(input);
             component.buildUI(container);
-
             components.put(input.getName(), component);
-
-            component.setValueChangeListener(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    refreshNavigationState();
-                    validate();
-                }
-            });
+            component.setValueChangeListener(new ValueChangeListener(model, components, navigationState));
         }
-
-        refreshNavigationState();
-
+        navigationState.refreshNavigationState();
         return container;
     }
 
@@ -105,7 +93,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     private WizardStep navigate(boolean forward)
     {
         // If it's not a wizard, we don't care
-        if (!(isWizardController()))
+        if (!(navigationState.isWizardController()))
         {
             return null;
         }
@@ -116,11 +104,11 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
             if (forward)
             {
-                nextController = getWizardCommandController().next();
+                nextController = navigationState.getWizardCommandController().next();
             }
             else
             {
-                nextController = getWizardCommandController().previous();
+                nextController = navigationState.getWizardCommandController().previous();
             }
 
             return new ForgeWizardStep(this.model, nextController);
@@ -162,110 +150,6 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
     public void refreshNavigationState()
     {
-        WizardNavigationState navigationState = model.getCurrentNavigationState();
-
-        navigationState.CANCEL.setEnabled(true);
-        navigationState.PREVIOUS.setEnabled(isPreviousEnabled());
-        navigationState.NEXT.setEnabled(isNextEnabled());
-        navigationState.FINISH.setEnabled(isFinishEnabled());
-    }
-
-    private boolean isPreviousEnabled()
-    {
-        if (!isWizardController())
-        {
-            return false;
-        }
-
-        return getWizardCommandController().canMoveToPreviousStep();
-    }
-
-    private boolean isNextEnabled()
-    {
-        if (!isWizardController())
-        {
-            return false;
-        }
-
-        return getWizardCommandController().canMoveToNextStep();
-    }
-
-    private boolean isFinishEnabled()
-    {
-        return controller.canExecute();
-    }
-
-    private boolean isWizardController()
-    {
-        return controller instanceof WizardCommandController;
-    }
-
-    private WizardCommandController getWizardCommandController()
-    {
-        return (WizardCommandController) controller;
-    }
-
-    private void validate()
-    {
-        List<UIMessage> allMessages = controller.validate();
-
-        Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
-        List<UIMessage> commandMessages = new ArrayList<>();
-
-        for (String inputName : components.keySet())
-        {
-            messagesByInputName.put(inputName, new ArrayList<UIMessage>());
-        }
-
-        for (UIMessage message : allMessages)
-        {
-            if (message.getSource() == null)
-            {
-                commandMessages.add(message);
-            }
-            else
-            {
-                InputComponent source = message.getSource();
-                messagesByInputName.get(source.getName()).add(message);
-            }
-        }
-
-        processComponentMessages(messagesByInputName);
-        processCommandMessages(commandMessages, allMessages);
-    }
-
-    private void processComponentMessages(Map<String, List<UIMessage>> messages)
-    {
-        for (Map.Entry<String, List<UIMessage>> entry : messages.entrySet())
-        {
-            ForgeComponent builder = components.get(entry.getKey());
-            builder.displayMessages(entry.getValue());
-        }
-    }
-
-    private void processCommandMessages(List<UIMessage> commandMessages, List<UIMessage> allMessages)
-    {
-        // Messages specific for command (not any input) should be displayed first
-        for (UIMessage message : commandMessages)
-        {
-            if (message.getSeverity() == UIMessage.Severity.ERROR)
-            {
-                model.getDialog().setErrorMessage(message.getDescription());
-                return;
-            }
-        }
-
-        // Display first input validation error
-        for (UIMessage message : allMessages)
-        {
-            if (message.getSeverity() == UIMessage.Severity.ERROR)
-            {
-                model.getDialog().setErrorMessage(message.getDescription());
-                return;
-            }
-        }
-
-        // If there are no errors
-        model.getDialog().setErrorMessage(null);
+        this.navigationState.refreshNavigationState();
     }
 }
