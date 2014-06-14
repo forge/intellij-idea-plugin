@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
+import com.intellij.openapi.project.Project;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
@@ -15,8 +16,12 @@ public class UIContextImpl extends AbstractUIContext
     private final UISelection<?> initialSelection;
     private final UIProvider provider;
 
-    UIContextImpl(UISelection<?> initialSelection, UIProvider provider)
+    private final Project project;
+
+    UIContextImpl(Project project, UISelection<?> initialSelection, UIProvider provider)
     {
+        this.project = project;
+
         this.initialSelection = initialSelection;
         this.provider = provider;
     }
@@ -32,5 +37,10 @@ public class UIContextImpl extends AbstractUIContext
     public UIProvider getProvider()
     {
         return provider;
+    }
+
+    public Project getProject()
+    {
+        return project;
     }
 }

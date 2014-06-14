@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -28,12 +29,12 @@ import java.util.List;
  */
 public class UIContextFactory
 {
-    public static UIContext create(VirtualFile[] files)
+    public static UIContext create(Project project, VirtualFile[] files)
     {
         UIProvider provider = new UIProviderImpl();
         UISelection<?> initialSelection = getSelection(files);
 
-        return new UIContextImpl(initialSelection, provider);
+        return new UIContextImpl(project, initialSelection, provider);
     }
 
     private static UISelection<?> getSelection(VirtualFile[] files)

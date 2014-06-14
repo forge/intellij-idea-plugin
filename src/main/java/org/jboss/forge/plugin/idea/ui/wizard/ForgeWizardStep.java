@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.wizard;
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
 import net.miginfocom.swing.MigLayout;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.result.Result;
@@ -18,6 +19,7 @@ import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
+import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -32,7 +34,6 @@ import java.util.Map;
 public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
     private final ForgeWizardModel model;
-    private final CommandController controller;
     private final NavigationState navigationState;
 
     /**
@@ -43,7 +44,6 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
     {
         this.model = model;
-        this.controller = controller;
         this.navigationState = new NavigationState(model, controller);
 
         try
@@ -53,6 +53,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         catch (Exception e)
         {
             ForgeNotifications.showErrorMessage(e);
+            e.printStackTrace();
         }
     }
 
@@ -65,7 +66,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
         components = new HashMap<>();
 
-        for (InputComponent input : controller.getInputs().values())
+        for (InputComponent input : navigationState.getController().getInputs().values())
         {
             ComponentBuilder builder =
                     ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
@@ -116,6 +117,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         catch (Exception e)
         {
             model.getDialog().setErrorMessage(e.getMessage());
+            e.printStackTrace();
             return this;
         }
     }
@@ -125,12 +127,17 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     {
         try
         {
-            Result result = controller.execute();
+            Result result = navigationState.getController().execute();
             ForgeNotifications.showExecutionResult(result);
+
+            UIContext context = navigationState.getController().getContext();
+            IDEUtil.refreshProject(context);
+            IDEUtil.openSelection(context);
         }
         catch (Exception e)
         {
             ForgeNotifications.showErrorMessage(e);
+            e.printStackTrace();
         }
 
         return true;
@@ -145,7 +152,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     @Override
     public String getExplanation()
     {
-        return controller.getMetadata().getDescription();
+        return navigationState.getController().getMetadata().getDescription();
     }
 
     public void refreshNavigationState()

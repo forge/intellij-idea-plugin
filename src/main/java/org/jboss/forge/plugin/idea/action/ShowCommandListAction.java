@@ -9,10 +9,11 @@ package org.jboss.forge.plugin.idea.action;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.plugin.idea.service.callbacks.CommandListPopupCallBack;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.callbacks.CommandListPopupCallBack;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
 /**
@@ -32,6 +33,7 @@ public class ShowCommandListAction extends AnAction
             return;
         }
 
+        Project project = event.getData(DataKeys.PROJECT);
         VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
 
         // If no file is selected, then set project directory as selection
@@ -41,6 +43,6 @@ public class ShowCommandListAction extends AnAction
         }
 
         final VirtualFile[] selectedFiles = files;
-        ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(selectedFiles));
+        ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(project, selectedFiles));
     }
 }

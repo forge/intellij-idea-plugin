@@ -7,6 +7,7 @@
 
 package org.jboss.forge.plugin.idea.service.callbacks;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -24,17 +25,19 @@ import java.util.List;
  */
 public class CommandListPopupCallBack implements Runnable
 {
-    private VirtualFile[] selectedFiles;
+    private final Project project;
+    private final VirtualFile[] selectedFiles;
 
-    public CommandListPopupCallBack(VirtualFile... selectedFiles)
+    public CommandListPopupCallBack(Project project, VirtualFile... selectedFiles)
     {
+        this.project = project;
         this.selectedFiles = selectedFiles;
     }
 
     @Override
     public void run()
     {
-        UIContext uiContext = UIContextFactory.create(selectedFiles);
+        UIContext uiContext = UIContextFactory.create(project, selectedFiles);
 
         new CommandListPopupBuilder()
                 .setUIContext(uiContext)
