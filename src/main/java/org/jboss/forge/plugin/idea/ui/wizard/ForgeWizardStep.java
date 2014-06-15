@@ -62,7 +62,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     public JComponent prepare(WizardNavigationState state)
     {
         JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
-                "[left]rel[grow,fill]", "[]10[]"));
+                "[left]rel[grow,fill]"));
 
         components = new HashMap<>();
 

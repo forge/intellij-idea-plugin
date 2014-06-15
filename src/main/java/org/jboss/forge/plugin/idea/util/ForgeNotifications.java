@@ -33,7 +33,17 @@ public class ForgeNotifications
 
     public static void showErrorMessage(Exception ex)
     {
-        NOTIFICATION_GROUP.createNotification(ex.getMessage(), MessageType.ERROR).notify(null);
+        try
+        {
+            String message = ex.getMessage();
+            message = message != null ? message : ex.getClass().getCanonicalName();
+            NOTIFICATION_GROUP.createNotification(message, MessageType.ERROR).notify(null);
+        }
+        catch (Exception anotherException)
+        {
+            // Don't rethrow, since showErrorMessage is usually used in a catch block
+            anotherException.printStackTrace();
+        }
     }
 
     private static String messageFrom(Result result)
