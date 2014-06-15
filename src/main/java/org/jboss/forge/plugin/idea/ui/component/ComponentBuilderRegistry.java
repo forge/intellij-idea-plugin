@@ -23,7 +23,6 @@ public enum ComponentBuilderRegistry
             new ComboComponentBuilder(),
             new RadioComponentBuilder(),
             new FileChooserComponentBuilder(),
-            // new CheckboxTableComponentBuilder(),
             new TextBoxComponentBuilder(),
             new PasswordComponentBuilder(),
             new FallbackTextBoxComponentBuilder()};

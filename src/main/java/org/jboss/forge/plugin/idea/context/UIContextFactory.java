@@ -14,12 +14,12 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
+import org.jboss.forge.addon.ui.util.Selections;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,12 +44,12 @@ public class UIContextFactory
 
         if (files == null || files.length == 0)
         {
-            selection = new UISelectionImpl<>(new ArrayList<>());
+            selection = Selections.emptySelection();
         }
         else
         {
             List<Object> resources = filesToResources(files);
-            selection = new UISelectionImpl<>(resources);
+            selection = Selections.from(resources);
         }
 
         return selection;
