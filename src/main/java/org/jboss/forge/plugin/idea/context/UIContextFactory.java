@@ -19,6 +19,7 @@ import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,8 +40,18 @@ public class UIContextFactory
 
     private static UISelection<?> getSelection(VirtualFile[] files)
     {
-        List<Object> resources = filesToResources(files);
-        UISelection<?> selection = new UISelectionImpl<>(resources);
+        UISelection<?> selection;
+
+        if (files == null || files.length == 0)
+        {
+            selection = new UISelectionImpl<>(new ArrayList<>());
+        }
+        else
+        {
+            List<Object> resources = filesToResources(files);
+            selection = new UISelectionImpl<>(resources);
+        }
+
         return selection;
     }
 
@@ -48,20 +59,33 @@ public class UIContextFactory
     private static List<Object> filesToResources(VirtualFile[] files)
     {
         List<Object> result = new LinkedList<Object>();
-        ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
-        Class<Resource> nativeResourceClass = ServiceHelper.getForgeService().locateNativeClass(Resource.class);
-        Converter<File, Resource> converter = converterFactory.getConverter(File.class, nativeResourceClass);
 
-        if (files != null)
+        Converter<File, Resource> converter = getResourceConverter();
+
+        for (VirtualFile virtualFile : files)
         {
-            for (VirtualFile virtualFile : files)
-            {
-                File file = new File(virtualFile.getPath());
-                Object resource = Proxies.unwrap(converter.convert(file));
-                result.add(resource);
-            }
+            result.add(fileToResource(virtualFile, converter));
         }
 
         return result;
+    }
+
+    private static Converter<File, Resource> getResourceConverter()
+    {
+        ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+        Class<Resource> nativeResourceClass = ServiceHelper.getForgeService().locateNativeClass(Resource.class);
+        return converterFactory.getConverter(File.class, nativeResourceClass);
+    }
+
+    private static Object fileToResource(VirtualFile file)
+    {
+        return fileToResource(file, getResourceConverter());
+    }
+
+    private static Object fileToResource(VirtualFile file, Converter<File, Resource> converter)
+    {
+        File javaFile = new File(file.getPath());
+        Object resource = Proxies.unwrap(converter.convert(javaFile));
+        return resource;
     }
 }

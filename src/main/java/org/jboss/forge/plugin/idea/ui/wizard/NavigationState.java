@@ -5,12 +5,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.forge.plugin.idea.ui;
+package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.ui.wizard.WizardNavigationState;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
-import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardModel;
 
 /**
  * @author <a href="mailto:danielsoro@gmail.com">Daniel Cunha (soro)</a>

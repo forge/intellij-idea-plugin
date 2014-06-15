@@ -7,10 +7,9 @@
 
 package org.jboss.forge.plugin.idea.ui.listeners;
 
-import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
-import org.jboss.forge.plugin.idea.ui.NavigationState;
+import org.jboss.forge.plugin.idea.ui.wizard.NavigationState;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardModel;
 

@@ -27,7 +27,7 @@ public class UISelectionImpl<T> implements UISelection<T>
     @Override
     public T get()
     {
-        return selection.get(0);
+        return selection.size() > 0 ? selection.get(0) : null;
     }
 
     @Override
