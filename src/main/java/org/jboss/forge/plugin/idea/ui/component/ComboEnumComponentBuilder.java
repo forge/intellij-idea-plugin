@@ -60,9 +60,10 @@ public class ComboEnumComponentBuilder extends ComponentBuilder
                 Iterable<Object> valueChoices = selectOne.getValueChoices();
                 if (valueChoices != null)
                 {
+                    model.removeAllElements();
                     for (Object choice : valueChoices)
                     {
-                        model.addElement(Proxies.unwrap(choice));
+                        model.addElement(((Enum) Proxies.unwrap(choice)).name());
                     }
                 }
                 combo.addItemListener(new ItemListener()
