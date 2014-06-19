@@ -25,6 +25,7 @@ public enum ComponentBuilderRegistry
             new FileChooserComponentBuilder(),
             new TextBoxComponentBuilder(),
             new PasswordComponentBuilder(),
+            new TextAreaComponentBuilder(),
             new FallbackTextBoxComponentBuilder()};
 
     public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)

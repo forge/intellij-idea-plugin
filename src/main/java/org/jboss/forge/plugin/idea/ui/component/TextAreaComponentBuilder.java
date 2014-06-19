@@ -11,17 +11,20 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-public class PasswordComponentBuilder extends AbstractTextComponentBuilder
+/**
+ * @author Adam Wyłuda
+ */
+public class TextAreaComponentBuilder extends AbstractTextComponentBuilder
 {
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.SECRET;
-    }
-
     @Override
     protected JTextComponent createTextComponent()
     {
-        return new JPasswordField();
+        return new JTextArea();
+    }
+
+    @Override
+    protected String getSupportedInputType()
+    {
+        return InputType.TEXTAREA;
     }
 }
