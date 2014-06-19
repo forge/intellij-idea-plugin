@@ -60,7 +60,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                         valueChangeListener.run();
                     }
                 });
-                container.add(checkbox, "span 2");
+                container.add(checkbox, "skip");
             }
         };
     }
