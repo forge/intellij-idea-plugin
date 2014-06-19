@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
@@ -65,7 +66,7 @@ public abstract class ComponentBuilder
 
         if (handles)
         {
-            if (inputTypeHint != null)
+            if (inputTypeHint != null && !InputType.DEFAULT.equals(inputTypeHint))
             {
                 handles = Proxies.areEquivalent(inputTypeHint,
                         getSupportedInputType());
