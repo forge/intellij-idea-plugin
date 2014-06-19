@@ -7,7 +7,6 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.ui.ComboBox;
-import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -16,6 +15,7 @@ import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.util.ForgeProxies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,44 +29,28 @@ public class ComboComponentBuilder extends ComponentBuilder
     @Override
     public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        return new ForgeComponent()
+        return new LabeledComponent(input, new ForgeComponent()
         {
             @Override
             public void buildUI(Container container)
             {
-                // Create the label
-                JBLabel label = new JBLabel();
-                label.setText(input.getLabel() == null ? input.getName() : input
-                        .getLabel());
-                container.add(label);
-
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                         .getConverterFactory();
-                final UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+                final UISelectOne<Object> selectOne = ForgeProxies.proxyTo(UISelectOne.class, input);
                 final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
                         .getItemLabelConverter(converterFactory, selectOne);
                 final DefaultComboBoxModel model = new DefaultComboBoxModel();
 
                 ComboBox combo = new ComboBox(model);
-                combo.setRenderer(new ListCellRenderer()
-                {
-
-                    @Override
-                    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-                                                                       boolean cellHasFocus)
-                    {
-                        Object obj = model.getElementAt(index);
-                        return new JLabel(converter.convert(obj));
-                    }
-                });
                 container.add(combo);
                 String value = converter.convert(InputComponents.getValueFor(input));
                 Iterable<Object> valueChoices = selectOne.getValueChoices();
                 if (valueChoices != null)
                 {
+                    model.removeAllElements();
                     for (Object choice : valueChoices)
                     {
-                        model.addElement(Proxies.unwrap(choice));
+                        model.addElement(converter.convert(Proxies.unwrap(choice)));
                     }
                 }
                 combo.addItemListener(new ItemListener()
@@ -94,7 +78,7 @@ public class ComboComponentBuilder extends ComponentBuilder
                     model.setSelectedItem(value);
                 }
             }
-        };
+        });
     }
 
     @Override

@@ -19,7 +19,6 @@ public enum ComponentBuilderRegistry
 
     private ComponentBuilder[] componentBuilders = {
             new CheckboxComponentBuilder(),
-            new ComboEnumComponentBuilder(),
             new ComboComponentBuilder(),
             new RadioComponentBuilder(),
             new FileChooserComponentBuilder(),
