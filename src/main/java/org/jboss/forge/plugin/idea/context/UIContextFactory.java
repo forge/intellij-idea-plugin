@@ -49,7 +49,7 @@ public class UIContextFactory
         else
         {
             List<Object> resources = filesToResources(files);
-            selection = Selections.from(resources);
+            selection = Selections.from(resources.toArray());
         }
 
         return selection;
