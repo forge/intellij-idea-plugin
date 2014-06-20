@@ -35,11 +35,6 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
     private final ForgeWizardModel model;
     private final NavigationState navigationState;
 
-    /**
-     * Maps component builders by input component name.
-     */
-    private Map<String, ForgeComponent> components;
-
     public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
     {
         this.model = model;
@@ -63,7 +58,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]"));
 
-        components = new HashMap<>();
+        Map<String, ForgeComponent> components = new HashMap<>();
 
         for (InputComponent input : navigationState.getController().getInputs().values())
         {
