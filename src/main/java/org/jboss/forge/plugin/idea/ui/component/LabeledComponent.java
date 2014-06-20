@@ -39,7 +39,8 @@ public class LabeledComponent extends ForgeComponent
     private String getLabelValue(InputComponent<?, Object> input)
     {
         String labelValue = input.getLabel() == null ? input.getName() : input.getLabel();
-        return labelValue + ":";
+        labelValue = labelValue.endsWith(":") ? labelValue : labelValue + ":";
+        return labelValue;
     }
 
     @Override
