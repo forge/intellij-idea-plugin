@@ -6,7 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.ui.components.JBLabel;
+import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -28,17 +28,12 @@ public class RadioComponentBuilder extends ComponentBuilder
     @Override
     public ForgeComponent build(final InputComponent<?, Object> input)
     {
-        return new ForgeComponent()
+        return new LabeledComponent(input, new ForgeComponent()
         {
             @Override
             public void buildUI(Container container)
             {
-                JBLabel label = new JBLabel();
-                label.setText(input.getLabel() == null ? input.getName() : input
-                        .getLabel());
-                container.add(label);
-
-                JPanel radioContainer = new JPanel(new FlowLayout());
+                JPanel radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                         .getConverterFactory();
@@ -72,7 +67,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                     }
                 }
             }
-        };
+        });
     }
 
     @Override
