@@ -6,9 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.ui.components.JBTextField;
 import org.jboss.forge.addon.ui.hints.InputType;
 
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 public class TextBoxComponentBuilder extends AbstractTextComponentBuilder
@@ -22,6 +22,6 @@ public class TextBoxComponentBuilder extends AbstractTextComponentBuilder
     @Override
     protected JTextComponent createTextComponent()
     {
-        return new JBTextField();
+        return new JTextField();
     }
 }
