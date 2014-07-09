@@ -60,6 +60,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
         Map<String, ForgeComponent> components = new HashMap<>();
         UIContext context = navigationState.getController().getContext();
+        ValueChangeListener listener = new ValueChangeListener(model, components, navigationState);
 
         for (InputComponent input : navigationState.getController().getInputs().values())
         {
@@ -68,7 +69,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 
             ForgeComponent component = builder.build(input);
             component.buildUI(container);
-            component.setValueChangeListener(new ValueChangeListener(model, components, navigationState));
+            component.setValueChangeListener(listener);
 
             components.put(input.getName(), component);
         }

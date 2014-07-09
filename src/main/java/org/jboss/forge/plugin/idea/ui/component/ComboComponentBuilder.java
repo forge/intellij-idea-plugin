@@ -70,7 +70,9 @@ public class ComboComponentBuilder extends ComponentBuilder
                 {
                     if (model.getSize() > 0)
                     {
-                        model.setSelectedItem(model.getElementAt(0));
+                        Object element = model.getElementAt(0);
+                        model.setSelectedItem(element);
+                        InputComponents.setValueFor(converterFactory, input, element);
                     }
                 }
                 else

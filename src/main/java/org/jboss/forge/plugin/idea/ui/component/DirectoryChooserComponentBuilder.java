@@ -23,7 +23,7 @@ public class DirectoryChooserComponentBuilder extends AbstractFileChooserCompone
     {
         TextFieldWithBrowseButton textField = new TextFieldWithBrowseButton();
         textField.addBrowseFolderListener("Select a directory", null, IDEUtil.projectFromContext(context),
-                FileChooserDescriptorFactory.createSingleLocalFileDescriptor());
+                FileChooserDescriptorFactory.createSingleFolderDescriptor());
         return textField;
     }
 
