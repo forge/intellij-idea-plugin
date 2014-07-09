@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -13,6 +14,13 @@ import org.jboss.forge.furnace.proxy.Proxies;
 
 public abstract class ComponentBuilder
 {
+    protected UIContext context;
+
+    public void setContext(UIContext context)
+    {
+        this.context = context;
+    }
+
     /**
      * Builds a UI Component object based on the input
      * <p/>

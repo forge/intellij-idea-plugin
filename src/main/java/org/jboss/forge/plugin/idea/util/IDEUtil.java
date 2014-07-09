@@ -52,7 +52,7 @@ public class IDEUtil
         FileEditorManager.getInstance(project).openFile(virtualFile, true);
     }
 
-    private static Project projectFromContext(UIContext context)
+    public static Project projectFromContext(UIContext context)
     {
         context = Proxies.unwrap(context);
         Assert.isTrue(context instanceof UIContextImpl, "UIContext must be an instance of UIContextImpl");

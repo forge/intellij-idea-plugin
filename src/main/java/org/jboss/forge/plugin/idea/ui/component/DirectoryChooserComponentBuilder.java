@@ -13,19 +13,22 @@ import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.io.File;
 
-public class FileChooserComponentBuilder extends AbstractFileChooserComponentBuilder
+/**
+ * @author Adam Wyłuda
+ */
+public class DirectoryChooserComponentBuilder extends AbstractFileChooserComponentBuilder
 {
     @Override
     protected TextFieldWithBrowseButton createTextField()
     {
         TextFieldWithBrowseButton textField = new TextFieldWithBrowseButton();
-        textField.addBrowseFolderListener("Select a file", null, IDEUtil.projectFromContext(context),
+        textField.addBrowseFolderListener("Select a directory", null, IDEUtil.projectFromContext(context),
                 FileChooserDescriptorFactory.createSingleLocalFileDescriptor());
         return textField;
     }
 
     @Override
-    protected Class<File> getProducedType()
+    protected Class<?> getProducedType()
     {
         return File.class;
     }
@@ -33,6 +36,6 @@ public class FileChooserComponentBuilder extends AbstractFileChooserComponentBui
     @Override
     protected String getSupportedInputType()
     {
-        return InputType.FILE_PICKER;
+        return InputType.DIRECTORY_PICKER;
     }
 }

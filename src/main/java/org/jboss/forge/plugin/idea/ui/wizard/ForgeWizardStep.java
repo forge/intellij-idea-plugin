@@ -59,17 +59,22 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
                 "[left]rel[grow,fill]"));
 
         Map<String, ForgeComponent> components = new HashMap<>();
+        UIContext context = navigationState.getController().getContext();
 
         for (InputComponent input : navigationState.getController().getInputs().values())
         {
-            ComponentBuilder builder =
-                    ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
+            ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
+            builder.setContext(context);
+
             ForgeComponent component = builder.build(input);
             component.buildUI(container);
-            components.put(input.getName(), component);
             component.setValueChangeListener(new ValueChangeListener(model, components, navigationState));
+
+            components.put(input.getName(), component);
         }
+
         navigationState.refreshNavigationState();
+
         return container;
     }
 
