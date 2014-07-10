@@ -6,12 +6,17 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import com.intellij.ide.util.TreeClassChooser;
+import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.util.ClassUtil;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.furnace.proxy.Proxies;
@@ -72,5 +77,25 @@ public class IDEUtil
         VirtualFile initialFile = LocalFileSystem.getInstance().findFileByIoFile(new File(initialValue));
         VirtualFile choosenFile = FileChooser.chooseFile(descriptor, project, initialFile);
         return choosenFile != null ? choosenFile.getCanonicalPath() : (initialValue.isEmpty() ? null : initialValue);
+    }
+
+    public static String chooseClass(UIContext context, String initialValue)
+    {
+        return chooseClass(projectFromContext(context), initialValue);
+    }
+
+    public static String chooseClass(Project project, String initialValue)
+    {
+        PsiManager psiManager = PsiManager.getInstance(project);
+
+        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project)
+            .createProjectScopeChooser(
+                    "Select a Java class",
+                    ClassUtil.findPsiClass(psiManager, initialValue));
+        chooser.showDialog();
+
+        PsiClass choosenPsiClass = chooser.getSelected();
+
+        return choosenPsiClass != null ? choosenPsiClass.getQualifiedName() : (initialValue.isEmpty() ? null : initialValue);
     }
 }
