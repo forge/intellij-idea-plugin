@@ -7,6 +7,7 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.plugin.idea.ui.component.many.FileChooserMultipleComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.many.TextBoxMultipleComponentBuilder;
 
 /**
@@ -30,6 +31,7 @@ public enum ComponentBuilderRegistry
             new JavaClassChooserComponentBuilder(),
             new JavaPackageChooserComponentBuilder(),
             new TextBoxMultipleComponentBuilder(),
+            new FileChooserMultipleComponentBuilder(),
             new FallbackTextBoxComponentBuilder()};
 
     public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)

@@ -6,6 +6,8 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -58,5 +60,17 @@ public class IDEUtil
         Assert.isTrue(context instanceof UIContextImpl, "UIContext must be an instance of UIContextImpl");
 
         return ((UIContextImpl) context).getProject();
+    }
+
+    public static String chooseFile(UIContext context, FileChooserDescriptor descriptor, String initialValue)
+    {
+        return chooseFile(projectFromContext(context), descriptor, initialValue);
+    }
+
+    public static String chooseFile(Project project, FileChooserDescriptor descriptor, String initialValue)
+    {
+        VirtualFile initialFile = LocalFileSystem.getInstance().findFileByIoFile(new File(initialValue));
+        VirtualFile choosenFile = FileChooser.chooseFile(descriptor, project, initialFile);
+        return choosenFile != null ? choosenFile.getCanonicalPath() : (initialValue.isEmpty() ? null : initialValue);
     }
 }
