@@ -7,6 +7,7 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.plugin.idea.ui.component.many.TextBoxMultipleComponentBuilder;
 
 /**
  * A factory for {@link ComponentBuilder} instances.
@@ -28,6 +29,7 @@ public enum ComponentBuilderRegistry
             new DirectoryChooserComponentBuilder(),
             new JavaClassChooserComponentBuilder(),
             new JavaPackageChooserComponentBuilder(),
+            new TextBoxMultipleComponentBuilder(),
             new FallbackTextBoxComponentBuilder()};
 
     public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)
