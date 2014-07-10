@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.component;
 import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
+import org.jboss.forge.addon.ui.util.InputComponents;
 
 import java.awt.*;
 import java.util.List;
@@ -25,7 +26,7 @@ public class LabeledComponent extends ForgeComponent
 
     public LabeledComponent(InputComponent<?, Object> input, ForgeComponent component)
     {
-        this.label = new JBLabel(getLabelValue(input));
+        this.label = new JBLabel(InputComponents.getLabelFor(input, true));
         this.component = component;
     }
 
@@ -34,13 +35,6 @@ public class LabeledComponent extends ForgeComponent
     {
         container.add(label);
         component.buildUI(container);
-    }
-
-    private String getLabelValue(InputComponent<?, Object> input)
-    {
-        String labelValue = input.getLabel() == null ? input.getName() : input.getLabel();
-        labelValue = labelValue.endsWith(":") ? labelValue : labelValue + ":";
-        return labelValue;
     }
 
     @Override
