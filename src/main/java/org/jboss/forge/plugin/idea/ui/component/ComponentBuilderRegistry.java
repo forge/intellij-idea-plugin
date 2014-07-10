@@ -21,13 +21,13 @@ public enum ComponentBuilderRegistry
             new CheckboxComponentBuilder(),
             new ComboComponentBuilder(),
             new RadioComponentBuilder(),
+            new TextBoxComponentBuilder(),
+            new PasswordComponentBuilder(),
+            new TextAreaComponentBuilder(),
             new FileChooserComponentBuilder(),
             new DirectoryChooserComponentBuilder(),
             new JavaClassChooserComponentBuilder(),
             new JavaPackageChooserComponentBuilder(),
-            new TextBoxComponentBuilder(),
-            new PasswordComponentBuilder(),
-            new TextAreaComponentBuilder(),
             new FallbackTextBoxComponentBuilder()};
 
     public ComponentBuilder getBuilderFor(InputComponent<?, ?> input)
