@@ -16,6 +16,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
@@ -48,13 +49,13 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 List<Object> choices = new ArrayList<>();
                 for (Object item : inputMany.getValueChoices())
                 {
-                    choices.add(item);
+                    choices.add(Proxies.unwrap(item));
                 }
 
                 List<Object> value = new ArrayList<>();
                 for (Object item : inputMany.getValue())
                 {
-                    value.add(item);
+                    value.add(Proxies.unwrap(item));
                 }
 
                 String label = InputComponents.getLabelFor(input, false);
