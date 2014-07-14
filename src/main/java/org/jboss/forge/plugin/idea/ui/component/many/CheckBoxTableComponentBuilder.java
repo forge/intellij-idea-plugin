@@ -9,23 +9,22 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.Function;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.util.ForgeProxies;
-import org.jboss.forge.plugin.idea.util.FunctionConverterAdapter;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Adam Wyłuda
@@ -43,27 +42,24 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 final UISelectMany inputMany = ForgeProxies.proxyTo(UISelectMany.class, input);
 
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
-                Converter<?, String> forgeConverter = InputComponents.getItemLabelConverter(converterFactory, inputMany);
-                Function<?, String> converter = new FunctionConverterAdapter(forgeConverter);
+                Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, inputMany);
 
-                List<Object> choices = new ArrayList<>();
+                Map<String, Boolean> choices = new HashMap<>();
                 for (Object item : inputMany.getValueChoices())
                 {
-                    choices.add(Proxies.unwrap(item));
+                    choices.put(converter.convert(item), false);
                 }
 
-                List<Object> value = new ArrayList<>();
                 for (Object item : inputMany.getValue())
                 {
-                    value.add(Proxies.unwrap(item));
+                    choices.put(converter.convert(item), true);
                 }
 
                 String label = InputComponents.getLabelFor(input, false);
 
                 final CheckBoxList checkBoxList = new CheckBoxList();
                 checkBoxList.setBorder(IdeBorderFactory.createTitledBorder(label, false));
-                checkBoxList.setItems(choices, converter);
-                setSelectedItems(checkBoxList, value);
+                checkBoxList.setStringItems(choices);
 
                 checkBoxList.setCheckBoxListListener(new CheckBoxListListener()
                 {
@@ -91,14 +87,6 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 }
 
                 return result;
-            }
-
-            private void setSelectedItems(CheckBoxList checkBoxList, List value)
-            {
-                for (Object item : value)
-                {
-                    checkBoxList.setItemSelected(item, true);
-                }
             }
         };
     }
