@@ -18,7 +18,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
        
       <idea.version>13.1.2</idea.version>
-      <forge.version>2.6.1-SNAPSHOT</forge.version>
+      <forge.version>2.7.1-SNAPSHOT</forge.version>
 
       <ij.plugin>true</ij.plugin>
    </properties>
