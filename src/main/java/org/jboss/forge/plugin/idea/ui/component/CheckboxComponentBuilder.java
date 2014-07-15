@@ -32,13 +32,15 @@ public class CheckboxComponentBuilder extends ComponentBuilder
     {
         return new ForgeComponent()
         {
+            private JCheckBox checkbox;
+
             @Override
             public void buildUI(Container container)
             {
                 // Create the label
                 String text = (input.getLabel() == null ? input.getName() : input
                         .getLabel());
-                final JCheckBox checkbox = new JCheckBox(text);
+                checkbox = new JCheckBox(text);
                 // Set Default Value
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                         .lookup(ConverterFactory.class);
@@ -61,6 +63,12 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                     }
                 });
                 container.add(checkbox, "skip");
+            }
+
+            @Override
+            public void updateState()
+            {
+                checkbox.setEnabled(input.isEnabled());
             }
         };
     }

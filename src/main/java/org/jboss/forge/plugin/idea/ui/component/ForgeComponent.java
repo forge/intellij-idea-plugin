@@ -55,4 +55,6 @@ public abstract class ForgeComponent
     {
         this.valueChangeListener = valueChangeListener;
     }
+
+    public abstract void updateState();
 }

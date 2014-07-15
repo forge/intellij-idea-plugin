@@ -31,6 +31,9 @@ public class ComboComponentBuilder extends ComponentBuilder
     {
         return new LabeledComponent(input, new ForgeComponent()
         {
+
+            private ComboBox combo;
+
             @Override
             public void buildUI(Container container)
             {
@@ -41,7 +44,7 @@ public class ComboComponentBuilder extends ComponentBuilder
                         .getItemLabelConverter(converterFactory, selectOne);
                 final DefaultComboBoxModel model = new DefaultComboBoxModel();
 
-                ComboBox combo = new ComboBox(model);
+                combo = new ComboBox(model);
                 container.add(combo);
                 String value = converter.convert(InputComponents.getValueFor(input));
                 Iterable<Object> valueChoices = selectOne.getValueChoices();
@@ -79,6 +82,12 @@ public class ComboComponentBuilder extends ComponentBuilder
                 {
                     model.setSelectedItem(value);
                 }
+            }
+
+            @Override
+            public void updateState()
+            {
+                combo.setEnabled(input.isEnabled());
             }
         });
     }

@@ -38,6 +38,8 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
     {
         return new ForgeComponent()
         {
+            private CheckBoxList checkBoxList;
+
             @Override
             public void buildUI(Container container)
             {
@@ -62,7 +64,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 JPanel panel = new JPanel(new MigLayout("fill"));
                 panel.setBorder(IdeBorderFactory.createTitledBorder(label, false));
 
-                final CheckBoxList checkBoxList = new CheckBoxList();
+                checkBoxList = new CheckBoxList();
                 checkBoxList.setStringItems(choices);
                 checkBoxList.setBorder(IdeBorderFactory.createBorder());
                 panel.add(checkBoxList, "grow,height :150:200");
@@ -78,6 +80,12 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(panel, "span 2,growx");
+            }
+
+            @Override
+            public void updateState()
+            {
+                checkBoxList.setEnabled(input.isEnabled());
             }
 
             private List getSelectedItems(CheckBoxList checkBoxList)

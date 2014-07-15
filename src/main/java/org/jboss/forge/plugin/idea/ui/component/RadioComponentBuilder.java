@@ -23,17 +23,18 @@ import java.awt.event.ActionListener;
 
 public class RadioComponentBuilder extends ComponentBuilder
 {
-
     @SuppressWarnings("unchecked")
     @Override
     public ForgeComponent build(final InputComponent<?, Object> input)
     {
         return new LabeledComponent(input, new ForgeComponent()
         {
+            private JPanel radioContainer;
+
             @Override
             public void buildUI(Container container)
             {
-                JPanel radioContainer = new JPanel(new MigLayout("left"));
+                radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService()
                         .getConverterFactory();
@@ -66,6 +67,12 @@ public class RadioComponentBuilder extends ComponentBuilder
                         group.add(radio);
                     }
                 }
+            }
+
+            @Override
+            public void updateState()
+            {
+                radioContainer.setEnabled(input.isEnabled());
             }
         });
     }

@@ -75,6 +75,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         }
 
         navigationState.refreshNavigationState();
+        listener.updateComponentsState();
 
         return container;
     }

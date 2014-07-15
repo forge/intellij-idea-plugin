@@ -23,7 +23,6 @@ import java.util.Map;
  */
 public class ValueChangeListener implements Runnable
 {
-
     private final ForgeWizardModel model;
     private final Map<String, ForgeComponent> components;
     private final NavigationState navigationState;
@@ -40,6 +39,14 @@ public class ValueChangeListener implements Runnable
     {
         navigationState.refreshNavigationState();
         validate();
+    }
+
+    public void updateComponentsState()
+    {
+        for (ForgeComponent component : components.values())
+        {
+            component.updateState();
+        }
     }
 
     private void validate()
@@ -69,6 +76,8 @@ public class ValueChangeListener implements Runnable
 
         processComponentMessages(messagesByInputName);
         processCommandMessages(commandMessages, allMessages);
+
+        updateComponentsState();
     }
 
     private void processComponentMessages(Map<String, List<UIMessage>> messages)

@@ -88,4 +88,10 @@ public class TextComponent extends ForgeComponent
         component.setForeground(null);
         component.setToolTipText("");
     }
+
+    @Override
+    public void updateState()
+    {
+        component.setEnabled(input.isEnabled());
+    }
 }

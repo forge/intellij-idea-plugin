@@ -29,11 +29,12 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
     {
         return new LabeledComponent(input, new ForgeComponent()
         {
+            private TextFieldWithBrowseButton fileField;
+
             @Override
             public void buildUI(Container container)
             {
-
-                final TextFieldWithBrowseButton fileField = createTextField();
+                fileField = createTextField();
 
                 // Set Default Value
                 final ConverterFactory converterFactory = ServiceHelper.getForgeService()
@@ -72,6 +73,12 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(fileField);
+            }
+
+            @Override
+            public void updateState()
+            {
+                fileField.setEnabled(input.isEnabled());
             }
         });
     }

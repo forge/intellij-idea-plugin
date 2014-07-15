@@ -21,18 +21,21 @@ import java.util.List;
  */
 public class LabeledComponent extends ForgeComponent
 {
-    private final JBLabel label;
+    private final InputComponent<?, Object> input;
     private final ForgeComponent component;
+
+    private JBLabel label;
 
     public LabeledComponent(InputComponent<?, Object> input, ForgeComponent component)
     {
-        this.label = new JBLabel(InputComponents.getLabelFor(input, true));
+        this.input = input;
         this.component = component;
     }
 
     @Override
     public void buildUI(Container container)
     {
+        this.label = new JBLabel(InputComponents.getLabelFor(input, true));
         container.add(label);
         component.buildUI(container);
     }
@@ -59,5 +62,12 @@ public class LabeledComponent extends ForgeComponent
     public void setValueChangeListener(Runnable valueChangeListener)
     {
         component.setValueChangeListener(valueChangeListener);
+    }
+
+    @Override
+    public void updateState()
+    {
+        label.setEnabled(input.isEnabled());
+        component.updateState();
     }
 }

@@ -60,6 +60,12 @@ public abstract class ListComponent extends ForgeComponent
         container.add(panel, "span 2,growx");
     }
 
+    @Override
+    public void updateState()
+    {
+        panel.setEnabled(input.isEnabled());
+    }
+
     protected abstract String editSelectedItem(String item);
 
     protected abstract String findItemToAdd();
