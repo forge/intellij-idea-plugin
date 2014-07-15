@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -16,6 +17,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiPackage;
 import com.intellij.psi.util.ClassUtil;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -101,12 +103,17 @@ public class IDEUtil
 
     public static String choosePackage(UIContext context, String initialValue)
     {
-        return chooseClass(projectFromContext(context), initialValue);
+        return choosePackage(projectFromContext(context), initialValue);
     }
 
     public static String choosePackage(Project project, String initialValue)
     {
-        // TODO Implement choosePackage()
-        return null;
+        PackageChooserDialog dialog = new PackageChooserDialog("Select a Java package", project);
+        dialog.selectPackage(initialValue);
+        dialog.show();
+
+        PsiPackage psiPackage = dialog.getSelectedPackage();
+
+        return psiPackage != null ? psiPackage.getQualifiedName() : (initialValue.isEmpty() ? null : initialValue);
     }
 }
