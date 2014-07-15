@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
+import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -20,6 +21,7 @@ import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.util.ForgeProxies;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,9 +59,13 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
 
                 String label = InputComponents.getLabelFor(input, false);
 
+                JPanel panel = new JPanel(new MigLayout("fill"));
+                panel.setBorder(IdeBorderFactory.createTitledBorder(label, false));
+
                 final CheckBoxList checkBoxList = new CheckBoxList();
-                checkBoxList.setBorder(IdeBorderFactory.createTitledBorder(label, false));
                 checkBoxList.setStringItems(choices);
+                checkBoxList.setBorder(IdeBorderFactory.createBorder());
+                panel.add(checkBoxList, "grow,height :150:200");
 
                 checkBoxList.setCheckBoxListListener(new CheckBoxListListener()
                 {
@@ -71,7 +77,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                     }
                 });
 
-                container.add(checkBoxList, "span 2,growx,height :350:");
+                container.add(panel, "span 2,growx");
             }
 
             private List getSelectedItems(CheckBoxList checkBoxList)
