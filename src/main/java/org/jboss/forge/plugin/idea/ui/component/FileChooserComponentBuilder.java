@@ -13,7 +13,7 @@ import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.io.File;
 
-public class FileChooserComponentBuilder extends AbstractFileChooserComponentBuilder
+public class FileChooserComponentBuilder extends AbstractChooserComponentBuilder
 {
     @Override
     protected TextFieldWithBrowseButton createTextField()

@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * @author Adam Wyłuda
  */
-public class DirectoryChooserComponentBuilder extends AbstractFileChooserComponentBuilder
+public class DirectoryChooserComponentBuilder extends AbstractChooserComponentBuilder
 {
     @Override
     protected TextFieldWithBrowseButton createTextField()

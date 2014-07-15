@@ -98,4 +98,15 @@ public class IDEUtil
 
         return choosenPsiClass != null ? choosenPsiClass.getQualifiedName() : (initialValue.isEmpty() ? null : initialValue);
     }
+
+    public static String choosePackage(UIContext context, String initialValue)
+    {
+        return chooseClass(projectFromContext(context), initialValue);
+    }
+
+    public static String choosePackage(Project project, String initialValue)
+    {
+        // TODO Implement choosePackage()
+        return null;
+    }
 }

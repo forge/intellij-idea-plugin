@@ -22,7 +22,7 @@ import java.awt.*;
 /**
  * @author Adam Wyłuda
  */
-public abstract class AbstractFileChooserComponentBuilder extends ComponentBuilder
+public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
 {
     @Override
     public ForgeComponent build(final InputComponent<?, Object> input)

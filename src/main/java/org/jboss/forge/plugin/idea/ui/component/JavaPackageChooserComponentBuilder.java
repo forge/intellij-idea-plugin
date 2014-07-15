@@ -6,36 +6,37 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.psi.JavaCodeFragment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPackage;
-import com.intellij.ui.EditorTextFieldWithBrowseButton;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Adam Wyłuda
  */
-public class JavaPackageChooserComponentBuilder extends AbstractJavaChooserComponentBuilder
+public class JavaPackageChooserComponentBuilder extends AbstractChooserComponentBuilder
 {
     @Override
-    protected EditorTextFieldWithBrowseButton createEditorField()
+    protected TextFieldWithBrowseButton createTextField()
     {
-        // TODO Browse packages
-        return new EditorTextFieldWithBrowseButton(IDEUtil.projectFromContext(context),
-                true,
-                new JavaCodeFragment.VisibilityChecker()
+        final TextFieldWithBrowseButton[] holder = new TextFieldWithBrowseButton[1];
+        TextFieldWithBrowseButton textField = new TextFieldWithBrowseButton(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String initialValue = holder[0].getText();
+                String value = IDEUtil.choosePackage(context, initialValue);
+                if (value != null)
                 {
-                    @Override
-                    public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place)
-                    {
-                        if (declaration instanceof PsiPackage)
-                        {
-                            return Visibility.VISIBLE;
-                        }
-                        return Visibility.NOT_VISIBLE;
-                    }
-                });
+                    holder[0].setText(value);
+                }
+            }
+        });
+        holder[0] = textField;
+        return textField;
     }
 
     @Override
