@@ -6,13 +6,94 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import com.intellij.ui.JBColor;
+import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.output.UIMessage;
+import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
 
-public class PasswordComponentBuilder extends AbstractTextComponentBuilder
+public class PasswordComponentBuilder extends ComponentBuilder
 {
+    @Override
+    public ForgeComponent build(final InputComponent<?, Object> input)
+    {
+        return new LabeledComponent(input, new ForgeComponent()
+        {
+            private JPasswordField component;
+
+            @Override
+            public void buildUI(Container container)
+            {
+                component = new JPasswordField();
+
+                // Set Default Value
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+                Converter<Object, String> converter = converterFactory.getConverter(
+                        input.getValueType(), String.class);
+                String value = converter.convert(InputComponents.getValueFor(input));
+                component.setText(value == null ? "" : value);
+
+                component.getDocument().addDocumentListener(new DocumentListener()
+                {
+                    @Override
+                    public void removeUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                component.getText());
+                        valueChangeListener.run();
+                    }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                component.getText());
+                        valueChangeListener.run();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e)
+                    {
+                        InputComponents.setValueFor(converterFactory, input,
+                                component.getText());
+                        valueChangeListener.run();
+                    }
+                });
+
+                container.add(component);
+            }
+
+            @Override
+            public void updateState()
+            {
+                component.setEnabled(input.isEnabled());
+            }
+
+            @Override
+            public void setErrorMessage(UIMessage message)
+            {
+                component.setForeground(JBColor.RED);
+                component.setToolTipText(message.getDescription());
+            }
+
+            @Override
+            public void clearErrorMessage()
+            {
+                component.setForeground(null);
+                component.setToolTipText("");
+            }
+        });
+    }
+
     @Override
     protected String getSupportedInputType()
     {
@@ -20,8 +101,14 @@ public class PasswordComponentBuilder extends AbstractTextComponentBuilder
     }
 
     @Override
-    protected JTextComponent createTextComponent()
+    protected Class<String> getProducedType()
     {
-        return new JPasswordField();
+        return String.class;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
     }
 }

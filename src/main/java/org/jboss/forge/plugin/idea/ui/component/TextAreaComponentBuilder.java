@@ -7,24 +7,35 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.hints.InputType;
-
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UIInput;
 
 /**
  * @author Adam Wyłuda
  */
-public class TextAreaComponentBuilder extends AbstractTextComponentBuilder
+public class TextAreaComponentBuilder extends ComponentBuilder
 {
     @Override
-    protected JTextComponent createTextComponent()
+    public ForgeComponent build(InputComponent<?, Object> input)
     {
-        return new JTextArea();
+        return new LabeledComponent(input, new TextComponent(context, input, false));
     }
 
     @Override
     protected String getSupportedInputType()
     {
         return InputType.TEXTAREA;
+    }
+
+    @Override
+    protected Class<String> getProducedType()
+    {
+        return String.class;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
     }
 }

@@ -7,12 +7,17 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UIInput;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-
-public class TextBoxComponentBuilder extends AbstractTextComponentBuilder
+public class TextBoxComponentBuilder extends ComponentBuilder
 {
+    @Override
+    public ForgeComponent build(InputComponent<?, Object> input)
+    {
+        return new LabeledComponent(input, new TextComponent(context, input, true));
+    }
+
     @Override
     protected String getSupportedInputType()
     {
@@ -20,8 +25,14 @@ public class TextBoxComponentBuilder extends AbstractTextComponentBuilder
     }
 
     @Override
-    protected JTextComponent createTextComponent()
+    protected Class<String> getProducedType()
     {
-        return new JTextField();
+        return String.class;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
     }
 }
