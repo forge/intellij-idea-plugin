@@ -6,8 +6,11 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.plugin.idea.util.CompletionUtil;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.awt.event.ActionEvent;
@@ -19,24 +22,29 @@ import java.awt.event.ActionListener;
 public class JavaPackageChooserComponentBuilder extends AbstractChooserComponentBuilder
 {
     @Override
-    protected TextFieldWithBrowseButton createTextField()
+    @SuppressWarnings("unchecked")
+    protected ComponentWithBrowseButton<TextFieldWithAutoCompletion> createTextField(InputComponent<?, Object> input)
     {
-        final TextFieldWithBrowseButton[] holder = new TextFieldWithBrowseButton[1];
-        TextFieldWithBrowseButton textField = new TextFieldWithBrowseButton(new ActionListener()
+        boolean hasCompletions = CompletionUtil.hasCompletions(input);
+
+        final TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
+        ComponentWithBrowseButton<TextFieldWithAutoCompletion> component =
+                new ComponentWithBrowseButton<>(textField, null);
+
+        component.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                String initialValue = holder[0].getText();
+                String initialValue = textField.getText();
                 String value = IDEUtil.choosePackage(context, initialValue);
                 if (value != null)
                 {
-                    holder[0].setText(value);
+                    textField.setText(value);
                 }
             }
         });
-        holder[0] = textField;
-        return textField;
+        return component;
     }
 
     @Override

@@ -18,10 +18,8 @@ import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
-import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,24 +49,16 @@ public class TextComponent extends ForgeComponent
     @Override
     public void buildUI(Container container)
     {
-        if (CompletionUtil.hasCompletions(input))
+        boolean hasCompletions = CompletionUtil.hasCompletions(input);
+
+        component = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
+
+        if (hasCompletions)
         {
-            component = TextFieldWithAutoCompletion.create(
-                    IDEUtil.projectFromContext(context),
-                    getCompletions(),
-                    true,
-                    ""
-            );
+            component.setVariants(getCompletions());
         }
-        else
-        {
-            component = TextFieldWithAutoCompletion.create(
-                    IDEUtil.projectFromContext(context),
-                    Collections.<String>emptyList(),
-                    false,
-                    ""
-            );
-        }
+
+        component.setOneLineMode(oneLineMode);
 
         // Set Default Value
         Converter<Object, String> converter = converterFactory.getConverter(

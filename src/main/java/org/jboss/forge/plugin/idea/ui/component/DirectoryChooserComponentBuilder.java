@@ -7,10 +7,15 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.plugin.idea.util.CompletionUtil;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
@@ -19,12 +24,32 @@ import java.io.File;
 public class DirectoryChooserComponentBuilder extends AbstractChooserComponentBuilder
 {
     @Override
-    protected TextFieldWithBrowseButton createTextField()
+    @SuppressWarnings("unchecked")
+    protected ComponentWithBrowseButton<TextFieldWithAutoCompletion> createTextField(InputComponent<?, Object> input)
     {
-        TextFieldWithBrowseButton textField = new TextFieldWithBrowseButton();
-        textField.addBrowseFolderListener("Select a directory", null, IDEUtil.projectFromContext(context),
-                FileChooserDescriptorFactory.createSingleFolderDescriptor());
-        return textField;
+        boolean hasCompletions = CompletionUtil.hasCompletions(input);
+
+        final TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
+        ComponentWithBrowseButton<TextFieldWithAutoCompletion> component =
+                new ComponentWithBrowseButton<>(textField, null);
+
+        component.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                String initialValue = textField.getText();
+                String value = IDEUtil.chooseFile(
+                        context,
+                        FileChooserDescriptorFactory.createSingleFolderDescriptor(),
+                        initialValue);
+                if (value != null)
+                {
+                    textField.setText(value);
+                }
+            }
+        });
+        return component;
     }
 
     @Override

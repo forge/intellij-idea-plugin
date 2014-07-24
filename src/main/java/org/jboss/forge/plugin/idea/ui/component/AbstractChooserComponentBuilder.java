@@ -6,17 +6,18 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 /**
@@ -29,56 +30,66 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
     {
         return new LabeledComponent(input, new ForgeComponent()
         {
-            private TextFieldWithBrowseButton fileField;
+            private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
+            private TextFieldWithAutoCompletion inputField;
+
+            private ConverterFactory converterFactory;
 
             @Override
             public void buildUI(Container container)
             {
-                fileField = createTextField();
+                converterFactory = ServiceHelper.getForgeService()
+                        .getConverterFactory();
+
+                component = createTextField(input);
+                inputField = component.getChildComponent();
+
+                if (CompletionUtil.hasCompletions(input))
+                {
+                    inputField.setVariants(getCompletions());
+                }
 
                 // Set Default Value
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
-                        .getConverterFactory();
                 Converter<Object, String> converter = converterFactory.getConverter(
                         input.getValueType(), String.class);
                 String value = converter.convert(InputComponents.getValueFor(input));
-                fileField.setText(value == null ? "" : value);
+                inputField.setText(value == null ? "" : value);
 
-                final JTextField textField = fileField.getTextField();
-                textField.getDocument().addDocumentListener(new DocumentListener()
+                inputField.getDocument().addDocumentListener(new DocumentListener()
                 {
                     @Override
-                    public void removeUpdate(DocumentEvent e)
+                    public void beforeDocumentChange(DocumentEvent event)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                textField.getText());
-                        valueChangeListener.run();
+
                     }
 
                     @Override
-                    public void insertUpdate(DocumentEvent e)
+                    public void documentChanged(DocumentEvent event)
                     {
                         InputComponents.setValueFor(converterFactory, input,
-                                textField.getText());
-                        valueChangeListener.run();
-                    }
+                                inputField.getText());
+                        if (CompletionUtil.hasCompletions(input))
+                        {
+                            inputField.setVariants(getCompletions());
+                        }
 
-                    @Override
-                    public void changedUpdate(DocumentEvent e)
-                    {
-                        InputComponents.setValueFor(converterFactory, input,
-                                textField.getText());
                         valueChangeListener.run();
                     }
                 });
 
-                container.add(fileField);
+                container.add(component);
             }
 
             @Override
             public void updateState()
             {
-                fileField.setEnabled(input.isEnabled());
+                component.setEnabled(input.isEnabled());
+            }
+
+            private java.util.List<String> getCompletions()
+            {
+                return CompletionUtil.getCompletions(converterFactory, context, input,
+                        component != null ? inputField.getText() : null);
             }
         });
     }
@@ -89,5 +100,6 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
         return new Class<?>[]{UIInput.class};
     }
 
-    protected abstract TextFieldWithBrowseButton createTextField();
+    protected abstract ComponentWithBrowseButton<TextFieldWithAutoCompletion> createTextField(
+            InputComponent<?, Object> input);
 }

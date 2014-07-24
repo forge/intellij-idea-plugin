@@ -1,5 +1,6 @@
 package org.jboss.forge.plugin.idea.util;
 
+import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -8,6 +9,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,5 +46,15 @@ public class CompletionUtil
         }
 
         return result;
+    }
+
+    public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, boolean hasCompletions)
+    {
+        return TextFieldWithAutoCompletion.create(
+                IDEUtil.projectFromContext(context),
+                Collections.<String>emptyList(),
+                hasCompletions,
+                ""
+        );
     }
 }
