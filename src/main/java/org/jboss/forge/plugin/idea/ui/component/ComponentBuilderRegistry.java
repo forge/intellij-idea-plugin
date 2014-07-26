@@ -25,6 +25,7 @@ public enum ComponentBuilderRegistry
             new TextBoxComponentBuilder(),
             new PasswordComponentBuilder(),
             new TextAreaComponentBuilder(),
+            new SpinnerComponentBuilder(),
             new FileChooserComponentBuilder(),
             new DirectoryChooserComponentBuilder(),
             new JavaClassChooserComponentBuilder(),

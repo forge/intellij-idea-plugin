@@ -1,0 +1,88 @@
+package org.jboss.forge.plugin.idea.ui.component;
+
+import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+
+/**
+ * @author Adam Wyłuda
+ */
+public class SpinnerComponentBuilder extends ComponentBuilder
+{
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public ForgeComponent build(final InputComponent<?, Object> input)
+    {
+        return new LabeledComponent(input, new ForgeComponent()
+        {
+            private JSpinner spinner;
+
+            @Override
+            public void buildUI(Container container)
+            {
+                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                        .lookup(ConverterFactory.class);
+
+                spinner = new JSpinner();
+                container.add(spinner);
+
+                JComponent editor = spinner.getEditor();
+                if (editor instanceof JSpinner.DefaultEditor)
+                {
+                    ((JSpinner.DefaultEditor) editor).getTextField().setHorizontalAlignment(JTextField.LEFT);
+                }
+
+                spinner.addChangeListener(new ChangeListener()
+                {
+                    @Override
+                    public void stateChanged(ChangeEvent e)
+                    {
+                        Object selectedItem = spinner.getValue();
+                        InputComponents.setValueFor(converterFactory, input, selectedItem);
+                        valueChangeListener.run();
+                    }
+                });
+
+                // Set Default Value
+                Converter<Object, Integer> converter = converterFactory
+                        .getConverter(input.getValueType(), Integer.class);
+                Integer value = converter.convert(InputComponents.getValueFor(input));
+                spinner.setValue(value == null ? 0 : value);
+            }
+
+            @Override
+            public void updateState()
+            {
+                spinner.setEnabled(input.isEnabled());
+            }
+        });
+    }
+
+    @Override
+    protected Class<Integer> getProducedType()
+    {
+        return Integer.class;
+    }
+
+    @Override
+    protected String getSupportedInputType()
+    {
+        return InputType.DEFAULT;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
+    }
+}
