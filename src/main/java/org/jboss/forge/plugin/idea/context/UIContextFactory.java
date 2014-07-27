@@ -17,7 +17,7 @@ import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.util.Selections;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -72,8 +72,8 @@ public class UIContextFactory
 
     private static Converter<File, Resource> getResourceConverter()
     {
-        ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
-        Class<Resource> nativeResourceClass = ServiceHelper.getForgeService().locateNativeClass(Resource.class);
+        ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
+        Class<Resource> nativeResourceClass = ForgeService.getInstance().locateNativeClass(Resource.class);
         return converterFactory.getConverter(File.class, nativeResourceClass);
     }
 

@@ -16,7 +16,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -43,7 +43,7 @@ public class TextComponent extends ForgeComponent
         this.input = input;
         this.oneLineMode = oneLineMode;
 
-        this.converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+        this.converterFactory = ForgeService.getInstance().getConverterFactory();
     }
 
     @Override

@@ -14,7 +14,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +36,7 @@ public class RadioComponentBuilder extends ComponentBuilder
             {
                 radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                final ConverterFactory converterFactory = ForgeService.getInstance()
                         .getConverterFactory();
                 UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
                 Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents

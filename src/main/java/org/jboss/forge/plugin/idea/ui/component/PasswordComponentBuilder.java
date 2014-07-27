@@ -14,7 +14,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -36,7 +36,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                 component = new JPasswordField();
 
                 // Set Default Value
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+                final ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
                 Converter<Object, String> converter = converterFactory.getConverter(
                         input.getValueType(), String.class);
                 String value = converter.convert(InputComponents.getValueFor(input));

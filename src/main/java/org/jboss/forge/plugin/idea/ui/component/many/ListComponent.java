@@ -11,7 +11,7 @@ import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public abstract class ListComponent extends ForgeComponent
     public ListComponent(UIInputMany<?> input)
     {
         this.input = input;
-        this.converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+        this.converterFactory = ForgeService.getInstance().getConverterFactory();
     }
 
     @Override

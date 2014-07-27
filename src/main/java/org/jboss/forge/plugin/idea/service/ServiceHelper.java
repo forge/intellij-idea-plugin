@@ -7,7 +7,6 @@
 package org.jboss.forge.plugin.idea.service;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import org.jboss.forge.furnace.Furnace;
@@ -25,23 +24,18 @@ public class ServiceHelper
     {
     }
 
-    public static ForgeService getForgeService()
-    {
-        return ServiceManager.getService(ForgeService.class);
-    }
-
     /**
      * Makes sure that Furnace is loaded and then executes given callback on IntelliJ UI thread.
      */
     public static void loadFurnaceAndRun(Runnable callback)
     {
-        if (getForgeService().isLoaded())
+        if (ForgeService.getInstance().isLoaded())
         {
             runOnUIThread(callback);
         }
         else
         {
-            Future<Furnace> future = getForgeService().startAsync();
+            Future<Furnace> future = ForgeService.getInstance().startAsync();
             startForgeInitTask(future, callback);
         }
     }

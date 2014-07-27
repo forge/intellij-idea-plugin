@@ -28,7 +28,7 @@ public class ForgeServiceTest //extends LightCodeInsightFixtureTestCase
     public void prepare()
     {
         // This should be obtained and initialized using IntelliJ API:
-        // service = ServiceHelper.getForgeService();
+        // service = ServiceHelper.getInstance();
         service = new ForgeService();
         service.createFurnace();
         service.initializeAddonRepositories(false);

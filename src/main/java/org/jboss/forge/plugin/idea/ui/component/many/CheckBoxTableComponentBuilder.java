@@ -16,7 +16,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.util.ForgeProxies;
@@ -45,7 +45,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
             {
                 final UISelectMany inputMany = ForgeProxies.proxyTo(UISelectMany.class, input);
 
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService().getConverterFactory();
+                final ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
                 Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, inputMany);
 
                 Map<String, Boolean> choices = new HashMap<>();

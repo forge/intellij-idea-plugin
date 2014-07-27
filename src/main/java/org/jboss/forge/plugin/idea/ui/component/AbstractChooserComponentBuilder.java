@@ -15,7 +15,7 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -38,7 +38,7 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
             @Override
             public void buildUI(Container container)
             {
-                converterFactory = ServiceHelper.getForgeService()
+                converterFactory = ForgeService.getInstance()
                         .getConverterFactory();
 
                 component = createTextField(input);

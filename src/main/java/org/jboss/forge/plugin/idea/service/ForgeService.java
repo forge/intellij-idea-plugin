@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.service;
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.extensions.PluginId;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
@@ -37,6 +38,11 @@ public class ForgeService implements ApplicationComponent
 
     ForgeService()
     {
+    }
+
+    public static ForgeService getInstance()
+    {
+        return ServiceManager.getService(ForgeService.class);
     }
 
     @Override

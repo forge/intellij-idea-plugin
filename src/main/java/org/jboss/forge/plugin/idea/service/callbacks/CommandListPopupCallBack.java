@@ -14,7 +14,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class CommandListPopupCallBack implements Runnable
     private List<UICommand> getAllCandidates(UIContext uiContext)
     {
         List<UICommand> commands = new ArrayList<UICommand>();
-        CommandFactory commandFactory = ServiceHelper.getForgeService().getCommandFactory();
+        CommandFactory commandFactory = ForgeService.getInstance().getCommandFactory();
 
         for (UICommand command : commandFactory.getCommands())
         {

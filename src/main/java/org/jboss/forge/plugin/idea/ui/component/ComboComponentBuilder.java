@@ -14,7 +14,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.util.ForgeProxies;
 
 import javax.swing.*;
@@ -37,7 +37,7 @@ public class ComboComponentBuilder extends ComponentBuilder
             @Override
             public void buildUI(Container container)
             {
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                final ConverterFactory converterFactory = ForgeService.getInstance()
                         .getConverterFactory();
                 final UISelectOne<Object> selectOne = ForgeProxies.proxyTo(UISelectOne.class, input);
                 final Converter<Object, String> converter = (Converter<Object, String>) InputComponents

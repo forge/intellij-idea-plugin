@@ -12,7 +12,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +42,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                         .getLabel());
                 checkbox = new JCheckBox(text);
                 // Set Default Value
-                final ConverterFactory converterFactory = ServiceHelper.getForgeService()
+                final ConverterFactory converterFactory = ForgeService.getInstance()
                         .lookup(ConverterFactory.class);
                 if (converterFactory != null)
                 {

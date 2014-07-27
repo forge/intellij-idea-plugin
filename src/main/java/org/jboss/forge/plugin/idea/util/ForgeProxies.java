@@ -8,7 +8,7 @@ package org.jboss.forge.plugin.idea.util;
 
 import org.jboss.forge.furnace.proxy.ClassLoaderAdapterBuilder;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 /**
  * @author Adam Wyłuda
@@ -27,7 +27,7 @@ public class ForgeProxies
         }
 
         instance = Proxies.unwrap(instance);
-        Class nativeTargetClass = ServiceHelper.getForgeService().locateNativeClass(targetClass);
+        Class nativeTargetClass = ForgeService.getInstance().locateNativeClass(targetClass);
 
         if (nativeTargetClass.isAssignableFrom(instance.getClass()))
         {
