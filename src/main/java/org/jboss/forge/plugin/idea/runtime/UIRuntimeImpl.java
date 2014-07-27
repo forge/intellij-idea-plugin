@@ -16,12 +16,17 @@ import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
  */
 public class UIRuntimeImpl implements UIRuntime
 {
-    // TODO Implement UIRuntime
+    private final UIProgressMonitor monitor;
+
+    public UIRuntimeImpl(UIProgressMonitor monitor)
+    {
+        this.monitor = monitor;
+    }
 
     @Override
     public UIProgressMonitor createProgressMonitor(UIContext context)
     {
-         return new UIProgressMonitorImpl();
+         return monitor;
     }
 
     @Override

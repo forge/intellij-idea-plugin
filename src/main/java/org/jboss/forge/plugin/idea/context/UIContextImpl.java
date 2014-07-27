@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 
 public class UIContextImpl extends AbstractUIContext
 {
@@ -17,6 +18,7 @@ public class UIContextImpl extends AbstractUIContext
     private final UIProvider provider;
 
     private final Project project;
+    private UIProgressMonitor monitor;
 
     UIContextImpl(Project project, UISelection<?> initialSelection, UIProvider provider)
     {
@@ -42,5 +44,15 @@ public class UIContextImpl extends AbstractUIContext
     public Project getProject()
     {
         return project;
+    }
+
+    public void setProgressMonitor(UIProgressMonitor monitor)
+    {
+        this.monitor = monitor;
+    }
+
+    public UIProgressMonitor getProgressMonitor()
+    {
+        return monitor;
     }
 }

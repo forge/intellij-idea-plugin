@@ -22,6 +22,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.furnace.util.Assert;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
@@ -68,6 +69,14 @@ public class IDEUtil
         Assert.isTrue(context instanceof UIContextImpl, "UIContext must be an instance of UIContextImpl");
 
         return ((UIContextImpl) context).getProject();
+    }
+
+    public static UIProgressMonitor progressMonitorFromContext(UIContext context)
+    {
+        context = Proxies.unwrap(context);
+        Assert.isTrue(context instanceof UIContextImpl, "UIContext must be an instance of UIContextImpl");
+
+        return ((UIContextImpl) context).getProgressMonitor();
     }
 
     public static String chooseFile(UIContext context, FileChooserDescriptor descriptor, String initialValue)

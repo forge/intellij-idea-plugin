@@ -16,6 +16,9 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+import org.jboss.forge.plugin.idea.context.UIContextImpl;
+import org.jboss.forge.plugin.idea.runtime.UIProgressMonitorImpl;
 import org.jboss.forge.plugin.idea.runtime.UIRuntimeImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
@@ -257,7 +260,10 @@ public class CommandListPopupBuilder
 
     private void openWizard(UICommand command)
     {
-        UIRuntime uiRuntime = new UIRuntimeImpl();
+        UIProgressMonitor monitor = new UIProgressMonitorImpl();
+
+        ((UIContextImpl) uiContext).setProgressMonitor(monitor);
+        UIRuntime uiRuntime = new UIRuntimeImpl(monitor);
         CommandControllerFactory controllerFactory = ForgeService.getInstance().getCommandControllerFactory();
         CommandController controller = controllerFactory.createController(uiContext, uiRuntime, command);
 
