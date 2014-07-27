@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
+import com.intellij.openapi.ui.Messages;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 
 /**
@@ -16,24 +17,26 @@ public class UIPromptImpl implements UIPrompt
     @Override
     public String prompt(String message)
     {
-        return null;
+        return Messages.showInputDialog("", message, Messages.getQuestionIcon());
     }
 
     @Override
     public String promptSecret(String message)
     {
-        return null;
+        // TODO Implement promptSecret()
+        return prompt(message);
     }
 
     @Override
     public boolean promptBoolean(String message)
     {
-        return false;
+        return Messages.showYesNoDialog(message, "", Messages.getQuestionIcon()) == Messages.YES;
     }
 
     @Override
     public boolean promptBoolean(String message, boolean defaultValue)
     {
-        return false;
+        int result = Messages.showYesNoCancelDialog(message, "", Messages.getQuestionIcon());
+        return result == Messages.CANCEL ? defaultValue : result == Messages.YES;
     }
 }
