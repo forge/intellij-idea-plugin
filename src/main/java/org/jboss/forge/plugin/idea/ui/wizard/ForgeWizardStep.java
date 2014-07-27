@@ -140,6 +140,18 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
             ForgeNotifications.showErrorMessage(e);
             e.printStackTrace();
         }
+        finally
+        {
+            try
+            {
+                navigationState.getController().close();
+            }
+            catch (Exception e)
+            {
+                ForgeNotifications.showErrorMessage(e);
+                e.printStackTrace();
+            }
+        }
 
         return true;
     }
