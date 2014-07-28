@@ -6,6 +6,8 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.ui.Messages;
 import org.jboss.forge.addon.ui.input.UIPrompt;
 
@@ -14,10 +16,21 @@ import org.jboss.forge.addon.ui.input.UIPrompt;
  */
 public class UIPromptImpl implements UIPrompt
 {
+    private volatile String stringValue;
+    private volatile boolean booleanValue;
+
     @Override
-    public String prompt(String message)
+    public String prompt(final String message)
     {
-        return Messages.showInputDialog("", message, Messages.getQuestionIcon());
+        ApplicationManager.getApplication().invokeAndWait(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                stringValue = Messages.showInputDialog("", message, Messages.getQuestionIcon());
+            }
+        }, ModalityState.any());
+        return stringValue;
     }
 
     @Override
@@ -28,15 +41,31 @@ public class UIPromptImpl implements UIPrompt
     }
 
     @Override
-    public boolean promptBoolean(String message)
+    public boolean promptBoolean(final String message)
     {
-        return Messages.showYesNoDialog(message, "", Messages.getQuestionIcon()) == Messages.YES;
+        ApplicationManager.getApplication().invokeAndWait(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                booleanValue = Messages.showYesNoDialog(message, "", Messages.getQuestionIcon()) == Messages.YES;
+            }
+        }, ModalityState.any());
+        return booleanValue;
     }
 
     @Override
-    public boolean promptBoolean(String message, boolean defaultValue)
+    public boolean promptBoolean(final String message, final boolean defaultValue)
     {
-        int result = Messages.showYesNoCancelDialog(message, "", Messages.getQuestionIcon());
-        return result == Messages.CANCEL ? defaultValue : result == Messages.YES;
+        ApplicationManager.getApplication().invokeAndWait(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                int result = Messages.showYesNoCancelDialog(message, "", Messages.getQuestionIcon());
+                booleanValue = result == Messages.CANCEL ? defaultValue : result == Messages.YES;
+            }
+        }, ModalityState.any());
+        return booleanValue;
     }
 }
