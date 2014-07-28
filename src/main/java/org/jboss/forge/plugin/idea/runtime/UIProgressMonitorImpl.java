@@ -29,8 +29,13 @@ public class UIProgressMonitorImpl implements UIProgressMonitor
     @Override
     public void beginTask(String name, int totalWork)
     {
+        if (totalWork <= 0)
+        {
+            throw new IllegalArgumentException("Total work must be greater than 0");
+        }
+
         indicator.setText(name);
-        this.totalWork = totalWork != 0 ? totalWork : Integer.MAX_VALUE;
+        this.totalWork = totalWork;
     }
 
     @Override
