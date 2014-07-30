@@ -9,7 +9,7 @@
 
    <groupId>org.jboss.forge</groupId>
    <artifactId>forge-idea-plugin</artifactId>
-   <version>0.0.1-SNAPSHOT</version>
+   <version>2.7.2.Alpha1</version>
    <name>Forge IDEA Plugin</name>
 
    <description>Integration of the UI API in Intellij IDEA</description>
@@ -18,7 +18,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
        
       <idea.version>13.1.2</idea.version>
-      <forge.version>2.7.3-SNAPSHOT</forge.version>
+      <forge.version>2.7.2.Final</forge.version>
 
       <ij.plugin>true</ij.plugin>
    </properties>
@@ -167,7 +167,6 @@
                         <addonId>org.jboss.forge.addon:projects,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:ui-spi,${forge.version}</addonId>
-                        <addonId>org.jboss.forge.addon:ui-example,${forge.version}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
