@@ -15,6 +15,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
+import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
@@ -149,7 +150,7 @@ public class CommandListPopupBuilder
                     UICommand command = (UICommand) object;
                     UICommandMetadata metadata = metadataIndex.get(command);
 
-                    return metadata.getCategory().toString() + " " + metadata.getName();
+                    return categoryName(metadata.getCategory()) + " " + metadata.getName();
                 }
                 else if (object instanceof String)
                 {
@@ -232,7 +233,7 @@ public class CommandListPopupBuilder
         for (UICommand command : commands)
         {
             UICommandMetadata metadata = index.get(command);
-            String category = metadata.getCategory().getName();
+            String category = categoryName(metadata.getCategory());
 
             if (!categories.containsKey(category))
             {
@@ -256,6 +257,23 @@ public class CommandListPopupBuilder
         }
 
         return list;
+    }
+
+    private String categoryName(UICategory category)
+    {
+        StringBuilder name = new StringBuilder();
+
+        name.append(category.getName());
+        category = category.getSubCategory();
+
+        while (category != null)
+        {
+            name.append(" / ");
+            name.append(category.getName());
+            category = category.getSubCategory();
+        }
+
+        return name.toString();
     }
 
     private void openWizard(UICommand command)
