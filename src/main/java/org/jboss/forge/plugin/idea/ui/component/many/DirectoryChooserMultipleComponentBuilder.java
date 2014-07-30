@@ -12,7 +12,6 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
-import org.jboss.forge.plugin.idea.util.ForgeProxies;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.io.File;
@@ -25,7 +24,7 @@ public class DirectoryChooserMultipleComponentBuilder extends ComponentBuilder
     @Override
     public ForgeComponent build(InputComponent<?, Object> input)
     {
-        return new ListComponent(ForgeProxies.proxyTo(UIInputMany.class, input))
+        return new ListComponent((UIInputMany) input)
         {
             @Override
             protected String editSelectedItem(String item)

@@ -15,7 +15,6 @@ import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.service.ForgeService;
-import org.jboss.forge.plugin.idea.util.ForgeProxies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +38,7 @@ public class ComboComponentBuilder extends ComponentBuilder
             {
                 final ConverterFactory converterFactory = ForgeService.getInstance()
                         .getConverterFactory();
-                final UISelectOne<Object> selectOne = ForgeProxies.proxyTo(UISelectOne.class, input);
+                final UISelectOne<Object> selectOne = (UISelectOne) input;
                 final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
                         .getItemLabelConverter(converterFactory, selectOne);
                 final DefaultComboBoxModel model = new DefaultComboBoxModel();

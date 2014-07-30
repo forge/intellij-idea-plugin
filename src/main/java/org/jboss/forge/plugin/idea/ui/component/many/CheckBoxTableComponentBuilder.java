@@ -19,7 +19,6 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
-import org.jboss.forge.plugin.idea.util.ForgeProxies;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +42,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
             @Override
             public void buildUI(Container container)
             {
-                final UISelectMany inputMany = ForgeProxies.proxyTo(UISelectMany.class, input);
+                final UISelectMany inputMany = (UISelectMany) input;
 
                 final ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
                 Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, inputMany);

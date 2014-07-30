@@ -25,20 +25,15 @@ public class CompletionUtil
 {
     public static boolean hasCompletions(InputComponent input)
     {
-        HasCompleter hasCompleter = getHasCompleter(input);
+        HasCompleter hasCompleter = (HasCompleter) input;
         return hasCompleter != null && hasCompleter.getCompleter() != null;
-    }
-
-    public static HasCompleter getHasCompleter(InputComponent input)
-    {
-        return ForgeProxies.proxyTo(HasCompleter.class, input);
     }
 
     public static List<String> getCompletions(ConverterFactory converterFactory, UIContext context,
                                               InputComponent input, String text)
     {
         List<String> result = new ArrayList<>();
-        UICompleter completer = getHasCompleter(input).getCompleter();
+        UICompleter completer = ((HasCompleter) input).getCompleter();
         Converter converter = converterFactory.getConverter(input.getValueType(), String.class);
 
         Iterable proposals = completer.getCompletionProposals(context, input, text);

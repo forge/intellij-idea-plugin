@@ -48,7 +48,7 @@ public class IDEUtil
     {
         Project project = projectFromContext(context);
 
-        FileResource resource = ForgeProxies.proxyTo(FileResource.class, context.getSelection());
+        FileResource resource = (FileResource) context.getSelection();
 
         if (resource != null)
         {
