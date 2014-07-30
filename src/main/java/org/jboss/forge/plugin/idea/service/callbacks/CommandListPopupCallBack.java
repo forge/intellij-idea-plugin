@@ -12,9 +12,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.wizard.UIWizardStep;
+import org.jboss.forge.addon.ui.util.Commands;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.ForgeService;
+import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
 import java.util.ArrayList;
@@ -39,9 +40,12 @@ public class CommandListPopupCallBack implements Runnable
     {
         UIContext uiContext = UIContextFactory.create(project, selectedFiles);
 
+        List<UICommand> candidates = getAllCandidates(uiContext);
+
         new CommandListPopupBuilder()
                 .setUIContext(uiContext)
-                .setCommands(getAllCandidates(uiContext))
+                .setCommands(candidates)
+                .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
                 .build()
                 .showInFocusCenter();
     }
@@ -53,17 +57,12 @@ public class CommandListPopupCallBack implements Runnable
 
         for (UICommand command : commandFactory.getCommands())
         {
-            if (isCandidate(command, uiContext))
+            if (Commands.isEnabled(command, uiContext))
             {
                 commands.add(command);
             }
         }
 
         return commands;
-    }
-
-    private boolean isCandidate(UICommand command, UIContext uiContext)
-    {
-        return !(command instanceof UIWizardStep) && command.isEnabled(uiContext);
     }
 }

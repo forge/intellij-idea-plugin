@@ -18,10 +18,12 @@ import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.plugin.idea.context.UIContextImpl;
 import org.jboss.forge.plugin.idea.runtime.UIProgressMonitorImpl;
 import org.jboss.forge.plugin.idea.runtime.UIRuntimeImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
+import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
 
 import javax.swing.*;
@@ -34,11 +36,13 @@ import java.util.*;
  */
 public class CommandListPopupBuilder
 {
+    private static final String RECENT_COMMANDS = "Recent Commands";
     private static final Icon FORGE_ICON = new ImageIcon(CommandListPopupBuilder.class.getResource("/icons/forge.png"));
     private static volatile boolean active;
 
     private UIContext uiContext;
     private List<UICommand> commands;
+    private List<UICommand> recentCommmands;
 
     public CommandListPopupBuilder setUIContext(UIContext uiContext)
     {
@@ -52,6 +56,12 @@ public class CommandListPopupBuilder
         return this;
     }
 
+    public CommandListPopupBuilder setRecentCommands(List<UICommand> recentCommands)
+    {
+        this.recentCommmands = recentCommands;
+        return this;
+    }
+
     public static boolean isActive()
     {
         return active;
@@ -61,8 +71,12 @@ public class CommandListPopupBuilder
     {
         active = true;
 
-        Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(commands);
-        Map<String, List<UICommand>> categories = categorizeCommands(commands, metadataIndex);
+        List<UICommand> allCommands = new ArrayList<>();
+        allCommands.addAll(commands);
+        allCommands.addAll(recentCommmands);
+
+        Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(allCommands, uiContext);
+        Map<String, List<UICommand>> categories = categorizeCommands(commands, recentCommmands, metadataIndex);
         List<Object> elements = categoriesToList(sortCategories(categories, metadataIndex));
 
         JBList list = buildJBList(elements, metadataIndex);
@@ -174,13 +188,13 @@ public class CommandListPopupBuilder
         return listPopupBuilder.createPopup();
     }
 
-    private Map<UICommand, UICommandMetadata> indexMetadata(List<UICommand> commands)
+    private static Map<UICommand, UICommandMetadata> indexMetadata(List<UICommand> commands, UIContext context)
     {
         Map<UICommand, UICommandMetadata> index = new HashMap<>();
 
         for (UICommand command : commands)
         {
-            UICommandMetadata metadata = command.getMetadata(uiContext);
+            UICommandMetadata metadata = command.getMetadata(context);
             index.put(command, metadata);
         }
 
@@ -191,7 +205,7 @@ public class CommandListPopupBuilder
      * Returns a list of pairs: (category name, list of commands). Sorted by category name, also each command list
      * is sorted by command name.
      */
-    private List<Map.Entry<String, List<UICommand>>> sortCategories(Map<String, List<UICommand>> categories,
+    private static List<Map.Entry<String, List<UICommand>>> sortCategories(Map<String, List<UICommand>> categories,
                                                                     final Map<UICommand, UICommandMetadata> index)
     {
         List<Map.Entry<String, List<UICommand>>> result = new ArrayList<>();
@@ -218,14 +232,28 @@ public class CommandListPopupBuilder
             @Override
             public int compare(Map.Entry<String, List<UICommand>> o1, Map.Entry<String, List<UICommand>> o2)
             {
-                return o1.getKey().compareTo(o2.getKey());
+                String o1Name = o1.getKey();
+                String o2Name = o2.getKey();
+
+                if (o1Name.equals(RECENT_COMMANDS))
+                {
+                    return -1;
+                }
+
+                if (o2Name.equals(RECENT_COMMANDS))
+                {
+                    return 1;
+                }
+
+                return o1Name.compareTo(o2Name);
             }
         });
 
         return result;
     }
 
-    private Map<String, List<UICommand>> categorizeCommands(List<UICommand> commands,
+    private static Map<String, List<UICommand>> categorizeCommands(List<UICommand> commands,
+                                                            List<UICommand> recentCommands,
                                                             Map<UICommand, UICommandMetadata> index)
     {
         Map<String, List<UICommand>> categories = new HashMap<>();
@@ -243,10 +271,15 @@ public class CommandListPopupBuilder
             categories.get(category).add(command);
         }
 
+        if (!recentCommands.isEmpty())
+        {
+            categories.put(RECENT_COMMANDS, recentCommands);
+        }
+
         return categories;
     }
 
-    private List<Object> categoriesToList(List<Map.Entry<String, List<UICommand>>> categories)
+    private static List<Object> categoriesToList(List<Map.Entry<String, List<UICommand>>> categories)
     {
         List<Object> list = new ArrayList<>();
 
@@ -259,17 +292,22 @@ public class CommandListPopupBuilder
         return list;
     }
 
-    private String categoryName(UICategory category)
+    private static String categoryName(UICategory category)
     {
+        if (category == null)
+        {
+            category = Categories.createDefault();
+        }
+
         StringBuilder name = new StringBuilder();
 
-        name.append(category.getName());
+        name.append(category.getName().trim());
         category = category.getSubCategory();
 
         while (category != null)
         {
             name.append(" / ");
-            name.append(category.getName());
+            name.append(category.getName().trim());
             category = category.getSubCategory();
         }
 
@@ -278,6 +316,8 @@ public class CommandListPopupBuilder
 
     private void openWizard(UICommand command)
     {
+        PluginService.getInstance().addRecentCommand(command, uiContext);
+
         UIProgressMonitor monitor = new UIProgressMonitorImpl();
 
         ((UIContextImpl) uiContext).setProgressMonitor(monitor);

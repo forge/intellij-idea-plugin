@@ -25,6 +25,9 @@
         <component>
             <implementation-class>org.jboss.forge.plugin.idea.service.ForgeService</implementation-class>
         </component>
+        <component>
+            <implementation-class>org.jboss.forge.plugin.idea.service.PluginService</implementation-class>
+        </component>
     </application-components>
 
     <actions>
