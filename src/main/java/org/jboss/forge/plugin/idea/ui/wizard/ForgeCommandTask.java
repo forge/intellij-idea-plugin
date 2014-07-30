@@ -28,7 +28,11 @@ public class ForgeCommandTask extends Task.Backgroundable
 
     public ForgeCommandTask(CommandController controller)
     {
-        super(IDEUtil.projectFromContext(controller.getContext()), "Executing Forge command", true);
+        super(IDEUtil.projectFromContext(controller.getContext()),
+                "Executing Forge command [" +
+                        controller.getCommand().getMetadata(controller.getContext()).getName()
+                        + "]",
+                true);
 
         this.controller = controller;
 
