@@ -56,17 +56,10 @@ public class PluginService implements ApplicationComponent
 
     public synchronized void addRecentCommand(UICommand command, UIContext context)
     {
-        // Remove older version of the command
         UICommandMetadata metadata = command.getMetadata(context);
-        for (String commandFromList : recentCommands)
-        {
-            if (metadata.getName().equals(commandFromList))
-            {
-                recentCommands.remove(commandFromList);
-                break;
-            }
-        }
 
+        // To make sure it will be the last element on the list
+        recentCommands.remove(metadata.getName());
         recentCommands.add(metadata.getName());
 
         if (recentCommands.size() > RECENT_COMMANDS_LIMIT)
