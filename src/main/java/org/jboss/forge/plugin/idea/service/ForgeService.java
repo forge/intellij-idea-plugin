@@ -135,7 +135,7 @@ public class ForgeService implements ApplicationComponent
         // MODULES-136
         System.setProperty("modules.ignore.jdk.factory", "true");
 
-        furnace = FurnaceFactory.getInstance();
+        furnace = FurnaceFactory.getInstance(ForgeService.class.getClassLoader());
     }
 
     void initializeAddonRepositories(boolean addBundledAddons)
