@@ -8,6 +8,7 @@ package org.jboss.forge.plugin.idea.ui.wizard;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.wizard.WizardDialog;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 
 import java.awt.*;
@@ -20,17 +21,32 @@ import java.awt.*;
  */
 public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
 {
+    private final String name;
+    private final UIContext context;
+
     public ForgeWizardDialog(CommandController originalController)
     {
         super((Project) null, false, new ForgeWizardModel(originalController));
 
         myModel.setDialog(this);
+
+        this.name = originalController.getMetadata().getName().trim();
+        this.context = originalController.getContext();
+
+        refreshTitle();
     }
 
     @Override
     public String getTitle()
     {
         return super.getTitle();
+    }
+
+    public void refreshTitle()
+    {
+        Object selection = context.getSelection();
+
+        setTitle(name + (selection != null ? " [" + selection + "]" : ""));
     }
 
     @Override

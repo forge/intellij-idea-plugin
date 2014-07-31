@@ -34,6 +34,11 @@ public class NavigationState
         navigationState.PREVIOUS.setEnabled(isPreviousEnabled());
         navigationState.NEXT.setEnabled(isNextEnabled());
         navigationState.FINISH.setEnabled(isFinishEnabled());
+
+        if (model.getDialog() != null)
+        {
+            model.getDialog().refreshTitle();
+        }
     }
 
     public boolean isPreviousEnabled()
