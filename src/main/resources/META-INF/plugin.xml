@@ -6,11 +6,12 @@
 
     <description><![CDATA[
       <p>
-          JBoss Forge 2.x Support<br>
+          JBoss Forge 2.x Support<br/>
           <small>Execute wizards and interact with the container.</small>
       </p>
       <p>
-          Press Ctrl+Alt+4 to show Forge commands.
+          Press Ctrl+Alt+4 to show Forge commands.<br/>
+          Requires JDK1.7+ to run.
       </p>
       ]]></description>
 

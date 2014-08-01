@@ -48,12 +48,16 @@ public class IDEUtil
     {
         Project project = projectFromContext(context);
 
-        FileResource resource = (FileResource) context.getSelection();
-
-        if (resource != null)
+        // TODO Open array of file resources
+        if (context.getSelection() instanceof FileResource)
         {
-            File file = new File(resource.getFullyQualifiedName());
-            openFile(project, file);
+            FileResource resource = (FileResource) context.getSelection();
+
+            if (resource != null)
+            {
+                File file = new File(resource.getFullyQualifiedName());
+                openFile(project, file);
+            }
         }
     }
 
