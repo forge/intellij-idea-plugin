@@ -157,16 +157,19 @@
                      <addonRepository>${project.build.directory}/addon-repository</addonRepository>
                      <addonIds>
                         <addonId>org.jboss.forge.addon:addons,${forge.version}</addonId>
+                        <addonId>org.jboss.forge.addon:addon-manager,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:convert,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:facets,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:environment,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:resources,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:dependencies,${forge.version}</addonId>
-                        <addonId>org.jboss.forge.addon:addon-manager,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:maven,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:projects,${forge.version}</addonId>
+                        <addonId>org.jboss.forge.addon:scaffold,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${forge.version}</addonId>
                         <addonId>org.jboss.forge.addon:ui-spi,${forge.version}</addonId>
+
+                        <addonId>org.jboss.forge.addon:angularjs,2.1.1-SNAPSHOT</addonId>
                      </addonIds>
                   </configuration>
                </execution>
