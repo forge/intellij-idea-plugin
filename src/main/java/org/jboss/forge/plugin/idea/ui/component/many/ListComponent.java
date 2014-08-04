@@ -10,6 +10,8 @@ import com.intellij.ui.AddEditDeleteListPanel;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,8 +70,8 @@ public abstract class ListComponent extends ForgeComponent
 
     protected void componentUpdated()
     {
-        InputComponents.setValueFor(converterFactory, input, panel.getValue());
-        valueChangeListener.run();
+        PluginService.getInstance().submitFormUpdate(
+                new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
     }
 
     protected class ListPanel extends AddEditDeleteListPanel<String>

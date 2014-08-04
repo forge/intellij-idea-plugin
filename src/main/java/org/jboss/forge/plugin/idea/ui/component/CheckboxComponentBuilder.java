@@ -11,6 +11,8 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,9 +55,9 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                     @Override
                     public void actionPerformed(ActionEvent e)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                checkbox.isSelected());
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        checkbox.isSelected(), valueChangeListener));
                     }
                 });
                 container.add(checkbox, "skip");

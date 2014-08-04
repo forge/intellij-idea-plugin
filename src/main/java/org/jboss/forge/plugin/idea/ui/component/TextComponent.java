@@ -15,6 +15,8 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -47,11 +49,6 @@ public class TextComponent extends ForgeComponent
 
         component = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
 
-        if (hasCompletions)
-        {
-            component.setVariants(getCompletions());
-        }
-
         component.setOneLineMode(oneLineMode);
 
         // Set Default Value
@@ -70,10 +67,8 @@ public class TextComponent extends ForgeComponent
             @Override
             public void documentChanged(DocumentEvent event)
             {
-                InputComponents.setValueFor(converterFactory, input,
-                        component.getText());
-
-                valueChangeListener.run();
+                PluginService.getInstance().submitFormUpdate(
+                        new FormUpdateCallback(converterFactory, input, component.getText(), valueChangeListener));
             }
         });
 

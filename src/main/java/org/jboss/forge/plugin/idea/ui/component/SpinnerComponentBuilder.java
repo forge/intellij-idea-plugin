@@ -11,6 +11,8 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -49,8 +51,9 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                     public void stateChanged(ChangeEvent e)
                     {
                         Object selectedItem = spinner.getValue();
-                        InputComponents.setValueFor(converterFactory, input, selectedItem);
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        selectedItem, valueChangeListener));
                     }
                 });
 

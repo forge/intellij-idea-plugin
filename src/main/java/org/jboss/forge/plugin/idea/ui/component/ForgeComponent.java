@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.component;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.service.ForgeService;
+import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 
 import java.awt.*;
 
@@ -19,13 +20,7 @@ import java.awt.*;
  */
 public abstract class ForgeComponent
 {
-    protected Runnable valueChangeListener = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-        }
-    };
+    protected ValueChangeListener valueChangeListener;
 
     protected ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
 
@@ -55,7 +50,7 @@ public abstract class ForgeComponent
     {
     }
 
-    public void setValueChangeListener(Runnable valueChangeListener)
+    public void setValueChangeListener(ValueChangeListener valueChangeListener)
     {
         this.valueChangeListener = valueChangeListener;
     }

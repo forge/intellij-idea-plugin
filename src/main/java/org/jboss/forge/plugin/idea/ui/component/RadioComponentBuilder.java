@@ -13,6 +13,8 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +38,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                 container.add(radioContainer);
 
                 UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-                Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
+                Converter<Object, String> itemLabelConverter = InputComponents
                         .getItemLabelConverter(converterFactory, selectOne);
 
                 Object originalValue = InputComponents.getValueFor(input);
@@ -57,9 +59,9 @@ public class RadioComponentBuilder extends ComponentBuilder
                             @Override
                             public void actionPerformed(ActionEvent e)
                             {
-                                InputComponents.setValueFor(converterFactory,
-                                        input, Proxies.unwrap(choice));
-                                valueChangeListener.run();
+                                PluginService.getInstance().submitFormUpdate(
+                                        new FormUpdateCallback(converterFactory, input,
+                                                Proxies.unwrap(choice), valueChangeListener));
                             }
                         });
                         radioContainer.add(radio);

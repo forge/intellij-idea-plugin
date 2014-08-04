@@ -13,6 +13,8 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -43,25 +45,25 @@ public class PasswordComponentBuilder extends ComponentBuilder
                     @Override
                     public void removeUpdate(DocumentEvent e)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                component.getText());
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        component.getText(), valueChangeListener));
                     }
 
                     @Override
                     public void insertUpdate(DocumentEvent e)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                component.getText());
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        component.getText(), valueChangeListener));
                     }
 
                     @Override
                     public void changedUpdate(DocumentEvent e)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                component.getText());
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        component.getText(), valueChangeListener));
                     }
                 });
 

@@ -12,10 +12,13 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Commands;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Maintains plugin state.
@@ -27,6 +30,7 @@ public class PluginService implements ApplicationComponent
     private static final int RECENT_COMMANDS_LIMIT = 3;
 
     private List<String> recentCommands = new ArrayList<>();
+    private ValidationThread validationThread = new ValidationThread();
 
     PluginService()
     {
@@ -40,6 +44,7 @@ public class PluginService implements ApplicationComponent
     @Override
     public void initComponent()
     {
+        validationThread.start();
     }
 
     @Override
@@ -84,5 +89,51 @@ public class PluginService implements ApplicationComponent
         }
 
         return enabledList;
+    }
+
+    public synchronized void submitFormUpdate(FormUpdateCallback callback)
+    {
+        validationThread.setNextCallback(callback);
+    }
+
+    private static class ValidationThread extends Thread
+    {
+        private BlockingQueue<FormUpdateCallback> queue = new LinkedBlockingQueue<>();
+
+        public ValidationThread()
+        {
+            super("ForgeValidationThread");
+        }
+
+        public void setNextCallback(FormUpdateCallback nextCallback)
+        {
+            // Discard previous request for this component
+            for (FormUpdateCallback callback : queue)
+            {
+                if (callback.getInput() == nextCallback.getInput())
+                {
+                    queue.remove(callback);
+                    break;
+                }
+            }
+
+            queue.add(nextCallback);
+        }
+
+        @Override
+        public void run()
+        {
+            while (true)
+            {
+                try
+                {
+                    queue.take().run();
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 }

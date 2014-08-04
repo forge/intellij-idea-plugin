@@ -13,6 +13,8 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,8 +60,10 @@ public class ComboComponentBuilder extends ComponentBuilder
                     public void itemStateChanged(ItemEvent e)
                     {
                         Object selectedItem = model.getSelectedItem();
-                        InputComponents.setValueFor(converterFactory, input, selectedItem);
-                        valueChangeListener.run();
+
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        selectedItem, valueChangeListener));
                     }
                 });
 

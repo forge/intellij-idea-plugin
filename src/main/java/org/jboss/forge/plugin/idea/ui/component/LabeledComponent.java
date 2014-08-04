@@ -10,6 +10,7 @@ import com.intellij.ui.components.JBLabel;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 
 import java.awt.*;
 import java.util.List;
@@ -59,7 +60,7 @@ public class LabeledComponent extends ForgeComponent
     }
 
     @Override
-    public void setValueChangeListener(Runnable valueChangeListener)
+    public void setValueChangeListener(ValueChangeListener valueChangeListener)
     {
         component.setValueChangeListener(valueChangeListener);
     }

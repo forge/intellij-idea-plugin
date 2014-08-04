@@ -14,6 +14,8 @@ import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -54,10 +56,9 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
                     @Override
                     public void documentChanged(DocumentEvent event)
                     {
-                        InputComponents.setValueFor(converterFactory, input,
-                                inputField.getText());
-
-                        valueChangeListener.run();
+                        PluginService.getInstance().submitFormUpdate(
+                                new FormUpdateCallback(converterFactory, input,
+                                        inputField.getText(), valueChangeListener));
                     }
                 });
 

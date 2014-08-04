@@ -7,11 +7,13 @@
 
 package org.jboss.forge.plugin.idea.ui.listeners;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
-import org.jboss.forge.plugin.idea.ui.wizard.NavigationState;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardModel;
+import org.jboss.forge.plugin.idea.ui.wizard.NavigationState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,6 @@ public class ValueChangeListener implements Runnable
     @Override
     public void run()
     {
-        navigationState.refreshNavigationState();
         validate();
     }
 
@@ -51,10 +52,10 @@ public class ValueChangeListener implements Runnable
 
     private void validate()
     {
-        List<UIMessage> allMessages = navigationState.getController().validate();
+        final List<UIMessage> allMessages = navigationState.getController().validate();
 
-        Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
-        List<UIMessage> commandMessages = new ArrayList<>();
+        final Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
+        final List<UIMessage> commandMessages = new ArrayList<>();
 
         for (String inputName : components.keySet())
         {
@@ -74,10 +75,20 @@ public class ValueChangeListener implements Runnable
             }
         }
 
-        processComponentMessages(messagesByInputName);
-        processCommandMessages(commandMessages, allMessages);
+        // Must be invoked on UI thread
+        ApplicationManager.getApplication().invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                processComponentMessages(messagesByInputName);
+                processCommandMessages(commandMessages, allMessages);
 
-        updateComponentsState();
+                updateComponentsState();
+
+                navigationState.refreshNavigationState();
+            }
+        }, ModalityState.any());
     }
 
     private void processComponentMessages(Map<String, List<UIMessage>> messages)
