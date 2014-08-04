@@ -11,12 +11,10 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -33,8 +31,6 @@ public class TextComponent extends ForgeComponent
     private final InputComponent<?, Object> input;
     private final boolean oneLineMode;
 
-    private final ConverterFactory converterFactory;
-
     private TextFieldWithAutoCompletion component;
 
     public TextComponent(UIContext context, InputComponent<?, Object> input, boolean oneLineMode)
@@ -42,8 +38,6 @@ public class TextComponent extends ForgeComponent
         this.context = context;
         this.input = input;
         this.oneLineMode = oneLineMode;
-
-        this.converterFactory = ForgeService.getInstance().getConverterFactory();
     }
 
     @Override
@@ -78,10 +72,6 @@ public class TextComponent extends ForgeComponent
             {
                 InputComponents.setValueFor(converterFactory, input,
                         component.getText());
-                if (CompletionUtil.hasCompletions(input))
-                {
-                    component.setVariants(getCompletions());
-                }
 
                 valueChangeListener.run();
             }
@@ -109,6 +99,11 @@ public class TextComponent extends ForgeComponent
     public void updateState()
     {
         component.setEnabled(input.isEnabled());
+
+        if (CompletionUtil.hasCompletions(input))
+        {
+            component.setVariants(getCompletions());
+        }
     }
 
     private List<String> getCompletions()

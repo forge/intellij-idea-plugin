@@ -11,11 +11,9 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
@@ -33,21 +31,11 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
             private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
             private TextFieldWithAutoCompletion inputField;
 
-            private ConverterFactory converterFactory;
-
             @Override
             public void buildUI(Container container)
             {
-                converterFactory = ForgeService.getInstance()
-                        .getConverterFactory();
-
                 component = createTextField(input);
                 inputField = component.getChildComponent();
-
-                if (CompletionUtil.hasCompletions(input))
-                {
-                    inputField.setVariants(getCompletions());
-                }
 
                 // Set Default Value
                 Converter<Object, String> converter = converterFactory.getConverter(
@@ -68,10 +56,6 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
                     {
                         InputComponents.setValueFor(converterFactory, input,
                                 inputField.getText());
-                        if (CompletionUtil.hasCompletions(input))
-                        {
-                            inputField.setVariants(getCompletions());
-                        }
 
                         valueChangeListener.run();
                     }
@@ -84,6 +68,11 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
             public void updateState()
             {
                 component.setEnabled(input.isEnabled());
+
+                if (CompletionUtil.hasCompletions(input))
+                {
+                    inputField.setVariants(getCompletions());
+                }
             }
 
             private java.util.List<String> getCompletions()

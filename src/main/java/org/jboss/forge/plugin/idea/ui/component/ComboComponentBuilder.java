@@ -8,13 +8,11 @@ package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.ui.ComboBox;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,11 +34,9 @@ public class ComboComponentBuilder extends ComponentBuilder
             @Override
             public void buildUI(Container container)
             {
-                final ConverterFactory converterFactory = ForgeService.getInstance()
-                        .getConverterFactory();
                 final UISelectOne<Object> selectOne = (UISelectOne) input;
-                final Converter<Object, String> converter = (Converter<Object, String>) InputComponents
-                        .getItemLabelConverter(converterFactory, selectOne);
+                final Converter<Object, String> converter =
+                        InputComponents.getItemLabelConverter(converterFactory, selectOne);
                 final DefaultComboBoxModel model = new DefaultComboBoxModel();
 
                 combo = new ComboBox(model);

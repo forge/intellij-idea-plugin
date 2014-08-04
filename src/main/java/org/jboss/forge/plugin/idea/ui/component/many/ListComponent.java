@@ -8,10 +8,8 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 
 import com.intellij.ui.AddEditDeleteListPanel;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,14 +26,12 @@ import java.util.List;
 public abstract class ListComponent extends ForgeComponent
 {
     private final UIInputMany<?> input;
-    private final ConverterFactory converterFactory;
 
     private ListPanel panel;
 
     public ListComponent(UIInputMany<?> input)
     {
         this.input = input;
-        this.converterFactory = ForgeService.getInstance().getConverterFactory();
     }
 
     @Override

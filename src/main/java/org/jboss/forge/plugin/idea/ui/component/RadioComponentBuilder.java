@@ -8,13 +8,11 @@ package org.jboss.forge.plugin.idea.ui.component;
 
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,14 +34,15 @@ public class RadioComponentBuilder extends ComponentBuilder
             {
                 radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
-                final ConverterFactory converterFactory = ForgeService.getInstance()
-                        .getConverterFactory();
+
                 UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
                 Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
                         .getItemLabelConverter(converterFactory, selectOne);
+
                 Object originalValue = InputComponents.getValueFor(input);
                 Iterable<Object> valueChoices = selectOne.getValueChoices();
                 ButtonGroup group = new ButtonGroup();
+
                 if (valueChoices != null)
                 {
                     for (final Object choice : valueChoices)

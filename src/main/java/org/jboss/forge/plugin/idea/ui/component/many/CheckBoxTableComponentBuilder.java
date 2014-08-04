@@ -11,12 +11,10 @@ import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 
@@ -44,7 +42,6 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
             {
                 final UISelectMany inputMany = (UISelectMany) input;
 
-                final ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
                 Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, inputMany);
 
                 Map<String, Boolean> choices = new HashMap<>();

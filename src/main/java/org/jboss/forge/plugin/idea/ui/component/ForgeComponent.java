@@ -6,7 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.output.UIMessage;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import java.awt.*;
 
@@ -24,6 +26,8 @@ public abstract class ForgeComponent
         {
         }
     };
+
+    protected ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
 
     public abstract void buildUI(Container container);
 

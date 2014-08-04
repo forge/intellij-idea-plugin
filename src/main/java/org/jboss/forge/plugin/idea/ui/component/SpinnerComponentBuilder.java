@@ -7,12 +7,10 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -36,9 +34,6 @@ public class SpinnerComponentBuilder extends ComponentBuilder
             @Override
             public void buildUI(Container container)
             {
-                final ConverterFactory converterFactory = ForgeService.getInstance()
-                        .lookup(ConverterFactory.class);
-
                 spinner = new JSpinner();
                 container.add(spinner);
 
