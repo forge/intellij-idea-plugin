@@ -48,16 +48,28 @@ public class IDEUtil
     {
         Project project = projectFromContext(context);
 
-        // TODO Open array of file resources
-        if (context.getSelection() instanceof FileResource)
+        if (context.getSelection() instanceof Iterable)
         {
-            FileResource resource = (FileResource) context.getSelection();
+            Iterable iterable = context.getSelection();
 
-            if (resource != null)
+            for (Object selection : iterable)
             {
-                File file = new File(resource.getFullyQualifiedName());
-                openFile(project, file);
+                openSingleSelection(project, selection);
             }
+        }
+        else
+        {
+            openSingleSelection(project, context.getSelection());
+        }
+    }
+
+    private static void openSingleSelection(Project project, Object selection)
+    {
+        if (selection instanceof FileResource)
+        {
+            FileResource resource = (FileResource) selection;
+            File file = new File(resource.getFullyQualifiedName());
+            openFile(project, file);
         }
     }
 
