@@ -30,7 +30,7 @@ import javax.swing.*;
 import java.util.*;
 
 /**
- * Lists all UI commands.
+ * Lists enabled UI commands.
  *
  * @author Adam Wyłuda
  */
@@ -78,9 +78,10 @@ public class CommandListPopupBuilder
         Map<UICommand, UICommandMetadata> metadataIndex = indexMetadata(allCommands, uiContext);
         Map<String, List<UICommand>> categories = categorizeCommands(commands, recentCommmands, metadataIndex);
         List<Object> elements = categoriesToList(sortCategories(categories, metadataIndex));
+        Map<Object, String> filterIndex = indexFilterData(elements, categories, metadataIndex);
 
         JBList list = buildJBList(elements, metadataIndex);
-        JBPopup popup = buildPopup(list, categories, metadataIndex);
+        JBPopup popup = buildPopup(list, filterIndex);
 
         return popup;
     }
@@ -127,8 +128,7 @@ public class CommandListPopupBuilder
     }
 
     private JBPopup buildPopup(final JBList list,
-                               final Map<String, List<UICommand>> categories,
-                               final Map<UICommand, UICommandMetadata> metadataIndex)
+                               final Map<Object, String> filterIndex)
     {
         final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
         listPopupBuilder.setTitle("Run a Forge command");
@@ -159,29 +159,7 @@ public class CommandListPopupBuilder
             @Override
             public String fun(Object object)
             {
-                if (object instanceof UICommand)
-                {
-                    UICommand command = (UICommand) object;
-                    UICommandMetadata metadata = metadataIndex.get(command);
-
-                    return categoryName(metadata.getCategory()) + " " + metadata.getName();
-                }
-                else if (object instanceof String)
-                {
-                    StringBuilder categoryStringBuilder = new StringBuilder();
-                    categoryStringBuilder.append(object + " ");
-
-                    for (UICommand command : categories.get(object))
-                    {
-                        categoryStringBuilder.append(metadataIndex.get(command).getName() + " ");
-                    }
-
-                    return categoryStringBuilder.toString();
-                }
-                else
-                {
-                    throw new IllegalArgumentException("Unknown object type: " + object.getClass());
-                }
+                return filterIndex.get(object);
             }
         });
 
@@ -199,6 +177,41 @@ public class CommandListPopupBuilder
         }
 
         return index;
+    }
+
+    private static Map<Object, String> indexFilterData(List<Object> elements,
+                                                       Map<String, List<UICommand>> categories,
+                                                       Map<UICommand, UICommandMetadata> metadataIndex)
+    {
+        Map<Object, String> result = new HashMap<>();
+
+        for (Object object : elements)
+        {
+            if (object instanceof UICommand)
+            {
+                UICommand command = (UICommand) object;
+                UICommandMetadata metadata = metadataIndex.get(command);
+
+                result.put(object, categoryName(metadata.getCategory()) + " " + metadata.getName());
+            }
+            else if (object instanceof String)
+            {
+                StringBuilder categoryStringBuilder = new StringBuilder();
+                categoryStringBuilder.append(object + " ");
+
+                for (UICommand command : categories.get(object))
+                {
+                    categoryStringBuilder.append(metadataIndex.get(command).getName() + " ");
+                }
+
+                result.put(object, categoryStringBuilder.toString());
+            }
+            else
+            {
+                throw new IllegalArgumentException("Unknown object type: " + object.getClass());
+            }
+        }
+        return result;
     }
 
     /**
