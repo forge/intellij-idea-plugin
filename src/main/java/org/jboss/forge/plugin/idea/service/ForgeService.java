@@ -29,6 +29,9 @@ import java.util.concurrent.Future;
 /**
  * This is a singleton for the {@link Furnace} class.
  *
+ * Use {@link org.jboss.forge.plugin.idea.service.ServiceHelper#loadFurnaceAndRun(Runnable)} to start any
+ * interaction with Forge.
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * @author Adam Wyłuda
  */
@@ -65,17 +68,12 @@ public class ForgeService implements ApplicationComponent
         return getClass().getSimpleName();
     }
 
-    public void start()
-    {
-        furnace.start();
-    }
-
-    public Future<Furnace> startAsync()
+    Future<Furnace> startAsync()
     {
         return furnace.startAsync();
     }
 
-    public void stop()
+    void stop()
     {
         furnace.stop();
     }

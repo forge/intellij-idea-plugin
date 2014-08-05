@@ -57,6 +57,11 @@
          <artifactId>convert-api</artifactId>
          <version>${forge.version}</version>
       </dependency>
+       <dependency>
+           <groupId>org.jboss.forge.addon</groupId>
+           <artifactId>projects-api</artifactId>
+           <version>${forge.version}</version>
+       </dependency>
       <dependency>
          <groupId>org.jboss.forge.addon</groupId>
          <artifactId>ui-api</artifactId>
@@ -120,7 +125,7 @@
          <scope>provided</scope>
       </dependency>
 
-      <!-- Test -->
+       <!-- Test -->
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>

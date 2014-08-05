@@ -9,7 +9,11 @@ package org.jboss.forge.plugin.idea.service;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
+import org.jboss.forge.addon.projects.Project;
+import org.jboss.forge.addon.projects.ProjectFactory;
+import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.util.concurrent.Future;
 
@@ -61,6 +65,8 @@ public class ServiceHelper
                 }
                 indicator.setFraction(1.0);
 
+                registerProjectListener();
+
                 runOnUIThread(callback);
             }
         }.setCancelText("Stop loading").queue();
@@ -78,6 +84,30 @@ public class ServiceHelper
         else
         {
             ApplicationManager.getApplication().invokeLater(runnable);
+        }
+    }
+
+    private static void registerProjectListener()
+    {
+        ProjectFactory factory = ForgeService.getInstance().lookup(ProjectFactory.class);
+
+        if (factory != null)
+        {
+            factory.addProjectListener(new ProjectListener()
+            {
+                @Override
+                public void projectCreated(final Project project)
+                {
+                    ApplicationManager.getApplication().invokeLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            IDEUtil.openProject(project.getRoot().getFullyQualifiedName());
+                        }
+                    });
+                }
+            });
         }
     }
 }

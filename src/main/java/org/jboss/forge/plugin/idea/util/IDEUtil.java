@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import com.intellij.ide.impl.ProjectUtil;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeJavaClassChooserDialog;
@@ -41,7 +42,10 @@ public class IDEUtil
 
     public static void refreshProject(Project project)
     {
-        project.getBaseDir().refresh(true, true);
+        if (!project.isDisposed())
+        {
+            project.getBaseDir().refresh(true, true);
+        }
     }
 
     public static void openSelection(UIContext context)
@@ -65,7 +69,7 @@ public class IDEUtil
 
     private static void openSingleSelection(Project project, Object selection)
     {
-        if (selection instanceof FileResource)
+        if (!project.isDisposed() && selection instanceof FileResource)
         {
             FileResource resource = (FileResource) selection;
             File file = new File(resource.getFullyQualifiedName());
@@ -77,6 +81,18 @@ public class IDEUtil
     {
         VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
         FileEditorManager.getInstance(project).openFile(virtualFile, true);
+    }
+
+    public static void openProject(String path)
+    {
+        try
+        {
+            ProjectUtil.openOrImport(path, null, false);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static Project projectFromContext(UIContext context)
