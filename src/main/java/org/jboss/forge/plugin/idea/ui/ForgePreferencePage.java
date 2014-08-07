@@ -4,22 +4,21 @@
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.jboss.forge.plugin.idea.extensions;
+package org.jboss.forge.plugin.idea.ui;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import net.miginfocom.swing.MigLayout;
-import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.forge.furnace.util.Strings;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 /**
  * The Forge preferences Page
@@ -29,16 +28,12 @@ import java.io.File;
 public class ForgePreferencePage implements Configurable
 {
     private TextFieldWithBrowseButton addonsDirField;
-    private String defaultText;
 
     @Override
     @Nullable
     public JComponent createComponent()
     {
-        defaultText = new File(OperatingSystemUtils.getUserForgeDir(), "addons")
-                .getAbsolutePath();
         addonsDirField = new TextFieldWithBrowseButton();
-        addonsDirField.setText(defaultText);
         addonsDirField.addBrowseFolderListener(
                 "Select your preferred addon location",
                 "Specifies the directory that addons will be deployed", null,
@@ -50,34 +45,36 @@ public class ForgePreferencePage implements Configurable
 
         panel.add(new JLabel("Addons Installation Location:"));
         panel.add(addonsDirField);
+
         JPanel result = new JPanel(new BorderLayout());
         result.add(panel, BorderLayout.NORTH);
+
+        reset();
+
         return result;
     }
 
     @Override
     public boolean isModified()
     {
-        return true;
-        // return !defaultText.equals(addonsDirField.getText());
+        return !addonsDirField.getText().equals(getForgeState().getAddonDir());
     }
 
     @Override
     public void apply() throws ConfigurationException
     {
         String addonDir = addonsDirField.getText();
-        if (Strings.isNullOrEmpty(addonDir))
-        {
-            addonDir = defaultText;
-        }
 
-        // TODO: Store the addonDir value somewhere
+        if (!Strings.isNullOrEmpty(addonDir))
+        {
+            getForgeState().setAddonDir(addonDir);
+        }
     }
 
     @Override
     public void reset()
     {
-        addonsDirField.setText(defaultText);
+        addonsDirField.setText(getForgeState().getAddonDir());
     }
 
     @Override
@@ -99,5 +96,10 @@ public class ForgePreferencePage implements Configurable
     public String getHelpTopic()
     {
         return null;
+    }
+
+    private ForgeService.State getForgeState()
+    {
+        return ForgeService.getInstance().getState();
     }
 }

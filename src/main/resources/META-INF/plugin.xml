@@ -44,9 +44,6 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-      	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.extensions.ForgePreferencePage"/>
-
-        <!--<applicationService serviceInterface="org.jboss.forge.plugin.idea.service.ForgeService"-->
-                            <!--serviceImplementation="org.jboss.forge.plugin.idea.service.ForgeService"/>-->
+      	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
     </extensions>
 </idea-plugin>

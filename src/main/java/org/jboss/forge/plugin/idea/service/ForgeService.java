@@ -8,8 +8,7 @@ package org.jboss.forge.plugin.idea.service;
 
 import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.*;
 import com.intellij.openapi.extensions.PluginId;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
@@ -22,22 +21,31 @@ import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.concurrent.Future;
 
 /**
  * This is a singleton for the {@link Furnace} class.
- *
+ * <p/>
  * Use {@link org.jboss.forge.plugin.idea.service.ServiceHelper#loadFurnaceAndRun(Runnable)} to start any
  * interaction with Forge.
  *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * @author Adam Wyłuda
  */
-public class ForgeService implements ApplicationComponent
+@State(
+        name = "ForgeConfiguration",
+        storages = {
+                @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/other.xml")
+        }
+)
+public class ForgeService implements ApplicationComponent, PersistentStateComponent<ForgeService.State>
 {
     private transient Furnace furnace;
+
+    private State state = new State();
 
     ForgeService()
     {
@@ -100,7 +108,7 @@ public class ForgeService implements ApplicationComponent
         {
             exportedInstance = furnace.getAddonRegistry().getServices(service);
         }
-        return (exportedInstance == null) ? null : exportedInstance.get();
+        return (exportedInstance == null || exportedInstance.isUnsatisfied()) ? null : exportedInstance.get();
     }
 
     @SuppressWarnings("unchecked")
@@ -138,8 +146,7 @@ public class ForgeService implements ApplicationComponent
 
     void initializeAddonRepositories(boolean addBundledAddons)
     {
-        furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
-                OperatingSystemUtils.getUserForgeDir(), "addons"));
+        furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(state.addonDir));
 
         if (addBundledAddons)
         {
@@ -149,6 +156,34 @@ public class ForgeService implements ApplicationComponent
                     pluginId.getIdString());
             File addonRepo = new File(pluginHome, "addon-repository");
             furnace.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepo);
+        }
+    }
+
+    @Nullable
+    @Override
+    public State getState()
+    {
+        return this.state;
+    }
+
+    @Override
+    public void loadState(State state)
+    {
+        this.state = state;
+    }
+
+    public static class State
+    {
+        private String addonDir = new File(OperatingSystemUtils.getUserForgeDir(), "addons").getAbsolutePath();
+
+        public String getAddonDir()
+        {
+            return addonDir;
+        }
+
+        public void setAddonDir(String addonDir)
+        {
+            this.addonDir = addonDir;
         }
     }
 }
