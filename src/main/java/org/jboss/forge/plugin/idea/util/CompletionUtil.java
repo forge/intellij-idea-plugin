@@ -25,7 +25,7 @@ public class CompletionUtil
 {
     public static boolean hasCompletions(InputComponent input)
     {
-        HasCompleter hasCompleter = (HasCompleter) input;
+        HasCompleter hasCompleter = input instanceof HasCompleter ? (HasCompleter) input : null;
         return hasCompleter != null && hasCompleter.getCompleter() != null;
     }
 
