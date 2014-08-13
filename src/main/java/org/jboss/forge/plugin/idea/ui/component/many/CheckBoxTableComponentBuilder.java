@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.util.Function;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -23,9 +24,7 @@ import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Adam Wyłuda
@@ -37,33 +36,20 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
     {
         return new ForgeComponent()
         {
-            private CheckBoxList checkBoxList;
+            private CheckBoxList<String> checkBoxList;
+            private UISelectMany inputMany = (UISelectMany) input;
+            private Converter<Object, String> converter
+                    = InputComponents.getItemLabelConverter(converterFactory, inputMany);
 
             @Override
             public void buildUI(Container container)
             {
-                final UISelectMany inputMany = (UISelectMany) input;
-
-                Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, inputMany);
-
-                Map<String, Boolean> choices = new HashMap<>();
-                for (Object item : inputMany.getValueChoices())
-                {
-                    choices.put(converter.convert(item), false);
-                }
-
-                for (Object item : inputMany.getValue())
-                {
-                    choices.put(converter.convert(item), true);
-                }
+                JPanel panel = new JPanel(new MigLayout("fill"));
 
                 String label = InputComponents.getLabelFor(input, false);
-
-                JPanel panel = new JPanel(new MigLayout("fill"));
                 panel.setBorder(IdeBorderFactory.createTitledBorder(label, false));
 
-                checkBoxList = new CheckBoxList();
-                checkBoxList.setStringItems(choices);
+                checkBoxList = new CheckBoxList<>();
                 checkBoxList.setBorder(IdeBorderFactory.createBorder());
                 panel.add(checkBoxList, "grow,height :150:200");
 
@@ -73,24 +59,94 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                     public void checkBoxSelectionChanged(int index, boolean value)
                     {
                         PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, inputMany, getSelectedItems(checkBoxList),
+                                new FormUpdateCallback(converterFactory, inputMany, getValue(),
                                         valueChangeListener)
                         );
                     }
                 });
 
                 container.add(panel, "span 2,growx");
+
+                reloadValues();
             }
 
             @Override
             public void updateState()
             {
                 checkBoxList.setEnabled(input.isEnabled());
+
+                if (!getInputValueChoices().equals(getChoices()) ||
+                        !getInputValue().equals(getValue()))
+                {
+                    reloadValues();
+                }
             }
 
-            private List getSelectedItems(CheckBoxList checkBoxList)
+            private void reloadValues()
             {
-                List result = new ArrayList();
+                // Usage of List is necessary to preserve item order
+                List<String> choices = new ArrayList<>();
+
+                for (String item : getInputValueChoices())
+                {
+                    choices.add(item);
+                }
+
+                checkBoxList.setItems(choices, new Function<String, String>()
+                {
+                    @Override
+                    public String fun(String s)
+                    {
+                        return s;
+                    }
+                });
+
+                // Select input values
+                for (String item : getInputValue())
+                {
+                    checkBoxList.setItemSelected(item, true);
+                }
+            }
+
+            private List<String> getInputValueChoices()
+            {
+                List<String> list = new ArrayList<>();
+
+                for (Object item : inputMany.getValueChoices())
+                {
+                    list.add(converter.convert(item));
+                }
+
+                return list;
+            }
+
+            private List<String> getInputValue()
+            {
+                List<String> list = new ArrayList<>();
+
+                for (Object item : inputMany.getValue())
+                {
+                    list.add(converter.convert(item));
+                }
+
+                return list;
+            }
+
+            private List<String> getChoices()
+            {
+                List<String> result = new ArrayList<>();
+
+                for (int i = 0; i < checkBoxList.getItemsCount(); i++)
+                {
+                    result.add(checkBoxList.getItemAt(i));
+                }
+
+                return result;
+            }
+
+            private List<String> getValue()
+            {
+                List<String> result = new ArrayList<>();
 
                 for (int i = 0; i < checkBoxList.getItemsCount(); i++)
                 {
