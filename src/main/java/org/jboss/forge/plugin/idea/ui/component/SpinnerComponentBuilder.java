@@ -32,6 +32,8 @@ public class SpinnerComponentBuilder extends ComponentBuilder
         return new LabeledComponent(input, new ForgeComponent()
         {
             private JSpinner spinner;
+            private Converter<Object, Integer> converter = converterFactory
+                    .getConverter(input.getValueType(), Integer.class);
 
             @Override
             public void buildUI(Container container)
@@ -56,18 +58,33 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                                         selectedItem, valueChangeListener));
                     }
                 });
-
-                // Set Default Value
-                Converter<Object, Integer> converter = converterFactory
-                        .getConverter(input.getValueType(), Integer.class);
-                Integer value = converter.convert(InputComponents.getValueFor(input));
-                spinner.setValue(value == null ? 0 : value);
             }
 
             @Override
             public void updateState()
             {
                 spinner.setEnabled(input.isEnabled());
+
+                if (getValue() != getInputValue())
+                {
+                    reloadValue();
+                }
+            }
+
+            private void reloadValue()
+            {
+                spinner.setValue(getInputValue());
+            }
+
+            private int getInputValue()
+            {
+                Integer value = converter.convert(InputComponents.getValueFor(input));
+                return value != null ? value : 0;
+            }
+
+            private int getValue()
+            {
+                return (int) spinner.getValue();
             }
         });
     }

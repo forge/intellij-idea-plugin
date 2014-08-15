@@ -12,7 +12,6 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
@@ -20,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComboComponentBuilder extends ComponentBuilder
 {
@@ -30,44 +31,62 @@ public class ComboComponentBuilder extends ComponentBuilder
     {
         return new LabeledComponent(input, new ForgeComponent()
         {
-
             private ComboBox combo;
+            private UISelectOne<Object> selectOne = (UISelectOne) input;
+            private Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, selectOne);
+            private DefaultComboBoxModel<String> model;
 
             @Override
             public void buildUI(Container container)
             {
-                final UISelectOne<Object> selectOne = (UISelectOne) input;
-                final Converter<Object, String> converter =
-                        InputComponents.getItemLabelConverter(converterFactory, selectOne);
-                final DefaultComboBoxModel model = new DefaultComboBoxModel();
+                model = new DefaultComboBoxModel();
 
                 combo = new ComboBox(model);
                 container.add(combo);
-                String value = converter.convert(InputComponents.getValueFor(input));
+                combo.addItemListener(new ItemListener()
+                {
+                    @Override
+                    public void itemStateChanged(ItemEvent e)
+                    {
+                        // To prevent nullifying input's value when model is cleared
+                        if (e.getStateChange() == ItemEvent.SELECTED)
+                        {
+                            Object selectedItem = model.getSelectedItem();
+
+                            PluginService.getInstance().submitFormUpdate(
+                                    new FormUpdateCallback(converterFactory, input,
+                                            selectedItem, valueChangeListener));
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void updateState()
+            {
+                combo.setEnabled(input.isEnabled());
+
+                if (!getInputValueChoices().equals(getChoices()) ||
+                        !getInputValue().equals(getValue()))
+                {
+                    reloadValue();
+                }
+            }
+
+            private void reloadValue()
+            {
                 Iterable<Object> valueChoices = selectOne.getValueChoices();
                 if (valueChoices != null)
                 {
                     model.removeAllElements();
-                    for (Object choice : valueChoices)
+                    for (String choice : getInputValueChoices())
                     {
-                        model.addElement(converter.convert(Proxies.unwrap(choice)));
+                        model.addElement(choice);
                     }
                 }
-                combo.addItemListener(new ItemListener()
-                {
-
-                    @Override
-                    public void itemStateChanged(ItemEvent e)
-                    {
-                        Object selectedItem = model.getSelectedItem();
-
-                        PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, input,
-                                        selectedItem, valueChangeListener));
-                    }
-                });
 
                 // Set Default Value
+                String value = converter.convert(InputComponents.getValueFor(input));
                 if (value == null)
                 {
                     if (model.getSize() > 0)
@@ -83,10 +102,38 @@ public class ComboComponentBuilder extends ComponentBuilder
                 }
             }
 
-            @Override
-            public void updateState()
+            private List<String> getInputValueChoices()
             {
-                combo.setEnabled(input.isEnabled());
+                List<String> list = new ArrayList<>();
+
+                for (Object item : selectOne.getValueChoices())
+                {
+                    list.add(converter.convert(item));
+                }
+
+                return list;
+            }
+
+            private String getInputValue()
+            {
+                return converter.convert(selectOne.getValue());
+            }
+
+            private List<String> getChoices()
+            {
+                List<String> result = new ArrayList<>();
+
+                for (int i = 0; i < model.getSize(); i++)
+                {
+                    result.add(model.getElementAt(i));
+                }
+
+                return result;
+            }
+
+            private String getValue()
+            {
+                return (String) model.getSelectedItem();
             }
         });
     }

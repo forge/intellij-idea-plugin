@@ -12,7 +12,6 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.output.UIMessage;
-import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
@@ -29,33 +28,39 @@ public class PasswordComponentBuilder extends ComponentBuilder
         return new LabeledComponent(input, new ForgeComponent()
         {
             private JPasswordField component;
+            private Converter<Object, String> converter = converterFactory.getConverter(
+                    input.getValueType(), String.class);
+
+            // No need to make form update during value update
+            private boolean settingValue = false;
 
             @Override
             public void buildUI(Container container)
             {
                 component = new JPasswordField();
 
-                Converter<Object, String> converter = converterFactory.getConverter(
-                        input.getValueType(), String.class);
-                String value = converter.convert(InputComponents.getValueFor(input));
-                component.setText(value == null ? "" : value);
-
                 component.getDocument().addDocumentListener(new DocumentListener()
                 {
                     @Override
                     public void removeUpdate(DocumentEvent e)
                     {
-                        PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, input,
-                                        component.getText(), valueChangeListener));
+                        if (!settingValue)
+                        {
+                            PluginService.getInstance().submitFormUpdate(
+                                    new FormUpdateCallback(converterFactory, input,
+                                            component.getText(), valueChangeListener));
+                        }
                     }
 
                     @Override
                     public void insertUpdate(DocumentEvent e)
                     {
-                        PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, input,
-                                        component.getText(), valueChangeListener));
+                        if (!settingValue)
+                        {
+                            PluginService.getInstance().submitFormUpdate(
+                                    new FormUpdateCallback(converterFactory, input,
+                                            component.getText(), valueChangeListener));
+                        }
                     }
 
                     @Override
@@ -74,6 +79,30 @@ public class PasswordComponentBuilder extends ComponentBuilder
             public void updateState()
             {
                 component.setEnabled(input.isEnabled());
+
+                if (!component.getText().equals(getInputValue()))
+                {
+                    reloadValue();
+                }
+            }
+
+            private void reloadValue()
+            {
+                String value = getInputValue();
+                try
+                {
+                    settingValue = true;
+                    component.setText(value == null ? "" : value);
+                }
+                finally
+                {
+                    settingValue = false;
+                }
+            }
+
+            private String getInputValue()
+            {
+                return converter.convert(input.getValue());
             }
 
             @Override

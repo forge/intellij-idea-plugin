@@ -27,13 +27,19 @@ import java.util.List;
  */
 public abstract class ListComponent extends ForgeComponent
 {
-    private final UIInputMany<?> input;
+    private final UIInputMany<Object> input;
+    private Converter<Object, String> converter;
 
     private ListPanel panel;
 
-    public ListComponent(UIInputMany<?> input)
+    // No need to make form update during value update
+    private boolean settingValue;
+
+    public ListComponent(UIInputMany<Object> input)
     {
         this.input = input;
+
+        converter = converterFactory.getConverter(input.getValueType(), String.class);
     }
 
     @Override
@@ -46,11 +52,9 @@ public abstract class ListComponent extends ForgeComponent
         Iterable inputValue = (Iterable) InputComponents.getValueFor(input);
         if (inputValue != null)
         {
-            Converter stringConverter = converterFactory.getConverter(input.getValueType(), String.class);
-
             for (Object item : inputValue)
             {
-                initialValue.add((String) stringConverter.convert(item));
+                initialValue.add((String) converter.convert(item));
             }
         }
 
@@ -62,6 +66,11 @@ public abstract class ListComponent extends ForgeComponent
     public void updateState()
     {
         panel.setEnabled(input.isEnabled());
+
+        if (!getInputValues().equals(panel.getValue()))
+        {
+            reloadValues();
+        }
     }
 
     protected abstract String editSelectedItem(String item);
@@ -70,8 +79,36 @@ public abstract class ListComponent extends ForgeComponent
 
     protected void componentUpdated()
     {
-        PluginService.getInstance().submitFormUpdate(
-                new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
+        if (!settingValue)
+        {
+            PluginService.getInstance().submitFormUpdate(
+                    new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
+        }
+    }
+
+    public void reloadValues()
+    {
+        try
+        {
+            settingValue = true;
+            panel.setValue(getInputValues());
+        }
+        finally
+        {
+            settingValue = false;
+        }
+    }
+
+    private List<String> getInputValues()
+    {
+        List<String> list = new ArrayList<>();
+
+        for (Object item : input.getValue())
+        {
+            list.add(converter.convert(item));
+        }
+
+        return list;
     }
 
     protected class ListPanel extends AddEditDeleteListPanel<String>
@@ -119,12 +156,24 @@ public abstract class ListComponent extends ForgeComponent
         public List<String> getValue()
         {
             List<String> value = new ArrayList<>();
+
             Enumeration<String> elements = myListModel.elements();
             while (elements.hasMoreElements())
             {
                 value.add(elements.nextElement());
             }
+
             return value;
+        }
+
+        public void setValue(List<String> value)
+        {
+            myListModel.removeAllElements();
+
+            for (String element : value)
+            {
+                myListModel.addElement(element);
+            }
         }
     }
 }

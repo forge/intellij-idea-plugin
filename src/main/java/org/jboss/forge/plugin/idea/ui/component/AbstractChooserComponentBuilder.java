@@ -19,6 +19,7 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * @author Adam Wyłuda
@@ -32,18 +33,14 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
         {
             private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
             private TextFieldWithAutoCompletion inputField;
+            private Converter<Object, String> converter = converterFactory.getConverter(
+                    input.getValueType(), String.class);
 
             @Override
             public void buildUI(Container container)
             {
                 component = createTextField(input);
                 inputField = component.getChildComponent();
-
-                // Set Default Value
-                Converter<Object, String> converter = converterFactory.getConverter(
-                        input.getValueType(), String.class);
-                String value = converter.convert(InputComponents.getValueFor(input));
-                inputField.setText(value == null ? "" : value);
 
                 inputField.getDocument().addDocumentListener(new DocumentListener()
                 {
@@ -70,13 +67,29 @@ public abstract class AbstractChooserComponentBuilder extends ComponentBuilder
             {
                 component.setEnabled(input.isEnabled());
 
+                if (!inputField.getText().equals(getInputValue()))
+                {
+                    reloadValue();
+                }
+
                 if (CompletionUtil.hasCompletions(input))
                 {
                     inputField.setVariants(getCompletions());
                 }
             }
 
-            private java.util.List<String> getCompletions()
+            private void reloadValue()
+            {
+                String value = getInputValue();
+                inputField.setText(value == null ? "" : value);
+            }
+
+            private String getInputValue()
+            {
+                return converter.convert(InputComponents.getValueFor(input));
+            }
+
+            private List<String> getCompletions()
             {
                 return CompletionUtil.getCompletions(converterFactory, context, input,
                         component != null ? inputField.getText() : null);

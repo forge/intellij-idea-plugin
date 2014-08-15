@@ -66,8 +66,6 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(panel, "span 2,growx");
-
-                reloadValues();
             }
 
             @Override
@@ -114,7 +112,8 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
 
                 for (Object item : inputMany.getValueChoices())
                 {
-                    list.add(converter.convert(item));
+                    String value = converter.convert(item);
+                    list.add(value != null ? value : "");
                 }
 
                 return list;

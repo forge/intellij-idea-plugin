@@ -33,6 +33,8 @@ public class CheckboxComponentBuilder extends ComponentBuilder
         return new ForgeComponent()
         {
             private JCheckBox checkbox;
+            private Converter<Object, Boolean> converter = converterFactory
+                    .getConverter(input.getValueType(), Boolean.class);
 
             @Override
             public void buildUI(Container container)
@@ -42,14 +44,6 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                         .getLabel());
                 checkbox = new JCheckBox(text);
 
-                if (converterFactory != null)
-                {
-                    Converter<Object, Boolean> converter = converterFactory
-                            .getConverter(input.getValueType(), Boolean.class);
-                    Boolean value = converter.convert(InputComponents
-                            .getValueFor(input));
-                    checkbox.setSelected(value == null ? false : value);
-                }
                 checkbox.addActionListener(new ActionListener()
                 {
                     @Override
@@ -60,6 +54,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                                         checkbox.isSelected(), valueChangeListener));
                     }
                 });
+
                 container.add(checkbox, "skip");
             }
 
@@ -67,6 +62,22 @@ public class CheckboxComponentBuilder extends ComponentBuilder
             public void updateState()
             {
                 checkbox.setEnabled(input.isEnabled());
+
+                if (checkbox.isSelected() != getInputValue())
+                {
+                    reloadValue();
+                }
+            }
+
+            private void reloadValue()
+            {
+                Boolean value = getInputValue();
+                checkbox.setSelected(value == null ? false : value);
+            }
+
+            private boolean getInputValue()
+            {
+                return converter.convert(InputComponents.getValueFor(input));
             }
         };
     }
