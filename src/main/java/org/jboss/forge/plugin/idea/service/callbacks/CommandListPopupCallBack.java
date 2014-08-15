@@ -9,16 +9,13 @@ package org.jboss.forge.plugin.idea.service.callbacks;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.util.Commands;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
-import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
+import org.jboss.forge.plugin.idea.util.CommandUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +37,7 @@ public class CommandListPopupCallBack implements Runnable
     {
         UIContext uiContext = UIContextFactory.create(project, selectedFiles);
 
-        List<UICommand> candidates = getAllCandidates(uiContext);
+        List<UICommand> candidates = CommandUtil.getAllCandidates(uiContext);
 
         new CommandListPopupBuilder()
                 .setUIContext(uiContext)
@@ -50,19 +47,4 @@ public class CommandListPopupCallBack implements Runnable
                 .showInFocusCenter();
     }
 
-    private List<UICommand> getAllCandidates(UIContext uiContext)
-    {
-        List<UICommand> commands = new ArrayList<UICommand>();
-        CommandFactory commandFactory = ForgeService.getInstance().getCommandFactory();
-
-        for (UICommand command : commandFactory.getCommands())
-        {
-            if (Commands.isEnabled(command, uiContext))
-            {
-                commands.add(command);
-            }
-        }
-
-        return commands;
-    }
 }
