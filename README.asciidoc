@@ -1,0 +1,29 @@
+== JBoss Forge IntelliJ IDEA Plugin
+
+Provides support for http://forge.jboss.org/[JBoss Forge] commands and wizards in IntelliJ IDEA.
+
+=== Installation and usage
+
+Plugin is available in IntelliJ IDEA repository under the name "JBoss Forge IDEA Plugin"
+(go to `Settings > Plugins > Browse repositories...` to install).
+
+To show a list of commands press `Ctrl+Alt+4`.
+
+=== Build and debug
+
+To build the plugin, you need to have IntelliJ libraries installed in your Maven repository.
+If you're Linux/Mac user, you can use `install-intellij-libs.sh` script, if that doesn't work, you can
+install those JARs manually (only dependencies from POM are required).
+
+After that, you can build the plugin with `mvn package` command (add `-DskipTests` if you don't have
+Forge addons installed in your repository). The resulting ZIP file in `target/` directory can
+be installed by going to `Settings > Plugins > Install plugin from disk...`.
+
+To debug the plugin in IntelliJ IDEA, you need to install `Intellij plugin development with Maven` plugin first.
+That will allow you to run a second instance of the IDE, in which you can test and debug the plugin.
+
+After installing this plugin, you can add a plugin run/debug configuration.
+To do that, go to `Run -> Edit Configurations...` and add _Plugin_ configuration.
+
+This configuration should start a new IntelliJ window. In case the plugin is not installed, you will need
+to install it manually in IDE settings and run it again.
