@@ -14,7 +14,6 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
-import org.jboss.forge.plugin.idea.util.CommandUtil;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class CommandListPopupCallBack implements Runnable
     {
         UIContext uiContext = UIContextFactory.create(project, selectedFiles);
 
-        List<UICommand> candidates = CommandUtil.getAllCandidates(uiContext);
+        List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
 
         new CommandListPopupBuilder()
                 .setUIContext(uiContext)

@@ -175,6 +175,7 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
     public static class State
     {
         private String addonDir = new File(OperatingSystemUtils.getUserForgeDir(), "addons").getAbsolutePath();
+        private boolean cacheCommands = true;
 
         public String getAddonDir()
         {
@@ -184,6 +185,16 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
         public void setAddonDir(String addonDir)
         {
             this.addonDir = addonDir;
+        }
+
+        public boolean isCacheCommands()
+        {
+            return cacheCommands;
+        }
+
+        public void setCacheCommands(boolean cacheCommands)
+        {
+            this.cacheCommands = cacheCommands;
         }
     }
 }

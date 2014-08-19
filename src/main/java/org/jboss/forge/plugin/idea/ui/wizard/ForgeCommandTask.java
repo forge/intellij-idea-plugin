@@ -14,6 +14,7 @@ import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.plugin.idea.runtime.UIProgressMonitorImpl;
+import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 import org.jetbrains.annotations.NotNull;
@@ -45,9 +46,10 @@ public class ForgeCommandTask extends Task.Backgroundable
         ((UIProgressMonitorImpl) this.monitor).setIndicator(indicator);
         indicator.setFraction(0.0);
 
+        final UIContext context = controller.getContext();
+
         try
         {
-            final UIContext context = controller.getContext();
 
             Result result = controller.execute();
             ForgeNotifications.showExecutionResult(result);
@@ -78,6 +80,8 @@ public class ForgeCommandTask extends Task.Backgroundable
                 ForgeNotifications.showErrorMessage(e);
                 e.printStackTrace();
             }
+
+            PluginService.getInstance().invalidateAndReloadCommands(context);
         }
 
         monitor.done();

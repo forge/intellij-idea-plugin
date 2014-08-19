@@ -10,6 +10,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.furnace.util.Strings;
 import org.jboss.forge.plugin.idea.service.ForgeService;
@@ -28,6 +29,7 @@ import java.awt.*;
 public class ForgePreferencePage implements Configurable
 {
     private TextFieldWithBrowseButton addonsDirField;
+    private JBCheckBox cacheCommandCheckBox;
 
     @Override
     @Nullable
@@ -39,12 +41,16 @@ public class ForgePreferencePage implements Configurable
                 "Specifies the directory that addons will be deployed", null,
                 FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
+        cacheCommandCheckBox = new JBCheckBox("Cache command list (sometimes new commands might not show up)");
+
         JPanel panel = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]"));
         panel.setOpaque(false);
 
         panel.add(new JLabel("Addons Installation Location:"));
         panel.add(addonsDirField);
+
+        panel.add(cacheCommandCheckBox, "span 2");
 
         JPanel result = new JPanel(new BorderLayout());
         result.add(panel, BorderLayout.NORTH);
@@ -57,7 +63,8 @@ public class ForgePreferencePage implements Configurable
     @Override
     public boolean isModified()
     {
-        return !addonsDirField.getText().equals(getForgeState().getAddonDir());
+        return !addonsDirField.getText().equals(getForgeState().getAddonDir()) ||
+                !(cacheCommandCheckBox.isSelected() == getForgeState().isCacheCommands());
     }
 
     @Override
@@ -69,12 +76,15 @@ public class ForgePreferencePage implements Configurable
         {
             getForgeState().setAddonDir(addonDir);
         }
+
+        getForgeState().setCacheCommands(cacheCommandCheckBox.isSelected());
     }
 
     @Override
     public void reset()
     {
         addonsDirField.setText(getForgeState().getAddonDir());
+        cacheCommandCheckBox.setSelected(getForgeState().isCacheCommands());
     }
 
     @Override

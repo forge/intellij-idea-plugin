@@ -12,12 +12,15 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Commands;
+import org.jboss.forge.furnace.util.Lists;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
+import org.jboss.forge.plugin.idea.util.CommandUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -31,6 +34,7 @@ public class PluginService implements ApplicationComponent
 
     private List<String> recentCommands = new ArrayList<>();
     private ValidationThread validationThread = new ValidationThread();
+    private CommandLoadingThread commandLoadingThread = new CommandLoadingThread();
 
     PluginService()
     {
@@ -45,6 +49,7 @@ public class PluginService implements ApplicationComponent
     public void initComponent()
     {
         validationThread.start();
+        commandLoadingThread.start();
     }
 
     @Override
@@ -96,6 +101,38 @@ public class PluginService implements ApplicationComponent
         validationThread.setNextCallback(callback);
     }
 
+    public synchronized List<UICommand> getEnabledCommands(UIContext uiContext)
+    {
+        List<UICommand> result;
+
+        if (ForgeService.getInstance().getState().isCacheCommands())
+        {
+            result = commandLoadingThread.getCommands(uiContext);
+            commandLoadingThread.reload(uiContext);
+        }
+        else
+        {
+            result = loadCommands(uiContext);
+        }
+
+        return result;
+    }
+
+    /**
+     * Makes sure that next call to {@link #getEnabledCommands(org.jboss.forge.addon.ui.context.UIContext)}
+     * will return fresh instances of UICommand.
+     */
+    public synchronized void invalidateAndReloadCommands(UIContext uiContext)
+    {
+        commandLoadingThread.invalidate();
+        commandLoadingThread.reload(uiContext);
+    }
+
+    private static List<UICommand> loadCommands(UIContext uiContext)
+    {
+        return Lists.toList(Commands.getEnabledCommands(CommandUtil.getAllCommands(), uiContext));
+    }
+
     private static class ValidationThread extends Thread
     {
         private BlockingQueue<FormUpdateCallback> queue = new LinkedBlockingQueue<>();
@@ -135,5 +172,57 @@ public class PluginService implements ApplicationComponent
                 }
             }
         }
+    }
+
+    private static class CommandLoadingThread extends Thread
+    {
+        private CountDownLatch latch = new CountDownLatch(1);
+        private volatile List<UICommand> commands;
+        private volatile UIContext uiContext;
+
+        public CommandLoadingThread()
+        {
+            super("ForgeCommandLoadingThread");
+        }
+
+        public void invalidate()
+        {
+            commands = null;
+        }
+
+        public void reload(UIContext uiContext)
+        {
+            this.uiContext = uiContext;
+            latch.countDown();
+        }
+
+        // TODO It could return a Future
+        public List<UICommand> getCommands(UIContext uiContext)
+        {
+            if (commands == null)
+            {
+                commands = loadCommands(uiContext);
+            }
+
+            return commands;
+        }
+
+        @Override
+        public void run()
+        {
+            while (true)
+            {
+                try
+                {
+                    latch.await();
+                    commands = loadCommands(uiContext);
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
     }
 }

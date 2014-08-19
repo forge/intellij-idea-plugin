@@ -1,3 +1,9 @@
+/*
+ * Copyright 2014 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.jboss.forge.plugin.idea.util;
 
 import org.jboss.forge.addon.ui.command.CommandFactory;
@@ -6,7 +12,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Categories;
-import org.jboss.forge.addon.ui.util.Commands;
+import org.jboss.forge.furnace.util.Lists;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import java.util.*;
@@ -20,20 +26,10 @@ public class CommandUtil
 {
     private static final String RECENT_COMMANDS = "Recent Commands";
 
-    public static List<UICommand> getAllCandidates(UIContext uiContext)
+    public static List<UICommand> getAllCommands()
     {
-        List<UICommand> commands = new ArrayList<>();
         CommandFactory commandFactory = ForgeService.getInstance().getCommandFactory();
-
-        for (UICommand command : commandFactory.getCommands())
-        {
-            if (Commands.isEnabled(command, uiContext))
-            {
-                commands.add(command);
-            }
-        }
-
-        return commands;
+        return Lists.toList(commandFactory.getCommands());
     }
 
     public static Map<UICommand, UICommandMetadata> indexMetadata(List<UICommand> commands, UIContext context)

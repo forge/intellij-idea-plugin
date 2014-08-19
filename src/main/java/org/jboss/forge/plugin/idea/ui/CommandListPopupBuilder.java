@@ -151,7 +151,12 @@ public class CommandListPopupBuilder
                 if (selectedObject instanceof UICommand)
                 {
                     UICommand selectedCommand = (UICommand) selectedObject;
-                    openWizard(selectedCommand);
+
+                    // Make sure that this cached command is still enabled
+                    if (selectedCommand.isEnabled(uiContext))
+                    {
+                        openWizard(selectedCommand);
+                    }
                 }
             }
         });
