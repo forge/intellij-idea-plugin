@@ -105,7 +105,7 @@ public class PluginService implements ApplicationComponent
     {
         List<UICommand> result;
 
-        if (ForgeService.getInstance().getState().isCacheCommands())
+        if (isCacheCommands())
         {
             result = commandLoadingThread.getCommands(uiContext);
             commandLoadingThread.reload(uiContext);
@@ -119,13 +119,32 @@ public class PluginService implements ApplicationComponent
     }
 
     /**
+     * Makes request to reload command cache.
+     */
+    public synchronized void reloadCommands(UIContext uiContext)
+    {
+        if (isCacheCommands())
+        {
+            commandLoadingThread.reload(uiContext);
+        }
+    }
+
+    /**
      * Makes sure that next call to {@link #getEnabledCommands(org.jboss.forge.addon.ui.context.UIContext)}
      * will return fresh instances of UICommand.
      */
     public synchronized void invalidateAndReloadCommands(UIContext uiContext)
     {
-        commandLoadingThread.invalidate();
-        commandLoadingThread.reload(uiContext);
+        if (isCacheCommands())
+        {
+            commandLoadingThread.invalidate();
+            commandLoadingThread.reload(uiContext);
+        }
+    }
+
+    private boolean isCacheCommands()
+    {
+        return ForgeService.getInstance().getState().isCacheCommands();
     }
 
     private static List<UICommand> loadCommands(UIContext uiContext)

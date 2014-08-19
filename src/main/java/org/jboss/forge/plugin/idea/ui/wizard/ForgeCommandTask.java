@@ -81,7 +81,8 @@ public class ForgeCommandTask extends Task.Backgroundable
                 e.printStackTrace();
             }
 
-            PluginService.getInstance().invalidateAndReloadCommands(context);
+            // This command could enable/disable some commands, so the list should be reloaded
+            PluginService.getInstance().reloadCommands(context);
         }
 
         monitor.done();

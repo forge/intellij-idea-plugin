@@ -174,6 +174,9 @@ public class CommandListPopupBuilder
 
     private void openWizard(UICommand command)
     {
+        // Since wizard will be able to modify Command state, the cache should be invalidated
+        PluginService.getInstance().invalidateAndReloadCommands(uiContext);
+
         PluginService.getInstance().addRecentCommand(command, uiContext);
 
         UIProgressMonitor monitor = new UIProgressMonitorImpl();

@@ -12,7 +12,6 @@ import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilderRegistry;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
@@ -128,14 +127,6 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         new ForgeCommandTask(navigationState.getController()).queue();
 
         return true;
-    }
-
-    @Override
-    public boolean onCancel()
-    {
-        PluginService.getInstance().invalidateAndReloadCommands(navigationState.getController().getContext());
-
-        return super.onCancel();
     }
 
     @Override
