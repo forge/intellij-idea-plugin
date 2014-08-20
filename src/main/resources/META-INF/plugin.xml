@@ -11,18 +11,10 @@
       </p>
       <p>
           Press Ctrl+Alt+4 to show Forge commands.<br/>
-          Requires JDK1.7+ to run.
+          Requires JDK1.7+ to run.<br/>
+          Bundled with Forge ${forge.version}.
       </p>
       ]]></description>
-
-    <change-notes>   <![CDATA[
-          <small>
-            <ul>
-              <li>Alpha Distribution.</li>
-            </ul>
-          </small>
-          ]]>
-    </change-notes>
 
     <idea-version since-build="135.281"/>
 
@@ -44,6 +36,6 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-      	<applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
+        <applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
     </extensions>
 </idea-plugin>
