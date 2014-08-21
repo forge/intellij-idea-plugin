@@ -12,16 +12,14 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Commands;
-import org.jboss.forge.furnace.util.Lists;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
+import org.jboss.forge.plugin.idea.service.threads.CommandLoadingThread;
+import org.jboss.forge.plugin.idea.service.threads.ValidationThread;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Maintains plugin state.
@@ -112,7 +110,7 @@ public class PluginService implements ApplicationComponent
         }
         else
         {
-            result = loadCommands(uiContext);
+            result = CommandUtil.getEnabledCommands(uiContext);
         }
 
         return result;
@@ -145,103 +143,5 @@ public class PluginService implements ApplicationComponent
     private boolean isCacheCommands()
     {
         return ForgeService.getInstance().getState().isCacheCommands();
-    }
-
-    private static List<UICommand> loadCommands(UIContext uiContext)
-    {
-        return Lists.toList(Commands.getEnabledCommands(CommandUtil.getAllCommands(), uiContext));
-    }
-
-    private static class ValidationThread extends Thread
-    {
-        private BlockingQueue<FormUpdateCallback> queue = new LinkedBlockingQueue<>();
-
-        public ValidationThread()
-        {
-            super("ForgeValidationThread");
-        }
-
-        public void setNextCallback(FormUpdateCallback nextCallback)
-        {
-            // Discard previous request for this component
-            for (FormUpdateCallback callback : queue)
-            {
-                if (callback.getInput() == nextCallback.getInput())
-                {
-                    queue.remove(callback);
-                    break;
-                }
-            }
-
-            queue.add(nextCallback);
-        }
-
-        @Override
-        public void run()
-        {
-            while (true)
-            {
-                try
-                {
-                    queue.take().run();
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
-            }
-        }
-    }
-
-    private static class CommandLoadingThread extends Thread
-    {
-        private CountDownLatch latch = new CountDownLatch(1);
-        private volatile List<UICommand> commands;
-        private volatile UIContext uiContext;
-
-        public CommandLoadingThread()
-        {
-            super("ForgeCommandLoadingThread");
-        }
-
-        public void invalidate()
-        {
-            commands = null;
-        }
-
-        public void reload(UIContext uiContext)
-        {
-            this.uiContext = uiContext;
-            latch.countDown();
-        }
-
-        // TODO It could return a Future
-        public List<UICommand> getCommands(UIContext uiContext)
-        {
-            if (commands == null)
-            {
-                commands = loadCommands(uiContext);
-            }
-
-            return commands;
-        }
-
-        @Override
-        public void run()
-        {
-            while (true)
-            {
-                try
-                {
-                    latch.await();
-                    commands = loadCommands(uiContext);
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
     }
 }

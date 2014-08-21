@@ -12,6 +12,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.Categories;
+import org.jboss.forge.addon.ui.util.Commands;
 import org.jboss.forge.furnace.util.Lists;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 
@@ -191,5 +192,10 @@ public class CommandUtil
         }
 
         return name.toString();
+    }
+
+    public static List<UICommand> getEnabledCommands(UIContext uiContext)
+    {
+        return Lists.toList(Commands.getEnabledCommands(getAllCommands(), uiContext));
     }
 }
