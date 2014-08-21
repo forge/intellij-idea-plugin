@@ -11,7 +11,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 /**
  * Asynchronously loads command list. <p/>
@@ -22,7 +22,7 @@ import java.util.concurrent.CountDownLatch;
  */
 public class CommandLoadingThread extends Thread
 {
-    private CountDownLatch latch = new CountDownLatch(1);
+    private Semaphore semaphore = new Semaphore(0);
     private volatile List<UICommand> commands;
     private volatile UIContext uiContext;
 
@@ -45,7 +45,7 @@ public class CommandLoadingThread extends Thread
     public void reload(UIContext uiContext)
     {
         this.uiContext = uiContext;
-        latch.countDown();
+        semaphore.release();
     }
 
     /**
@@ -69,7 +69,8 @@ public class CommandLoadingThread extends Thread
             try
             {
                 // Wait for reload() call
-                latch.await();
+                semaphore.acquire();
+                semaphore.drainPermits();
                 commands = CommandUtil.getEnabledCommands(uiContext);
             }
             catch (Exception ex)
