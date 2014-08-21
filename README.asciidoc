@@ -1,6 +1,7 @@
 == JBoss Forge IntelliJ IDEA Plugin
 
 Published in http://plugins.jetbrains.com/plugin/7515
+
 Provides support for http://forge.jboss.org/[JBoss Forge] commands and wizards in IntelliJ IDEA.
 
 === Installation and usage
