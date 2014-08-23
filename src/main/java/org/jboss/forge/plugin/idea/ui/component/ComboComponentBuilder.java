@@ -116,7 +116,8 @@ public class ComboComponentBuilder extends ComponentBuilder
 
             private String getInputValue()
             {
-                return converter.convert(selectOne.getValue());
+                String value = converter.convert(selectOne.getValue());
+                return value != null ? value : "";
             }
 
             private List<String> getChoices()
