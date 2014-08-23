@@ -43,7 +43,7 @@ public class CommandListPopupCallBack implements Runnable
                 .setCommands(candidates)
                 .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
                 .build()
-                .showInFocusCenter();
+                .showCenteredInCurrentWindow(project);
     }
 
 }
