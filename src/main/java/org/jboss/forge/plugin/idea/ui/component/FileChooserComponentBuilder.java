@@ -39,10 +39,24 @@ public class FileChooserComponentBuilder extends ComponentBuilder
                                 initialValue);
                         if (value != null)
                         {
-                            textField.setText(value);
+                            textField.setText(new File(value).toString());
                         }
                     }
                 };
+            }
+
+            @Override
+            protected String getValue()
+            {
+                String value = super.getValue();
+                return (value != null && !value.isEmpty()) ? new File(value).toString() : "";
+            }
+
+            @Override
+            protected String getInputValue()
+            {
+                String inputValue = super.getInputValue();
+                return (inputValue != null && !inputValue.isEmpty()) ? new File(inputValue).toString() : "";
             }
         });
     }
