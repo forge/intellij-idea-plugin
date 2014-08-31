@@ -49,6 +49,11 @@ public class CompletionUtil
         return result;
     }
 
+    public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, InputComponent input)
+    {
+        return createTextFieldWithAutoCompletion(context, hasCompletions(input));
+    }
+
     public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, boolean hasCompletions)
     {
         return TextFieldWithAutoCompletion.create(

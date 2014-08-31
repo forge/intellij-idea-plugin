@@ -7,46 +7,44 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.plugin.idea.util.CompletionUtil;
+import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class FileChooserComponentBuilder extends AbstractChooserComponentBuilder
+public class FileChooserComponentBuilder extends ComponentBuilder
 {
     @Override
-    @SuppressWarnings("unchecked")
-    protected ComponentWithBrowseButton<TextFieldWithAutoCompletion> createTextField(InputComponent<?, Object> input)
+    public ForgeComponent build(InputComponent<?, Object> input)
     {
-        boolean hasCompletions = CompletionUtil.hasCompletions(input);
-
-        final TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
-        ComponentWithBrowseButton<TextFieldWithAutoCompletion> component =
-                new ComponentWithBrowseButton<>(textField, null);
-
-        component.addActionListener(new ActionListener()
+        return new LabeledComponent(input, new ChooserComponent(context, input)
         {
             @Override
-            public void actionPerformed(ActionEvent e)
+            public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion textField)
             {
-                String initialValue = textField.getText();
-                String value = IDEUtil.chooseFile(
-                        context,
-                        FileChooserDescriptorFactory.createSingleLocalFileDescriptor(),
-                        initialValue);
-                if (value != null)
+                return new ActionListener()
                 {
-                    textField.setText(value);
-                }
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        String initialValue = textField.getText();
+                        String value = IDEUtil.chooseFile(
+                                context,
+                                FileChooserDescriptorFactory.createSingleLocalFileDescriptor(),
+                                initialValue);
+                        if (value != null)
+                        {
+                            textField.setText(value);
+                        }
+                    }
+                };
             }
         });
-        return component;
     }
 
     @Override
@@ -59,5 +57,11 @@ public class FileChooserComponentBuilder extends AbstractChooserComponentBuilder
     protected String getSupportedInputType()
     {
         return InputType.FILE_PICKER;
+    }
+
+    @Override
+    protected Class<?>[] getSupportedInputComponentTypes()
+    {
+        return new Class<?>[]{UIInput.class};
     }
 }
