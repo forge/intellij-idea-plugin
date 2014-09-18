@@ -28,4 +28,28 @@ public class UIOutputImpl implements UIOutput
     {
         return System.err;
     }
+
+    @Override
+    public void success(PrintStream printStream, String s)
+    {
+        // TODO Implement new UIOutputImpl methods
+    }
+
+    @Override
+    public void error(PrintStream printStream, String s)
+    {
+        // TODO Implement new UIOutputImpl methods
+    }
+
+    @Override
+    public void info(PrintStream printStream, String s)
+    {
+        // TODO Implement new UIOutputImpl methods
+    }
+
+    @Override
+    public void warn(PrintStream printStream, String s)
+    {
+        // TODO Implement new UIOutputImpl methods
+    }
 }
