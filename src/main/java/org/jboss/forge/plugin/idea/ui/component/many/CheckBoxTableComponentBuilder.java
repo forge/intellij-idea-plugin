@@ -9,6 +9,7 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 import com.intellij.ui.CheckBoxList;
 import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.Function;
 import net.miginfocom.swing.MigLayout;
 import org.jboss.forge.addon.convert.Converter;
@@ -51,7 +52,9 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
 
                 checkBoxList = new CheckBoxList<>();
                 checkBoxList.setBorder(IdeBorderFactory.createBorder());
-                panel.add(checkBoxList, "grow,height :150:200");
+
+                JBScrollPane scrollPane = new JBScrollPane(checkBoxList);
+                panel.add(scrollPane, "grow,height :150:200");
 
                 checkBoxList.setCheckBoxListListener(new CheckBoxListListener()
                 {
