@@ -64,11 +64,12 @@ public class CommandUtil
             else if (object instanceof String)
             {
                 StringBuilder categoryStringBuilder = new StringBuilder();
-                categoryStringBuilder.append(object + " ");
 
                 for (UICommand command : categories.get(object))
                 {
-                    categoryStringBuilder.append(metadataIndex.get(command).getName() + " ");
+                    UICommandMetadata metadata = metadataIndex.get(command);
+
+                    categoryStringBuilder.append(categoryName(metadata.getCategory()) + " " + metadata.getName() + " ");
                 }
 
                 result.put(object, categoryStringBuilder.toString());
