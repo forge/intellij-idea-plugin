@@ -44,7 +44,7 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
 
     public void refreshTitle()
     {
-        Object selection = context.getSelection();
+        Object selection = context.getSelection().get();
 
         setTitle(name + (selection != null ? " [" + selection + "]" : ""));
     }

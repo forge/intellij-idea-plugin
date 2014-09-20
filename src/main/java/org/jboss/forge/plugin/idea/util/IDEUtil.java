@@ -52,18 +52,9 @@ public class IDEUtil
     {
         Project project = projectFromContext(context);
 
-        if (context.getSelection() instanceof Iterable)
+        for (Object selection : context.getSelection())
         {
-            Iterable iterable = context.getSelection();
-
-            for (Object selection : iterable)
-            {
-                openSingleSelection(project, selection);
-            }
-        }
-        else
-        {
-            openSingleSelection(project, context.getSelection());
+            openSingleSelection(project, selection);
         }
     }
 
