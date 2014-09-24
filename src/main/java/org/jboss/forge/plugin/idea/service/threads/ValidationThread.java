@@ -19,7 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ValidationThread extends Thread
 {
-    private BlockingQueue<FormUpdateCallback> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<FormUpdateCallback> queue = new LinkedBlockingQueue<>();
 
     public ValidationThread()
     {

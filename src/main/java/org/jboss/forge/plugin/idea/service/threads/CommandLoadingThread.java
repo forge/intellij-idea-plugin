@@ -22,7 +22,7 @@ import java.util.concurrent.Semaphore;
  */
 public class CommandLoadingThread extends Thread
 {
-    private Semaphore semaphore = new Semaphore(0);
+    private final Semaphore semaphore = new Semaphore(0);
     private volatile List<UICommand> commands;
     private volatile UIContext uiContext;
 
