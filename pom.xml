@@ -12,14 +12,14 @@
    <version>1.0.2-SNAPSHOT</version>
    <name>Forge IDEA Plugin</name>
 
-   <description>Integration of the UI API in Intellij IDEA</description>
+   <description>Integration of the UI API in IntelliJ IDEA.</description>
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
       <idea.version>13.1.4</idea.version>
-      <forge.version>2.10.1.Final</forge.version>
-      <angularjs.version>2.1.1.Final</angularjs.version>
+      <forge.version>2.11.0.Final</forge.version>
+      <angularjs.version>2.1.3.Final</angularjs.version>
 
       <ij.plugin>true</ij.plugin>
    </properties>
