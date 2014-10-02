@@ -9,7 +9,7 @@
 
    <groupId>org.jboss.forge</groupId>
    <artifactId>forge-idea-plugin</artifactId>
-   <version>1.0.2.Final</version>
+   <version>1.0.3-SNAPSHOT</version>
    <name>Forge IDEA Plugin</name>
 
    <description>Integration of the UI API in IntelliJ IDEA.</description>
