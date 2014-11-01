@@ -174,6 +174,11 @@ public class CommandListPopupBuilder
 
     private void openWizard(UICommand command)
     {
+        String name = command.getMetadata(uiContext).getName();
+        command = ForgeService.getInstance()
+                .getCommandFactory()
+                .getNewCommandByName(uiContext, name);
+
         // Since wizard will be able to modify Command state, the cache should be invalidated
         PluginService.getInstance().invalidateAndReloadCommands(uiContext);
 
