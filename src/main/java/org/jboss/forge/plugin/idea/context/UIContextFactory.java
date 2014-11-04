@@ -15,7 +15,6 @@ import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.util.Selections;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 
@@ -48,17 +47,16 @@ public class UIContextFactory
         }
         else
         {
-            List<Object> resources = filesToResources(files);
+            List<Resource> resources = filesToResources(files);
             selection = Selections.from(resources.toArray());
         }
 
         return selection;
     }
 
-    @SuppressWarnings("rawtypes")
-    private static List<Object> filesToResources(VirtualFile[] files)
+    private static List<Resource> filesToResources(VirtualFile[] files)
     {
-        List<Object> result = new LinkedList<Object>();
+        List<Resource> result = new LinkedList<>();
 
         Converter<File, Resource> converter = getResourceConverter();
 
@@ -77,15 +75,15 @@ public class UIContextFactory
         return converterFactory.getConverter(File.class, nativeResourceClass);
     }
 
-    private static Object fileToResource(VirtualFile file)
+    private static Resource fileToResource(VirtualFile file)
     {
         return fileToResource(file, getResourceConverter());
     }
 
-    private static Object fileToResource(VirtualFile file, Converter<File, Resource> converter)
+    private static Resource fileToResource(VirtualFile file, Converter<File, Resource> converter)
     {
         File javaFile = new File(file.getPath());
-        Object resource = Proxies.unwrap(converter.convert(javaFile));
+        Resource resource = converter.convert(javaFile);
         return resource;
     }
 }
