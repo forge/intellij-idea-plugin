@@ -17,8 +17,8 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-      <idea.version>13.1.5</idea.version>
-      <forge.version>2.12.1.Final</forge.version>
+      <idea.version>13.1.6</idea.version>
+      <forge.version>2.12.2.Final</forge.version>
       <angularjs.version>2.1.3.Final</angularjs.version>
 
       <ij.plugin>true</ij.plugin>
