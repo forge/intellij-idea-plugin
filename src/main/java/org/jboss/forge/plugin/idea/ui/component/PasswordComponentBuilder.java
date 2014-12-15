@@ -48,7 +48,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                         {
                             PluginService.getInstance().submitFormUpdate(
                                     new FormUpdateCallback(converterFactory, input,
-                                            component.getText(), valueChangeListener));
+                                            new String(component.getPassword()), valueChangeListener));
                         }
                     }
 
@@ -59,7 +59,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                         {
                             PluginService.getInstance().submitFormUpdate(
                                     new FormUpdateCallback(converterFactory, input,
-                                            component.getText(), valueChangeListener));
+                                             new String(component.getPassword()), valueChangeListener));
                         }
                     }
 
@@ -68,7 +68,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                     {
                         PluginService.getInstance().submitFormUpdate(
                                 new FormUpdateCallback(converterFactory, input,
-                                        component.getText(), valueChangeListener));
+                                         new String(component.getPassword()), valueChangeListener));
                     }
                 });
 
@@ -80,7 +80,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
             {
                 component.setEnabled(input.isEnabled());
 
-                if (!component.getText().equals(getInputValue()))
+                if (!new String(component.getPassword()).equals(getInputValue()))
                 {
                     reloadValue();
                 }
