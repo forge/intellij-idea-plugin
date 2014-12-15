@@ -6,6 +6,8 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
+import org.jboss.forge.addon.ui.DefaultUIDesktop;
+import org.jboss.forge.addon.ui.UIDesktop;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.output.UIOutput;
 
@@ -32,4 +34,10 @@ public class UIProviderImpl implements UIProvider
     {
         return output;
     }
+    
+   @Override
+   public UIDesktop getDesktop()
+   {
+      return new DefaultUIDesktop();
+   }
 }
