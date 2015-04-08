@@ -45,8 +45,9 @@ public class RadioComponentBuilder extends ComponentBuilder
             @Override
             public void updateState()
             {
-                radioContainer.setEnabled(input.isEnabled());
-
+                for (JRadioButton button: getRadioButtons()) {
+                    button.setEnabled(input.isEnabled());
+                }
                 if (!getChoices().equals(getInputValueChoices()))
                 {
                     reloadChoices();
