@@ -8,7 +8,6 @@ package org.jboss.forge.plugin.idea.service;
 
 import java.io.File;
 import java.util.concurrent.Future;
-import java.util.regex.Pattern;
 
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;

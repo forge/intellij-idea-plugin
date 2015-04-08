@@ -6,11 +6,12 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
-import com.intellij.notification.NotificationGroup;
-import com.intellij.openapi.ui.MessageType;
 import org.jboss.forge.addon.ui.result.CompositeResult;
 import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
+
+import com.intellij.notification.NotificationGroup;
+import com.intellij.openapi.ui.MessageType;
 
 /**
  * Forge notification

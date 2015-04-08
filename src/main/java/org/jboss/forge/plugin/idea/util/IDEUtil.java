@@ -6,6 +6,15 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import java.io.File;
+
+import org.jboss.forge.addon.resource.FileResource;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.furnace.util.Assert;
+import org.jboss.forge.plugin.idea.context.UIContextImpl;
+
 import com.intellij.ide.impl.ProjectUtil;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.ide.util.TreeClassChooser;
@@ -21,14 +30,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
-import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
-import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.furnace.util.Assert;
-import org.jboss.forge.plugin.idea.context.UIContextImpl;
-
-import java.io.File;
 
 /**
  * @author Adam Wyłuda

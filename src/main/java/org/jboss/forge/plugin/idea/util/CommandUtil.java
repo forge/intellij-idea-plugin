@@ -6,6 +6,13 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -15,8 +22,6 @@ import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.forge.addon.ui.util.Commands;
 import org.jboss.forge.furnace.util.Lists;
 import org.jboss.forge.plugin.idea.service.ForgeService;
-
-import java.util.*;
 
 /**
  * Forge command utilities.

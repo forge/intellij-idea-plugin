@@ -6,7 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.ui.component.many;
 
-import com.intellij.ui.AddEditDeleteListPanel;
+import java.awt.Container;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -15,12 +22,7 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import com.intellij.ui.AddEditDeleteListPanel;
 
 /**
  * @author Adam Wyłuda

@@ -6,7 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.openapi.ui.ComboBox;
+import java.awt.Container;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -15,12 +22,7 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.openapi.ui.ComboBox;
 
 public class ComboComponentBuilder extends ComponentBuilder
 {

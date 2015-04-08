@@ -6,10 +6,11 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
+import org.jboss.forge.addon.ui.input.UIPrompt;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.ui.Messages;
-import org.jboss.forge.addon.ui.input.UIPrompt;
 
 /**
  * @author Adam Wyłuda

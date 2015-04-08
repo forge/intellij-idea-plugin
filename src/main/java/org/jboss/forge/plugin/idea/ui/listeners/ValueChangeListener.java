@@ -7,18 +7,19 @@
 
 package org.jboss.forge.plugin.idea.ui.listeners;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardModel;
 import org.jboss.forge.plugin.idea.ui.wizard.NavigationState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 
 /**
  * @author <a href="mailto:danielsoro@gmail.com">Daniel Cunha (soro)</a>

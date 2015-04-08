@@ -6,12 +6,12 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import java.awt.Container;
+
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
-
-import java.awt.*;
 
 /**
  * Represents Forge input component.

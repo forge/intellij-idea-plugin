@@ -6,7 +6,10 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
-import com.intellij.ui.TextFieldWithAutoCompletion;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -14,9 +17,7 @@ import org.jboss.forge.addon.ui.input.HasCompleter;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 
 /**
  * @author Adam Wyłuda

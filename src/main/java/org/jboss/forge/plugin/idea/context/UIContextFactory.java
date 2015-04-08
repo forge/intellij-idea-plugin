@@ -6,8 +6,10 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.resource.Resource;
@@ -18,9 +20,8 @@ import org.jboss.forge.addon.ui.util.Selections;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * Provides UIContext instances with UISelection from IDE.

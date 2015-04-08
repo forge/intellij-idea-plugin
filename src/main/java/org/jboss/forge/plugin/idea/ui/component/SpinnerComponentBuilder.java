@@ -6,6 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import java.awt.Container;
+
+import javax.swing.JComponent;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -13,11 +21,6 @@ import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
 
 /**
  * @author Adam Wyłuda

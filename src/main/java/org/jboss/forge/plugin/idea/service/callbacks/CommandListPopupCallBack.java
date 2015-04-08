@@ -7,15 +7,16 @@
 
 package org.jboss.forge.plugin.idea.service.callbacks;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import java.util.List;
+
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
-import java.util.List;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author <a href="mailto:danielsoro@gmail.com">Daniel Cunha (soro)</a>

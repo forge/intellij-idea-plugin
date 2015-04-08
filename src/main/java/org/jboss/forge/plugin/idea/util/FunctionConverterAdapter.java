@@ -6,8 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.util;
 
-import com.intellij.util.Function;
 import org.jboss.forge.addon.convert.Converter;
+
+import com.intellij.util.Function;
 
 /**
  * Forge Converter to IntelliJ Function adapter.

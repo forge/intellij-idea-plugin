@@ -6,18 +6,17 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
+import java.util.concurrent.Future;
+
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
-import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.Furnace;
-import org.jboss.forge.furnace.versions.Versions;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
-import java.util.concurrent.Future;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
 
 /**
  * IntelliJ service utilities.

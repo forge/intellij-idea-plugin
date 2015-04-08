@@ -6,9 +6,6 @@
  */
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
@@ -18,6 +15,10 @@ import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 import org.jetbrains.annotations.NotNull;
+
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
 
 /**
  * @author Adam Wyłuda

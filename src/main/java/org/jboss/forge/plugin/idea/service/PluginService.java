@@ -6,8 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.ServiceManager;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
@@ -18,8 +19,8 @@ import org.jboss.forge.plugin.idea.service.threads.ValidationThread;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.ServiceManager;
 
 /**
  * Maintains plugin state.

@@ -6,12 +6,14 @@
  */
 package org.jboss.forge.plugin.idea.ui.component.many;
 
-import com.intellij.ui.CheckBoxList;
-import com.intellij.ui.CheckBoxListListener;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.util.Function;
+import java.awt.Container;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -22,10 +24,11 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.ui.CheckBoxList;
+import com.intellij.ui.CheckBoxListListener;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.components.JBScrollPane;
+import com.intellij.util.Function;
 
 /**
  * @author Adam Wyłuda

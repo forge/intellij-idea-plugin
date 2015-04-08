@@ -6,14 +6,15 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.ui.TextFieldWithAutoCompletion;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 
 /**
  * @author Adam Wyłuda

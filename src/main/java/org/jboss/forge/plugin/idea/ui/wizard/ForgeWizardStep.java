@@ -6,9 +6,15 @@
  */
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.ui.wizard.WizardNavigationState;
-import com.intellij.ui.wizard.WizardStep;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
+
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -18,9 +24,8 @@ import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 
-import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
+import com.intellij.ui.wizard.WizardNavigationState;
+import com.intellij.ui.wizard.WizardStep;
 
 /**
  * Represents Forge wizard step.

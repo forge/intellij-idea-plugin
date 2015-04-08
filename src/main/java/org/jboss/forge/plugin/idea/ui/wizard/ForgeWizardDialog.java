@@ -6,12 +6,13 @@
  */
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.wizard.WizardDialog;
+import java.awt.Dimension;
+
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 
-import java.awt.*;
+import com.intellij.openapi.project.Project;
+import com.intellij.ui.wizard.WizardDialog;
 
 /**
  * Forge wizard (and single command) dialog.

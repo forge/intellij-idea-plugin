@@ -6,22 +6,25 @@
  */
 package org.jboss.forge.plugin.idea.ui;
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.ui.components.JBCheckBox;
+import java.awt.BorderLayout;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import net.miginfocom.swing.MigLayout;
-import org.jboss.forge.addon.ui.context.UIContext;
+
 import org.jboss.forge.furnace.util.Strings;
-import org.jboss.forge.furnace.versions.Versions;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.components.JBCheckBox;
 
 /**
  * The Forge preferences Page

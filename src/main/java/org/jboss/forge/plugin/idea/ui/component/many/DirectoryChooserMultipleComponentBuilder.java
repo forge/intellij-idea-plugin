@@ -6,7 +6,8 @@
  */
 package org.jboss.forge.plugin.idea.ui.component.many;
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import java.io.File;
+
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInputMany;
@@ -14,7 +15,7 @@ import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
-import java.io.File;
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 
 /**
  * @author Adam Wyłuda

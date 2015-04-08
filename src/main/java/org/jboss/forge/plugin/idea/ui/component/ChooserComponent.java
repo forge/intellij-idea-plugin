@@ -6,10 +6,10 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.ui.TextFieldWithAutoCompletion;
+import java.awt.Container;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -18,9 +18,10 @@ import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.util.List;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 
 /**
  * Component with browse button.

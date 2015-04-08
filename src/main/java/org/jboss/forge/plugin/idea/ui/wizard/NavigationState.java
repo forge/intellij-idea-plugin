@@ -7,9 +7,10 @@
 
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.ui.wizard.WizardNavigationState;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
+
+import com.intellij.ui.wizard.WizardNavigationState;
 
 /**
  * @author <a href="mailto:danielsoro@gmail.com">Daniel Cunha (soro)</a>

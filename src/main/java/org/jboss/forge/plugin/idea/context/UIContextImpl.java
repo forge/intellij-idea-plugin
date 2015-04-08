@@ -6,11 +6,12 @@
  */
 package org.jboss.forge.plugin.idea.context;
 
-import com.intellij.openapi.project.Project;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+
+import com.intellij.openapi.project.Project;
 
 public class UIContextImpl extends AbstractUIContext
 {

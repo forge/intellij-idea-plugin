@@ -6,14 +6,15 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import com.intellij.ui.components.JBLabel;
+import java.awt.Container;
+import java.util.List;
+
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 
-import java.awt.*;
-import java.util.List;
+import com.intellij.ui.components.JBLabel;
 
 /**
  * Component with label.

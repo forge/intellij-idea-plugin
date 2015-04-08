@@ -6,8 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
-import com.intellij.openapi.progress.ProgressIndicator;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+
+import com.intellij.openapi.progress.ProgressIndicator;
 
 /**
  * @author Adam Wyłuda

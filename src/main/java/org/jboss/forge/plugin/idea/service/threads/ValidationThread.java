@@ -6,10 +6,10 @@
  */
 package org.jboss.forge.plugin.idea.service.threads;
 
-import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 /**
  * Updates and validates Forge wizard forms. Ensures that many request are performed serially.

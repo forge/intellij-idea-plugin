@@ -6,12 +6,12 @@
  */
 package org.jboss.forge.plugin.idea.service.threads;
 
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
-
-import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * Asynchronously loads command list. <p/>

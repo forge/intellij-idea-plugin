@@ -6,15 +6,16 @@
  */
 package org.jboss.forge.plugin.idea.action;
 
+import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.plugin.idea.service.ServiceHelper;
+import org.jboss.forge.plugin.idea.service.callbacks.CommandListPopupCallBack;
+import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.plugin.idea.service.ServiceHelper;
-import org.jboss.forge.plugin.idea.service.callbacks.CommandListPopupCallBack;
-import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
 /**
  * Creates a popup list and displays all the currently registered

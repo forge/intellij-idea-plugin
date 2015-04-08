@@ -6,10 +6,21 @@
  */
 package org.jboss.forge.plugin.idea.ui;
 
-import com.intellij.openapi.ui.popup.*;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.Function;
+import static org.jboss.forge.plugin.idea.util.CommandUtil.categoriesToList;
+import static org.jboss.forge.plugin.idea.util.CommandUtil.categorizeCommands;
+import static org.jboss.forge.plugin.idea.util.CommandUtil.indexFilterData;
+import static org.jboss.forge.plugin.idea.util.CommandUtil.indexMetadata;
+import static org.jboss.forge.plugin.idea.util.CommandUtil.sortCategories;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JList;
+
 import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -24,12 +35,14 @@ import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
 
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static org.jboss.forge.plugin.idea.util.CommandUtil.*;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.ui.popup.JBPopupAdapter;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.ui.popup.LightweightWindowEvent;
+import com.intellij.openapi.ui.popup.PopupChooserBuilder;
+import com.intellij.ui.ListCellRendererWrapper;
+import com.intellij.ui.components.JBList;
+import com.intellij.util.Function;
 
 /**
  * Lists enabled UI commands.

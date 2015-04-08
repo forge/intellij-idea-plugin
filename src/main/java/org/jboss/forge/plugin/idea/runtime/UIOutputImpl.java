@@ -6,9 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.runtime;
 
-import org.jboss.forge.addon.ui.output.UIOutput;
-
 import java.io.PrintStream;
+
+import org.jboss.forge.addon.ui.output.UIOutput;
 
 /**
  * @author Adam Wyłuda

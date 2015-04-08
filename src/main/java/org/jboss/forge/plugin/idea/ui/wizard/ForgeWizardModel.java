@@ -6,8 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.ui.wizard;
 
-import com.intellij.ui.wizard.WizardModel;
 import org.jboss.forge.addon.ui.controller.CommandController;
+
+import com.intellij.ui.wizard.WizardModel;
 
 /**
  * Represents the model of a wizard

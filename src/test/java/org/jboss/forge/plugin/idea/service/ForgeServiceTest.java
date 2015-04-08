@@ -6,14 +6,16 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
-import org.jboss.forge.addon.ui.command.CommandFactory;
-import org.jboss.forge.addon.ui.command.UICommand;
-import org.jboss.forge.furnace.util.Lists;
-import org.junit.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.jboss.forge.addon.ui.command.CommandFactory;
+import org.jboss.forge.addon.ui.command.UICommand;
+import org.jboss.forge.furnace.util.Lists;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Adam Wyłuda
