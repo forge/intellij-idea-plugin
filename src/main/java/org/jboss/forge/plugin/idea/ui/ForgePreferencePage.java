@@ -12,7 +12,9 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.components.JBCheckBox;
 import net.miginfocom.swing.MigLayout;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.furnace.util.Strings;
+import org.jboss.forge.furnace.versions.Versions;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -46,6 +48,9 @@ public class ForgePreferencePage implements Configurable
         JPanel panel = new JPanel(new MigLayout("fillx,wrap 2",
                 "[left]rel[grow,fill]"));
         panel.setOpaque(false);
+
+        panel.add(new JLabel("JBoss Forge Runtime Version:"));
+        panel.add(new JLabel(ForgeService.getForgeVersion()));
 
         panel.add(new JLabel("Addons Installation Location:"));
         panel.add(addonsDirField);

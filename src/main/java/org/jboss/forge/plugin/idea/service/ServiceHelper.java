@@ -12,7 +12,9 @@ import com.intellij.openapi.progress.Task;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
+import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.versions.Versions;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 
 import java.util.concurrent.Future;
@@ -53,7 +55,7 @@ public class ServiceHelper
         {
             public void run(ProgressIndicator indicator)
             {
-                indicator.setText("Loading Furnace");
+                indicator.setText("Loading JBoss Forge "+ ForgeService.getForgeVersion());
                 indicator.setFraction(0.0);
                 try
                 {
