@@ -45,11 +45,9 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                 spinner = new JSpinner();
                 container.add(spinner);
 
-                JComponent editor = spinner.getEditor();
-                if (editor instanceof JSpinner.DefaultEditor)
-                {
-                    ((JSpinner.DefaultEditor) editor).getTextField().setHorizontalAlignment(JTextField.LEFT);
-                }
+                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner, "0");
+                editor.getTextField().setHorizontalAlignment(JTextField.LEFT);
+                spinner.setEditor(editor);
 
                 spinner.addChangeListener(new ChangeListener()
                 {
