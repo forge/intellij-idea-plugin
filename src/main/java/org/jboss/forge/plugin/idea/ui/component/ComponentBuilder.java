@@ -11,25 +11,20 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.furnace.util.Strings;
+
+import javax.swing.*;
 
 public abstract class ComponentBuilder
 {
-    protected UIContext context;
-
-    public void setContext(UIContext context)
-    {
-        this.context = context;
-    }
-
     /**
      * Builds a UI Component object based on the input
      * <p/>
-     * TODO Write JavaDoc
-     *
+     * @param context
      * @param input
      * @return
      */
-    public abstract ForgeComponent build(InputComponent<?, Object> input);
+    public abstract ForgeComponent build(UIContext context, InputComponent<?, Object> input);
 
     /**
      * Returns the supported type this control may produce

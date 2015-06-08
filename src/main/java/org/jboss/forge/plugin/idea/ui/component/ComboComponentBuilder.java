@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
@@ -29,7 +30,7 @@ public class ComboComponentBuilder extends ComponentBuilder
 
     @SuppressWarnings("unchecked")
     @Override
-    public ForgeComponent build(final InputComponent<?, Object> input)
+    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
     {
         return new LabeledComponent(input, new ForgeComponent()
         {

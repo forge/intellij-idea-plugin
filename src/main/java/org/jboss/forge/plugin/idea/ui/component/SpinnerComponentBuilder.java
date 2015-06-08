@@ -15,6 +15,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -30,7 +31,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
 
     @SuppressWarnings("unchecked")
     @Override
-    public ForgeComponent build(final InputComponent<?, Object> input)
+    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
     {
         return new LabeledComponent(input, new ForgeComponent()
         {

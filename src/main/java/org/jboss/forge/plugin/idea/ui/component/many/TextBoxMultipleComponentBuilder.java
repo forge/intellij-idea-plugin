@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component.many;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInputMany;
@@ -21,7 +22,7 @@ import com.intellij.openapi.ui.Messages;
 public class TextBoxMultipleComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(final InputComponent<?, Object> input)
+    public ForgeComponent build(final UIContext context, final InputComponent<?, Object> input)
     {
         return new ListComponent((UIInputMany) input)
         {

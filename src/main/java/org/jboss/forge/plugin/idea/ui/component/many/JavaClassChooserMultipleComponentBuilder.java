@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component.many;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInputMany;
@@ -19,7 +20,7 @@ import org.jboss.forge.plugin.idea.util.IDEUtil;
 public class JavaClassChooserMultipleComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(InputComponent<?, Object> input)
+    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
     {
         return new ListComponent((UIInputMany) input)
         {

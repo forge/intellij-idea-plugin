@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -24,7 +25,7 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
 public class DirectoryChooserComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(InputComponent<?, Object> input)
+    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
     {
         return new LabeledComponent(input, new ChooserComponent(context, input)
         {

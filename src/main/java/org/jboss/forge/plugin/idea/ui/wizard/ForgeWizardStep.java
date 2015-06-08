@@ -68,9 +68,7 @@ public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
         for (InputComponent input : navigationState.getController().getInputs().values())
         {
             ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
-            builder.setContext(context);
-
-            ForgeComponent component = builder.build(input);
+            ForgeComponent component = builder.build(context, input);
             component.buildUI(container);
             component.setValueChangeListener(listener);
 

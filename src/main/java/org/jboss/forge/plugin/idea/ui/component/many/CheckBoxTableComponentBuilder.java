@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
@@ -36,7 +37,7 @@ import com.intellij.util.Function;
 public class CheckBoxTableComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(final InputComponent<?, Object> input)
+    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
     {
         return new ForgeComponent()
         {

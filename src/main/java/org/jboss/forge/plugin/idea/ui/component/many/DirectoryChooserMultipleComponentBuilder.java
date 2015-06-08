@@ -8,6 +8,7 @@ package org.jboss.forge.plugin.idea.ui.component.many;
 
 import java.io.File;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInputMany;
@@ -23,7 +24,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 public class DirectoryChooserMultipleComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(InputComponent<?, Object> input)
+    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
     {
         return new ListComponent((UIInputMany) input)
         {

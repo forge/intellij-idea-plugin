@@ -6,6 +6,7 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -13,7 +14,7 @@ import org.jboss.forge.addon.ui.input.UIInput;
 public class TextBoxComponentBuilder extends ComponentBuilder
 {
     @Override
-    public ForgeComponent build(InputComponent<?, Object> input)
+    public ForgeComponent build(UIContext context, InputComponent<?, Object> input)
     {
         return new LabeledComponent(input, new TextComponent(context, input, true));
     }
