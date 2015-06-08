@@ -6,22 +6,19 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import java.awt.Container;
-import java.util.List;
-
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.ui.TextFieldWithAutoCompletion;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.TextFieldWithAutoCompletion;
+import java.awt.*;
+import java.util.List;
 
 /**
  * Represents text components like TextArea or PasswordField.
@@ -53,7 +50,6 @@ public class TextComponent extends ForgeComponent
         boolean hasCompletions = CompletionUtil.hasCompletions(input);
         component = CompletionUtil.createTextFieldWithAutoCompletion(context, hasCompletions);
         component.setOneLineMode(oneLineMode);
-
         component.getDocument().addDocumentListener(new DocumentListener()
         {
             @Override
@@ -68,24 +64,9 @@ public class TextComponent extends ForgeComponent
                         new FormUpdateCallback(converterFactory, input, component.getText(), valueChangeListener));
             }
         });
-
         container.add(component);
+        component.setToolTipText(input.getDescription());
         addNoteLabel(container, component).setText(input.getNote());
-    }
-
-    @Override
-    public void setErrorMessage(UIMessage message)
-    {
-        // TODO Set foreground color for TextFieldWithAutoCompletion
-        component.setForeground(JBColor.RED);
-        component.setToolTipText(message.getDescription());
-    }
-
-    @Override
-    public void clearErrorMessage()
-    {
-        component.setForeground(null);
-        component.setToolTipText("");
     }
 
     @Override
@@ -97,11 +78,11 @@ public class TextComponent extends ForgeComponent
         {
             reloadValue();
         }
-
         if (CompletionUtil.hasCompletions(input))
         {
             component.setVariants(getCompletions());
         }
+        component.setToolTipText(input.getDescription());
         updateNote(component, input.getNote());
     }
 

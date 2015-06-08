@@ -73,6 +73,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(panel, "span 2,growx");
+                checkBoxList.setToolTipText(input.getDescription());
                 addNoteLabel(container, checkBoxList).setText(input.getNote());
             }
 
@@ -86,6 +87,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 {
                     reloadValues();
                 }
+                checkBoxList.setToolTipText(input.getDescription());
                 updateNote(checkBoxList, input.getNote());
             }
 

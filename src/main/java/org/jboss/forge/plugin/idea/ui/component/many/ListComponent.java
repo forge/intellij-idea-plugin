@@ -62,6 +62,7 @@ public abstract class ListComponent extends ForgeComponent
 
         panel = new ListPanel(label, initialValue);
         container.add(panel, "span 2,growx");
+        panel.setToolTipText(input.getDescription());
         addNoteLabel(container, panel).setText(input.getNote());
 
     }
@@ -75,6 +76,7 @@ public abstract class ListComponent extends ForgeComponent
         {
             reloadValues();
         }
+        panel.setToolTipText(input.getDescription());
         updateNote(panel, input.getNote());
     }
 

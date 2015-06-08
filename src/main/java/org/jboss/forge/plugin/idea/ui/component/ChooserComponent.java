@@ -71,6 +71,7 @@ public abstract class ChooserComponent extends ForgeComponent
         });
 
         container.add(component);
+        component.setToolTipText(input.getDescription());
         addNoteLabel(container, component).setText(input.getNote());
     }
 

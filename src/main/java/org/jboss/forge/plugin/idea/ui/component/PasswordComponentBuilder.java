@@ -76,6 +76,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(component);
+                component.setToolTipText(input.getDescription());
                 addNoteLabel(container, component).setText(input.getNote());
             }
 
@@ -88,6 +89,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                component.setToolTipText(input.getDescription());
                 updateNote(component, input.getNote());
             }
 
@@ -108,20 +110,6 @@ public class PasswordComponentBuilder extends ComponentBuilder
             private String getInputValue()
             {
                 return converter.convert(input.getValue());
-            }
-
-            @Override
-            public void setErrorMessage(UIMessage message)
-            {
-                component.setForeground(JBColor.RED);
-                component.setToolTipText(message.getDescription());
-            }
-
-            @Override
-            public void clearErrorMessage()
-            {
-                component.setForeground(null);
-                component.setToolTipText("");
             }
         });
     }

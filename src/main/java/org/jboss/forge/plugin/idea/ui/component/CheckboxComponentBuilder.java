@@ -58,6 +58,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(checkbox, "skip");
+                checkbox.setToolTipText(input.getDescription());
                 addNoteLabel(container, checkbox).setText(input.getNote());
             }
 
@@ -70,6 +71,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                checkbox.setToolTipText(input.getDescription());
                 updateNote(checkbox, input.getNote());
             }
 

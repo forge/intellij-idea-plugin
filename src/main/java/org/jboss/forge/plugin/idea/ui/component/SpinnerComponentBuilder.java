@@ -60,6 +60,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                                         selectedItem, valueChangeListener));
                     }
                 });
+                spinner.setToolTipText(input.getDescription());
                 addNoteLabel(container, spinner).setText(input.getNote());
             }
 
@@ -72,6 +73,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                spinner.setToolTipText(input.getDescription());
                 updateNote(spinner, input.getNote());
             }
 

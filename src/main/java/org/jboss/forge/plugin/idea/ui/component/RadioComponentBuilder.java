@@ -46,6 +46,7 @@ public class RadioComponentBuilder extends ComponentBuilder
             {
                 radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
+                radioContainer.setToolTipText(input.getDescription());
                 addNoteLabel(container, radioContainer).setText(input.getNote());
             }
 
@@ -63,6 +64,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                radioContainer.setToolTipText(input.getDescription());
                 updateNote(radioContainer, input.getNote());
             }
 
