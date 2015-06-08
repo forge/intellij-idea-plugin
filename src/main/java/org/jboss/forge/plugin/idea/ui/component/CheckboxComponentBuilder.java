@@ -58,6 +58,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(checkbox, "skip");
+                addNoteLabel(container, checkbox).setText(input.getNote());
             }
 
             @Override
@@ -69,6 +70,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                updateNote(checkbox, input.getNote());
             }
 
             private void reloadValue()

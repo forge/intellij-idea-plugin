@@ -62,6 +62,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                                         selectedItem, valueChangeListener));
                     }
                 });
+                addNoteLabel(container, spinner).setText(input.getNote());
             }
 
             @Override
@@ -73,6 +74,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                updateNote(spinner, input.getNote());
             }
 
             private void reloadValue()

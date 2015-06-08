@@ -62,6 +62,8 @@ public abstract class ListComponent extends ForgeComponent
 
         panel = new ListPanel(label, initialValue);
         container.add(panel, "span 2,growx");
+        addNoteLabel(container, panel).setText(input.getNote());
+
     }
 
     @Override
@@ -73,6 +75,7 @@ public abstract class ListComponent extends ForgeComponent
         {
             reloadValues();
         }
+        updateNote(panel, input.getNote());
     }
 
     protected abstract String editSelectedItem(String item);

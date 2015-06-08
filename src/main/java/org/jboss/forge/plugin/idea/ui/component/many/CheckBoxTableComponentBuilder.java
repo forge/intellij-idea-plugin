@@ -73,6 +73,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(panel, "span 2,growx");
+                addNoteLabel(container, checkBoxList).setText(input.getNote());
             }
 
             @Override
@@ -85,6 +86,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                 {
                     reloadValues();
                 }
+                updateNote(checkBoxList, input.getNote());
             }
 
             private void reloadValues()

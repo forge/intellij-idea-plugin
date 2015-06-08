@@ -71,6 +71,7 @@ public abstract class ChooserComponent extends ForgeComponent
         });
 
         container.add(component);
+        addNoteLabel(container, component).setText(input.getNote());
     }
 
     @Override
@@ -87,6 +88,7 @@ public abstract class ChooserComponent extends ForgeComponent
         {
             inputField.setVariants(getCompletions());
         }
+        updateNote(component, input.getNote());
     }
 
     private void reloadValue()

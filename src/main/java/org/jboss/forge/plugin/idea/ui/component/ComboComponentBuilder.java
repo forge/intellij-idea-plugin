@@ -62,6 +62,8 @@ public class ComboComponentBuilder extends ComponentBuilder
                         }
                     }
                 });
+                addNoteLabel(container, combo).setText(input.getNote());
+
             }
 
             @Override
@@ -74,6 +76,7 @@ public class ComboComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                updateNote(combo, input.getNote());
             }
 
             private void reloadValue()

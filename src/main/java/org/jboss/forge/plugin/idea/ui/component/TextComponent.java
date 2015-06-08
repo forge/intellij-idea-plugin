@@ -70,6 +70,7 @@ public class TextComponent extends ForgeComponent
         });
 
         container.add(component);
+        addNoteLabel(container, component).setText(input.getNote());
     }
 
     @Override
@@ -101,6 +102,7 @@ public class TextComponent extends ForgeComponent
         {
             component.setVariants(getCompletions());
         }
+        updateNote(component, input.getNote());
     }
 
     private void reloadValue()

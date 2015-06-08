@@ -46,6 +46,7 @@ public class RadioComponentBuilder extends ComponentBuilder
             {
                 radioContainer = new JPanel(new MigLayout("left"));
                 container.add(radioContainer);
+                addNoteLabel(container, radioContainer).setText(input.getNote());
             }
 
             @Override
@@ -62,6 +63,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                updateNote(radioContainer, input.getNote());
             }
 
             private void reloadChoices()

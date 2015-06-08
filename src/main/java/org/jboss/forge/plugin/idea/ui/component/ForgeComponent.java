@@ -6,12 +6,19 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import java.awt.Container;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
+import com.intellij.ui.components.JBLabel;
+import com.intellij.util.ui.UIUtil;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.output.UIMessage;
+import org.jboss.forge.furnace.util.Strings;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
+
+import javax.swing.*;
 
 /**
  * Represents Forge input component.
@@ -20,6 +27,8 @@ import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
  */
 public abstract class ForgeComponent
 {
+    private static final String NOTE_CLIENT_PROPERTY_KEY = "forge.note";
+
     protected ValueChangeListener valueChangeListener;
 
     protected ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
@@ -56,4 +65,29 @@ public abstract class ForgeComponent
     }
 
     public abstract void updateState();
+
+    protected JLabel addNoteLabel(Container parent, JComponent component) {
+        final JBLabel noteLabel = new JBLabel(UIUtil.ComponentStyle.SMALL);
+        // Hide empty labels
+        noteLabel.addPropertyChangeListener("text", new PropertyChangeListener()
+        {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt)
+            {
+                noteLabel.setVisible(!Strings.isNullOrEmpty(noteLabel.getText()));
+            }
+        });
+        noteLabel.setAnchor(component);
+        parent.add(noteLabel,"skip 1,hidemode 2");
+        component.putClientProperty(NOTE_CLIENT_PROPERTY_KEY, noteLabel);
+        return noteLabel;
+    }
+
+    protected void updateNote(JComponent component, String note) {
+        JLabel noteLabel = (JLabel) component.getClientProperty(NOTE_CLIENT_PROPERTY_KEY);
+        if (noteLabel != null) {
+            noteLabel.setText(note);
+        }
+    }
+
 }

@@ -76,6 +76,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                 });
 
                 container.add(component);
+                addNoteLabel(container, component).setText(input.getNote());
             }
 
             @Override
@@ -87,6 +88,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                 {
                     reloadValue();
                 }
+                updateNote(component, input.getNote());
             }
 
             private void reloadValue()
