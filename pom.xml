@@ -17,8 +17,8 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
       <idea.version>13.1.6</idea.version>
-      <furnace.version>2.18.1.Final</furnace.version>
-      <forge.version>2.16.1.Final</forge.version>
+      <furnace.version>2.18.2.Final</furnace.version>
+      <forge.version>2.16.2.Final</forge.version>
       <angularjs.version>2.1.4.Final</angularjs.version>
 
       <ij.plugin>true</ij.plugin>
