@@ -6,9 +6,16 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
-import java.io.File;
-import java.util.concurrent.Future;
-
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.extensions.PluginId;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
@@ -23,16 +30,8 @@ import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.extensions.PluginId;
+import java.io.File;
+import java.util.concurrent.Future;
 
 /**
  * This is a singleton for the {@link Furnace} class.
@@ -179,7 +178,8 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
       if (bundledIdx > -1)
       {
          version = description.substring(bundledIdx + str.length(),
-                  description.indexOf(System.lineSeparator(), bundledIdx)).trim();
+                  description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx))
+                  .trim();
       }
       return version;
    }
