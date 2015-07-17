@@ -8,7 +8,6 @@ package org.jboss.forge.plugin.idea.ui.component;
 
 import java.awt.Container;
 
-import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;

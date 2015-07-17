@@ -12,8 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jboss.forge.furnace.util.Strings;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jetbrains.annotations.Nls;
@@ -25,6 +23,8 @@ import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.ui.components.JBCheckBox;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * The Forge preferences Page

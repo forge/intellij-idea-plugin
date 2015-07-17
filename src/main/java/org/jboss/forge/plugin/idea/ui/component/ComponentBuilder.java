@@ -11,9 +11,6 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.furnace.util.Strings;
-
-import javax.swing.*;
 
 public abstract class ComponentBuilder
 {

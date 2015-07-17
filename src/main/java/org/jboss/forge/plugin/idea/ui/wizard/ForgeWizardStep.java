@@ -13,8 +13,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -26,6 +24,8 @@ import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 
 import com.intellij.ui.wizard.WizardNavigationState;
 import com.intellij.ui.wizard.WizardStep;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Represents Forge wizard step.

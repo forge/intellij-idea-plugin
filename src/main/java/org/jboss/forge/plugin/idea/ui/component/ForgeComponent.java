@@ -6,19 +6,21 @@
  */
 package org.jboss.forge.plugin.idea.ui.component;
 
-import java.awt.*;
+import java.awt.Container;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import com.intellij.ui.components.JBLabel;
-import com.intellij.util.ui.UIUtil;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.furnace.util.Strings;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 import org.jboss.forge.plugin.idea.ui.listeners.ValueChangeListener;
 
-import javax.swing.*;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.util.ui.UIUtil;
 
 /**
  * Represents Forge input component.

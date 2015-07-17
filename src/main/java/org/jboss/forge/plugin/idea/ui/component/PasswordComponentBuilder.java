@@ -17,11 +17,8 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
-import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
-
-import com.intellij.ui.JBColor;
 
 public class PasswordComponentBuilder extends ComponentBuilder
 {

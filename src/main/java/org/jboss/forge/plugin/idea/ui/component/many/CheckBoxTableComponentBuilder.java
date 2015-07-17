@@ -12,8 +12,6 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -30,6 +28,8 @@ import com.intellij.ui.CheckBoxListListener;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.Function;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * @author Adam Wyłuda

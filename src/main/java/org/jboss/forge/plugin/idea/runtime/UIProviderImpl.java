@@ -40,4 +40,16 @@ public class UIProviderImpl implements UIProvider
    {
       return new DefaultUIDesktop();
    }
+
+    @Override
+    public boolean isEmbedded()
+    {
+        return true;
+    }
+
+    @Override
+    public String getName()
+    {
+        return "Intellij IDEA";
+    }
 }
