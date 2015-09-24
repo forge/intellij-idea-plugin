@@ -7,13 +7,12 @@ target/
 *.iml
 *.ipr
 *.iws
+*.swp
 /*/src/main/java/META-INF
 .gitignore.swp
 docs/reference/src/main/docbook/en-US/version_info.xml
-.idea/*
-!.idea/codeStyleSettings.xml
+.idea
 .forge_settings
 .factorypath
 atlassian-ide-plugin.xml
 .externalToolBuilders
-bin/
