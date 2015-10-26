@@ -184,6 +184,7 @@ public class CommandListPopupBuilder
          }
       });
 
+
       return listPopupBuilder.createPopup();
    }
 

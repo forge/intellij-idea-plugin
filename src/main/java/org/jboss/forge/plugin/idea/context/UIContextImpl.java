@@ -8,52 +8,98 @@ package org.jboss.forge.plugin.idea.context;
 
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
+import org.jboss.forge.addon.ui.context.UIContextListener;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+import org.jboss.forge.furnace.services.Imported;
+import org.jboss.forge.plugin.idea.service.ForgeService;
 
 import com.intellij.openapi.project.Project;
 
 public class UIContextImpl extends AbstractUIContext
 {
-    private final UISelection<?> initialSelection;
-    private final UIProvider provider;
+   private final UISelection<?> initialSelection;
+   private final UIProvider provider;
 
-    private final Project project;
-    private UIProgressMonitor monitor;
+   private final Project project;
+   private UIProgressMonitor monitor;
 
-    UIContextImpl(Project project, UISelection<?> initialSelection, UIProvider provider)
-    {
-        this.project = project;
+   UIContextImpl(Project project, UISelection<?> initialSelection, UIProvider provider)
+   {
+      this.project = project;
+      this.initialSelection = initialSelection;
+      this.provider = provider;
+      initialize();
+   }
 
-        this.initialSelection = initialSelection;
-        this.provider = provider;
-    }
+   private void initialize()
+   {
+      Imported<UIContextListener> listener = ForgeService.getInstance()
+               .lookupImported(UIContextListener.class);
+      for (UIContextListener uiContextListener : listener)
+      {
+         if (uiContextListener != null)
+         {
+            try
+            {
+               uiContextListener.contextInitialized(this);
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+            }
+         }
+      }
+   }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public UISelection<?> getInitialSelection()
-    {
-        return initialSelection;
-    }
+   @Override
+   public void close()
+   {
+      super.close();
+      Imported<UIContextListener> listener = ForgeService.getInstance()
+               .lookupImported(UIContextListener.class);
+      for (UIContextListener uiContextListener : listener)
+      {
+         if (uiContextListener != null)
+         {
+            try
+            {
+               uiContextListener.contextDestroyed(this);
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+            }
+         }
+      }
 
-    @Override
-    public UIProvider getProvider()
-    {
-        return provider;
-    }
+   }
 
-    public Project getProject()
-    {
-        return project;
-    }
+   @SuppressWarnings("unchecked")
+   @Override
+   public UISelection<?> getInitialSelection()
+   {
+      return initialSelection;
+   }
 
-    public void setProgressMonitor(UIProgressMonitor monitor)
-    {
-        this.monitor = monitor;
-    }
+   @Override
+   public UIProvider getProvider()
+   {
+      return provider;
+   }
 
-    public UIProgressMonitor getProgressMonitor()
-    {
-        return monitor;
-    }
+   public Project getProject()
+   {
+      return project;
+   }
+
+   public void setProgressMonitor(UIProgressMonitor monitor)
+   {
+      this.monitor = monitor;
+   }
+
+   public UIProgressMonitor getProgressMonitor()
+   {
+      return monitor;
+   }
 }

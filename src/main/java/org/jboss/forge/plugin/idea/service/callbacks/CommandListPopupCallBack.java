@@ -23,28 +23,29 @@ import com.intellij.openapi.vfs.VirtualFile;
  */
 public class CommandListPopupCallBack implements Runnable
 {
-    private final Project project;
-    private final VirtualFile[] selectedFiles;
+   private final Project project;
+   private final VirtualFile[] selectedFiles;
 
-    public CommandListPopupCallBack(Project project, VirtualFile... selectedFiles)
-    {
-        this.project = project;
-        this.selectedFiles = selectedFiles;
-    }
+   public CommandListPopupCallBack(Project project, VirtualFile... selectedFiles)
+   {
+      this.project = project;
+      this.selectedFiles = selectedFiles;
 
-    @Override
-    public void run()
-    {
-        UIContext uiContext = UIContextFactory.create(project, selectedFiles);
+   }
 
-        List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
+   @Override
+   public void run()
+   {
+      UIContext uiContext = UIContextFactory.create(project, selectedFiles);
 
-        new CommandListPopupBuilder()
-                .setUIContext(uiContext)
-                .setCommands(candidates)
-                .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
-                .build()
-                .showCenteredInCurrentWindow(project);
-    }
+      List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
+
+      new CommandListPopupBuilder()
+               .setUIContext(uiContext)
+               .setCommands(candidates)
+               .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
+               .build()
+               .showCenteredInCurrentWindow(project);
+   }
 
 }

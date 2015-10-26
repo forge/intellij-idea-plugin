@@ -6,16 +6,9 @@
  */
 package org.jboss.forge.plugin.idea.service;
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.extensions.PluginId;
+import java.io.File;
+import java.util.concurrent.Future;
+
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
@@ -30,8 +23,16 @@ import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
-import java.util.concurrent.Future;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.components.ApplicationComponent;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
+import com.intellij.openapi.extensions.PluginId;
 
 /**
  * This is a singleton for the {@link Furnace} class.
@@ -117,6 +118,17 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
          exportedInstance = furnace.getAddonRegistry().getServices(service);
       }
       return (exportedInstance == null || exportedInstance.isUnsatisfied()) ? null : exportedInstance.get();
+   }
+
+   public <S> Imported<S> lookupImported(Class<S> service) {
+      if (furnace == null) {
+         createFurnace();
+      }
+      Imported<S> importedService = null;
+      if (furnace != null) {
+         importedService = furnace.getAddonRegistry().getServices(service);
+      }
+      return importedService;
    }
 
    @SuppressWarnings("unchecked")
