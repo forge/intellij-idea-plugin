@@ -6,24 +6,24 @@
 
     <description><![CDATA[
       <p>
-          JBoss Forge 2.x Support<br/>
+          JBoss Forge 3.x Support<br/>
           <small>Execute wizards and interact with the container.</small>
       </p>
       <p>
           Press Ctrl+Alt+4 to show Forge commands.<br/>
-          Requires JDK1.7+ to run.<br/>
+          Requires JDK1.8+ to run.<br/>
           Bundled with Forge ${forge.version}
       </p>
       <h1>WARNING</h1>
       <p>
       	The JBoss Forge plugin only works with Java 7 or higher. <br/>
-      	The following exception will appear if you execute in JDK 6 :
+      	The following exception will appear if you execute in JDK 7 or lower :
       	<code> 
       	Plugin 'org.jboss.forge.plugin.idea' failed to initialize and will be disabled. Please restart IntelliJ IDEA.
 
-		com.intellij.diagnostic.PluginException: org/jboss/forge/plugin/idea/service/ForgeService : Unsupported major.minor version 51.0 [Plugin: org.jboss.forge.plugin.idea]
+		com.intellij.diagnostic.PluginException: org/jboss/forge/plugin/idea/service/ForgeService : Unsupported major.minor version 52.0 [Plugin: org.jboss.forge.plugin.idea]
       	</code> <br/>
-      	IntelliJ Idea runs on JDK 6 by default, make sure to change the default IDE VM use JDK 7 by following instructions provided in <a href="https://intellij-support.jetbrains.com/entries/23455956-Selecting-the-JDK-version-the-IDE-will-run-under">here</a>.
+      	IntelliJ Idea runs on JDK 6 by default, make sure to change the default IDE VM use JDK 8 by following instructions provided in <a href="https://intellij-support.jetbrains.com/entries/23455956-Selecting-the-JDK-version-the-IDE-will-run-under">here</a>.
       </p>
       ]]></description>
 
