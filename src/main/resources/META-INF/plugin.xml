@@ -16,7 +16,7 @@
       </p>
       <h1>WARNING</h1>
       <p>
-      	The JBoss Forge plugin only works with Java 7 or higher. <br/>
+      	The JBoss Forge plugin only works with Java 8 or higher. <br/>
       	The following exception will appear if you execute in JDK 7 or lower :
       	<code> 
       	Plugin 'org.jboss.forge.plugin.idea' failed to initialize and will be disabled. Please restart IntelliJ IDEA.
