@@ -25,10 +25,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.components.StoragePathMacros;
@@ -43,11 +43,9 @@ import com.intellij.openapi.extensions.PluginId;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * @author Adam Wyłuda
  */
-@State(
-         name = "ForgeConfiguration",
-         storages = {
-                  @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/other.xml")
-         })
+@State(name = "ForgeConfiguration", storages = {
+         @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/other.xml")
+})
 public class ForgeService implements ApplicationComponent, PersistentStateComponent<ForgeService.State>
 {
    private transient Furnace furnace;
@@ -60,7 +58,7 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
 
    public static ForgeService getInstance()
    {
-      return ServiceManager.getService(ForgeService.class);
+      return ApplicationManager.getApplication().getComponent(ForgeService.class);
    }
 
    @Override
@@ -120,12 +118,15 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
       return (exportedInstance == null || exportedInstance.isUnsatisfied()) ? null : exportedInstance.get();
    }
 
-   public <S> Imported<S> lookupImported(Class<S> service) {
-      if (furnace == null) {
+   public <S> Imported<S> lookupImported(Class<S> service)
+   {
+      if (furnace == null)
+      {
          createFurnace();
       }
       Imported<S> importedService = null;
-      if (furnace != null) {
+      if (furnace != null)
+      {
          importedService = furnace.getAddonRegistry().getServices(service);
       }
       return importedService;

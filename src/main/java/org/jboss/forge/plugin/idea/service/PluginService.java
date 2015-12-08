@@ -19,8 +19,8 @@ import org.jboss.forge.plugin.idea.service.threads.ValidationThread;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.ServiceManager;
 
 /**
  * Maintains plugin state.
@@ -29,120 +29,120 @@ import com.intellij.openapi.components.ServiceManager;
  */
 public class PluginService implements ApplicationComponent
 {
-    private static final int RECENT_COMMANDS_LIMIT = 3;
+   private static final int RECENT_COMMANDS_LIMIT = 3;
 
-    private List<String> recentCommands = new ArrayList<>();
-    private ValidationThread validationThread = new ValidationThread();
-    private CommandLoadingThread commandLoadingThread = new CommandLoadingThread();
+   private List<String> recentCommands = new ArrayList<>();
+   private ValidationThread validationThread = new ValidationThread();
+   private CommandLoadingThread commandLoadingThread = new CommandLoadingThread();
 
-    PluginService()
-    {
-    }
+   PluginService()
+   {
+   }
 
-    public static PluginService getInstance()
-    {
-        return ServiceManager.getService(PluginService.class);
-    }
+   public static PluginService getInstance()
+   {
+      return ApplicationManager.getApplication().getComponent(PluginService.class);
+   }
 
-    @Override
-    public void initComponent()
-    {
-        validationThread.start();
-        commandLoadingThread.start();
-    }
+   @Override
+   public void initComponent()
+   {
+      validationThread.start();
+      commandLoadingThread.start();
+   }
 
-    @Override
-    public void disposeComponent()
-    {
-    }
+   @Override
+   public void disposeComponent()
+   {
+   }
 
-    @NotNull
-    @Override
-    public String getComponentName()
-    {
-        return getClass().getSimpleName();
-    }
+   @NotNull
+   @Override
+   public String getComponentName()
+   {
+      return getClass().getSimpleName();
+   }
 
-    public synchronized void addRecentCommand(UICommand command, UIContext context)
-    {
-        UICommandMetadata metadata = command.getMetadata(context);
+   public synchronized void addRecentCommand(UICommand command, UIContext context)
+   {
+      UICommandMetadata metadata = command.getMetadata(context);
 
-        // To make sure it will be the last element on the list
-        recentCommands.remove(metadata.getName());
-        recentCommands.add(metadata.getName());
+      // To make sure it will be the last element on the list
+      recentCommands.remove(metadata.getName());
+      recentCommands.add(metadata.getName());
 
-        if (recentCommands.size() > RECENT_COMMANDS_LIMIT)
-        {
-            recentCommands.remove(0);
-        }
-    }
+      if (recentCommands.size() > RECENT_COMMANDS_LIMIT)
+      {
+         recentCommands.remove(0);
+      }
+   }
 
-    public synchronized List<UICommand> getRecentCommands(List<UICommand> commands, UIContext context)
-    {
-        List<UICommand> enabledList = new ArrayList<>();
+   public synchronized List<UICommand> getRecentCommands(List<UICommand> commands, UIContext context)
+   {
+      List<UICommand> enabledList = new ArrayList<>();
 
-        for (UICommand command : commands)
-        {
-            UICommandMetadata metadata = command.getMetadata(context);
+      for (UICommand command : commands)
+      {
+         UICommandMetadata metadata = command.getMetadata(context);
 
-            // It's necessary to check if the command is still apparent on the list
-            if (recentCommands.contains(metadata.getName()) && Commands.isEnabled(command, context))
-            {
-                enabledList.add(command);
-            }
-        }
+         // It's necessary to check if the command is still apparent on the list
+         if (recentCommands.contains(metadata.getName()) && Commands.isEnabled(command, context))
+         {
+            enabledList.add(command);
+         }
+      }
 
-        return enabledList;
-    }
+      return enabledList;
+   }
 
-    public synchronized void submitFormUpdate(FormUpdateCallback callback)
-    {
-        validationThread.setNextCallback(callback);
-    }
+   public synchronized void submitFormUpdate(FormUpdateCallback callback)
+   {
+      validationThread.setNextCallback(callback);
+   }
 
-    public synchronized List<UICommand> getEnabledCommands(UIContext uiContext)
-    {
-        List<UICommand> result;
+   public synchronized List<UICommand> getEnabledCommands(UIContext uiContext)
+   {
+      List<UICommand> result;
 
-        if (isCacheCommands())
-        {
-            result = commandLoadingThread.getCommands(uiContext);
-            commandLoadingThread.reload(uiContext);
-        }
-        else
-        {
-            result = CommandUtil.getEnabledCommands(uiContext);
-        }
+      if (isCacheCommands())
+      {
+         result = commandLoadingThread.getCommands(uiContext);
+         commandLoadingThread.reload(uiContext);
+      }
+      else
+      {
+         result = CommandUtil.getEnabledCommands(uiContext);
+      }
 
-        return result;
-    }
+      return result;
+   }
 
-    /**
-     * Makes request to reload command cache.
-     */
-    public synchronized void reloadCommands(UIContext uiContext)
-    {
-        if (isCacheCommands())
-        {
-            commandLoadingThread.reload(uiContext);
-        }
-    }
+   /**
+    * Makes request to reload command cache.
+    */
+   public synchronized void reloadCommands(UIContext uiContext)
+   {
+      if (isCacheCommands())
+      {
+         commandLoadingThread.reload(uiContext);
+      }
+   }
 
-    /**
-     * Makes sure that next call to {@link #getEnabledCommands(org.jboss.forge.addon.ui.context.UIContext)}
-     * will return fresh instances of UICommand.
-     */
-    public synchronized void invalidateAndReloadCommands(UIContext uiContext)
-    {
-        if (isCacheCommands())
-        {
-            commandLoadingThread.invalidate();
-            commandLoadingThread.reload(uiContext);
-        }
-    }
+   /**
+    * Makes sure that next call to {@link #getEnabledCommands(org.jboss.forge.addon.ui.context.UIContext)} will return
+    * fresh instances of UICommand.
+    */
+   public synchronized void invalidateAndReloadCommands(UIContext uiContext)
+   {
+      if (isCacheCommands())
+      {
+         commandLoadingThread.invalidate();
+         commandLoadingThread.reload(uiContext);
+      }
+   }
 
-    private boolean isCacheCommands()
-    {
-        return ForgeService.getInstance().getState().isCacheCommands();
-    }
+   private boolean isCacheCommands()
+   {
+      return ForgeService.getInstance().getState().isCacheCommands();
+   }
 }
