@@ -62,6 +62,7 @@ public class ComboComponentBuilder extends ComponentBuilder
                         }
                     }
                 });
+                combo.setToolTipText(input.getDescription());
                 addNoteLabel(container, combo).setText(input.getNote());
 
             }
@@ -70,6 +71,7 @@ public class ComboComponentBuilder extends ComponentBuilder
             public void updateState()
             {
                 combo.setEnabled(input.isEnabled());
+                combo.setToolTipText(input.getDescription());
 
                 if (!getInputValueChoices().equals(getChoices()) ||
                         !getInputValue().equals(getValue()))

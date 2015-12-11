@@ -55,6 +55,8 @@ public abstract class ChooserComponent extends ForgeComponent
         component = new ComponentWithBrowseButton<>(textField, createBrowseButtonActionListener(textField));
 
         inputField = component.getChildComponent();
+        inputField.setToolTipText(input.getDescription());
+        component.setToolTipText(input.getDescription());
         inputField.getDocument().addDocumentListener(new DocumentListener()
         {
             @Override
@@ -79,7 +81,8 @@ public abstract class ChooserComponent extends ForgeComponent
     public void updateState()
     {
         component.setEnabled(input.isEnabled());
-
+        component.setToolTipText(input.getDescription());
+        inputField.setToolTipText(input.getDescription());
         if (!getValue().equals(getInputValue()))
         {
             reloadValue();

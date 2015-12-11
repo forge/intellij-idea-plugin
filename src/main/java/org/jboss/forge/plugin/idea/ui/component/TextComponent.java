@@ -74,6 +74,7 @@ public class TextComponent extends ForgeComponent
     public void updateState()
     {
         component.setEnabled(input.isEnabled());
+        component.setToolTipText(input.getDescription());
 
         if (!getValue().equals(getInputValue()))
         {
@@ -83,7 +84,6 @@ public class TextComponent extends ForgeComponent
         {
             component.setVariants(getCompletions());
         }
-        component.setToolTipText(input.getDescription());
         updateNote(component, input.getNote());
     }
 

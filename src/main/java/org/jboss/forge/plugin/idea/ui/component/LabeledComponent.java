@@ -38,6 +38,7 @@ public class LabeledComponent extends ForgeComponent
     public void buildUI(Container container)
     {
         this.label = new JBLabel(InputComponents.getLabelFor(input, true));
+        label.setToolTipText(input.getDescription());
         container.add(label);
         component.buildUI(container);
     }
@@ -70,6 +71,7 @@ public class LabeledComponent extends ForgeComponent
     public void updateState()
     {
         label.setEnabled(input.isEnabled());
+        label.setToolTipText(input.getDescription());
         component.updateState();
     }
 }
