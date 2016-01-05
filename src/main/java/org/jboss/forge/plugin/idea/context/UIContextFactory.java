@@ -28,63 +28,60 @@ import com.intellij.openapi.vfs.VirtualFile;
  *
  * @author Adam Wyłuda
  */
+@SuppressWarnings("rawtypes")
 public class UIContextFactory
 {
-    public static UIContext create(Project project, VirtualFile[] files)
-    {
-        UIProvider provider = new UIProviderImpl();
-        UISelection<?> initialSelection = getSelection(files);
+   public static UIContext create(Project project, VirtualFile[] files)
+   {
+      UIProvider provider = new UIProviderImpl();
+      UISelection<?> initialSelection = getSelection(files);
+      return new UIContextImpl(project, initialSelection, provider);
+   }
 
-        return new UIContextImpl(project, initialSelection, provider);
-    }
+   private static UISelection<?> getSelection(VirtualFile[] files)
+   {
+      UISelection<?> selection;
+      if (files == null || files.length == 0)
+      {
+         selection = Selections.emptySelection();
+      }
+      else
+      {
+         List<Resource> resources = filesToResources(files);
+         selection = Selections.from(resources.toArray());
+      }
+      return selection;
+   }
 
-    private static UISelection<?> getSelection(VirtualFile[] files)
-    {
-        UISelection<?> selection;
+   private static List<Resource> filesToResources(VirtualFile[] files)
+   {
+      List<Resource> result = new LinkedList<>();
+      Converter<File, Resource> converter = getResourceConverter();
+      for (VirtualFile virtualFile : files)
+      {
+         Resource resource = fileToResource(virtualFile, converter);
+         if (resource != null)
+         {
+            result.add(resource);
+         }
+      }
+      return result;
+   }
 
-        if (files == null || files.length == 0)
-        {
-            selection = Selections.emptySelection();
-        }
-        else
-        {
-            List<Resource> resources = filesToResources(files);
-            selection = Selections.from(resources.toArray());
-        }
+   private static Converter<File, Resource> getResourceConverter()
+   {
+      ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
+      Class<Resource> nativeResourceClass = ForgeService.getInstance().locateNativeClass(Resource.class);
+      return converterFactory.getConverter(File.class, nativeResourceClass);
+   }
 
-        return selection;
-    }
-
-    private static List<Resource> filesToResources(VirtualFile[] files)
-    {
-        List<Resource> result = new LinkedList<>();
-
-        Converter<File, Resource> converter = getResourceConverter();
-
-        for (VirtualFile virtualFile : files)
-        {
-            result.add(fileToResource(virtualFile, converter));
-        }
-
-        return result;
-    }
-
-    private static Converter<File, Resource> getResourceConverter()
-    {
-        ConverterFactory converterFactory = ForgeService.getInstance().getConverterFactory();
-        Class<Resource> nativeResourceClass = ForgeService.getInstance().locateNativeClass(Resource.class);
-        return converterFactory.getConverter(File.class, nativeResourceClass);
-    }
-
-    private static Resource fileToResource(VirtualFile file)
-    {
-        return fileToResource(file, getResourceConverter());
-    }
-
-    private static Resource fileToResource(VirtualFile file, Converter<File, Resource> converter)
-    {
-        File javaFile = new File(file.getPath());
-        Resource resource = converter.convert(javaFile);
-        return resource;
-    }
+   private static Resource fileToResource(VirtualFile file, Converter<File, Resource> converter)
+   {
+      Resource resource = null;
+      if (file != null)
+      {
+         resource = converter.convert(new File(file.getPath()));
+      }
+      return resource;
+   }
 }

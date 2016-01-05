@@ -18,32 +18,27 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 /**
- * Creates a popup list and displays all the currently registered
- * {@link UICommand} instances
+ * Creates a popup list and displays all the currently registered {@link UICommand} instances
  *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * @author Adam Wyłuda
  */
 public class ShowCommandListAction extends AnAction
 {
-    @Override
-    public void actionPerformed(AnActionEvent event)
-    {
-        if (CommandListPopupBuilder.isActive())
-        {
-            return;
-        }
-
-        Project project = event.getData(DataKeys.PROJECT);
-        VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
-
-        // If no file is selected, then set project directory as selection
-        if (files == null || files.length == 0)
-        {
-            files = new VirtualFile[]{event.getData(DataKeys.PROJECT_FILE_DIRECTORY)};
-        }
-
-        final VirtualFile[] selectedFiles = files;
-        ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(project, selectedFiles));
-    }
+   @Override
+   public void actionPerformed(AnActionEvent event)
+   {
+      if (CommandListPopupBuilder.isActive())
+      {
+         return;
+      }
+      Project project = event.getData(DataKeys.PROJECT);
+      VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
+      // If no file is selected, then set project directory as selection
+      if (files == null || files.length == 0)
+      {
+         files = new VirtualFile[] { event.getData(DataKeys.PROJECT_FILE_DIRECTORY) };
+      }
+      ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(project, files));
+   }
 }
