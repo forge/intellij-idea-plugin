@@ -98,12 +98,7 @@ public class ComboComponentBuilder extends ComponentBuilder
             Object value = InputComponents.getValueFor(input);
             if (value == null)
             {
-               if (model.getSize() > 0)
-               {
-                  Object element = model.getElementAt(0);
-                  model.setSelectedItem(element);
-                  InputComponents.setDefaultValueFor(converterFactory, input, element);
-               }
+               model.setSelectedItem(null);
             }
             else
             {
