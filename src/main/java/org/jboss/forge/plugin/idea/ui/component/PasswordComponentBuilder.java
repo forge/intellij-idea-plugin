@@ -22,110 +22,111 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 public class PasswordComponentBuilder extends ComponentBuilder
 {
-    @Override
-    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
-    {
-        return new LabeledComponent(input, new ForgeComponent()
-        {
-            private JPasswordField component;
-            private Converter<Object, String> converter = converterFactory.getConverter(
-                    input.getValueType(), String.class);
+   @Override
+   public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
+   {
+      return new LabeledComponent(input, new ForgeComponent()
+      {
+         private JPasswordField component;
+         private Converter<Object, String> converter = converterFactory.getConverter(
+                  input.getValueType(), String.class);
 
-            // No need to make form update during value update
-            private boolean settingValue = false;
+         // No need to make form update during value update
+         private boolean settingValue = false;
 
-            @Override
-            public void buildUI(Container container)
+         @Override
+         public void buildUI(Container container)
+         {
+            component = new JPasswordField();
+
+            component.getDocument().addDocumentListener(new DocumentListener()
             {
-                component = new JPasswordField();
+               @Override
+               public void removeUpdate(DocumentEvent e)
+               {
+                  if (!settingValue)
+                  {
+                     PluginService.getInstance().submitFormUpdate(
+                              new FormUpdateCallback(converterFactory, input,
+                                       new String(component.getPassword()), valueChangeListener));
+                  }
+               }
 
-                component.getDocument().addDocumentListener(new DocumentListener()
-                {
-                    @Override
-                    public void removeUpdate(DocumentEvent e)
-                    {
-                        if (!settingValue)
-                        {
-                            PluginService.getInstance().submitFormUpdate(
-                                    new FormUpdateCallback(converterFactory, input,
-                                            new String(component.getPassword()), valueChangeListener));
-                        }
-                    }
+               @Override
+               public void insertUpdate(DocumentEvent e)
+               {
+                  if (!settingValue)
+                  {
+                     PluginService.getInstance().submitFormUpdate(
+                              new FormUpdateCallback(converterFactory, input,
+                                       new String(component.getPassword()), valueChangeListener));
+                  }
+               }
 
-                    @Override
-                    public void insertUpdate(DocumentEvent e)
-                    {
-                        if (!settingValue)
-                        {
-                            PluginService.getInstance().submitFormUpdate(
-                                    new FormUpdateCallback(converterFactory, input,
-                                             new String(component.getPassword()), valueChangeListener));
-                        }
-                    }
+               @Override
+               public void changedUpdate(DocumentEvent e)
+               {
+                  PluginService.getInstance().submitFormUpdate(
+                           new FormUpdateCallback(converterFactory, input,
+                                    new String(component.getPassword()), valueChangeListener));
+               }
+            });
 
-                    @Override
-                    public void changedUpdate(DocumentEvent e)
-                    {
-                        PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, input,
-                                         new String(component.getPassword()), valueChangeListener));
-                    }
-                });
+            container.add(component);
+            component.setToolTipText(input.getDescription());
+            addNoteLabel(container, component).setText(input.getNote());
+         }
 
-                container.add(component);
-                component.setToolTipText(input.getDescription());
-                addNoteLabel(container, component).setText(input.getNote());
-            }
+         @Override
+         public void updateState()
+         {
+            component.setEnabled(input.isEnabled());
 
-            @Override
-            public void updateState()
+            if (!new String(component.getPassword()).equals(getInputValue()))
             {
-                component.setEnabled(input.isEnabled());
-
-                if (!new String(component.getPassword()).equals(getInputValue()))
-                {
-                    reloadValue();
-                }
-                component.setToolTipText(input.getDescription());
-                updateNote(component, input.getNote());
+               reloadValue();
             }
+            component.setToolTipText(input.getDescription());
+            updateNote(component, input.getNote());
+         }
 
-            private void reloadValue()
+         private void reloadValue()
+         {
+            String value = getInputValue();
+            try
             {
-                String value = getInputValue();
-                try
-                {
-                    settingValue = true;
-                    component.setText(value == null ? "" : value);
-                }
-                finally
-                {
-                    settingValue = false;
-                }
+               settingValue = true;
+               component.setText(value == null ? "" : value);
             }
-
-            private String getInputValue()
+            finally
             {
-                return converter.convert(input.getValue());
+               settingValue = false;
             }
-        });
-    }
+         }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.SECRET;
-    }
+         private String getInputValue()
+         {
+            Object value = input.getValue();
+            return (value == null) ? null : converter.convert(value);
+         }
+      });
+   }
 
-    @Override
-    protected Class<String> getProducedType()
-    {
-        return String.class;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.SECRET;
+   }
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInput.class};
-    }
+   @Override
+   protected Class<String> getProducedType()
+   {
+      return String.class;
+   }
+
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInput.class };
+   }
 }

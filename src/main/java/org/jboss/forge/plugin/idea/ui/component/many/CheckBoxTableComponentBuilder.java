@@ -123,8 +123,11 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
 
             for (Object item : inputMany.getValueChoices())
             {
-               String value = converter.convert(item);
-               list.add(value != null ? value : "");
+               if (item != null)
+               {
+                  String value = converter.convert(item);
+                  list.add(value != null ? value : "");
+               }
             }
 
             return list;
@@ -134,30 +137,33 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
          {
             List<String> list = new ArrayList<>();
 
-            for (Object item : inputMany.getValue())
+            Iterable<Object> value = inputMany.getValue();
+            if (value != null)
             {
-               list.add(converter.convert(item));
+               for (Object item : value)
+               {
+                  if (item != null)
+                  {
+                     list.add(converter.convert(item));
+                  }
+               }
             }
-
             return list;
          }
 
          private List<String> getChoices()
          {
             List<String> result = new ArrayList<>();
-
             for (int i = 0; i < checkBoxList.getItemsCount(); i++)
             {
                result.add(checkBoxList.getItemAt(i));
             }
-
             return result;
          }
 
          private List<String> getValue()
          {
             List<String> result = new ArrayList<>();
-
             for (int i = 0; i < checkBoxList.getItemsCount(); i++)
             {
                if (checkBoxList.isItemSelected(i))
@@ -165,7 +171,6 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                   result.add(checkBoxList.getItemAt(i));
                }
             }
-
             return result;
          }
       };

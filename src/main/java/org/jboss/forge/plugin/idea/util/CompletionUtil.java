@@ -24,44 +24,47 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
  */
 public class CompletionUtil
 {
-    public static boolean hasCompletions(InputComponent input)
-    {
-        HasCompleter hasCompleter = input instanceof HasCompleter ? (HasCompleter) input : null;
-        return hasCompleter != null && hasCompleter.getCompleter() != null;
-    }
+   public static boolean hasCompletions(InputComponent input)
+   {
+      HasCompleter hasCompleter = input instanceof HasCompleter ? (HasCompleter) input : null;
+      return hasCompleter != null && hasCompleter.getCompleter() != null;
+   }
 
-    public static List<String> getCompletions(ConverterFactory converterFactory, UIContext context,
-                                              InputComponent input, String text)
-    {
-        List<String> result = new ArrayList<>();
-        UICompleter completer = ((HasCompleter) input).getCompleter();
-        Converter converter = converterFactory.getConverter(input.getValueType(), String.class);
+   public static List<String> getCompletions(ConverterFactory converterFactory, UIContext context,
+            InputComponent input, String text)
+   {
+      List<String> result = new ArrayList<>();
+      UICompleter completer = ((HasCompleter) input).getCompleter();
+      Converter converter = converterFactory.getConverter(input.getValueType(), String.class);
 
-        Iterable proposals = completer.getCompletionProposals(context, input, text);
+      Iterable proposals = completer.getCompletionProposals(context, input, text);
 
-        if (proposals != null)
-        {
-            for (Object object : proposals)
+      if (proposals != null)
+      {
+         for (Object object : proposals)
+         {
+            if (object != null)
             {
-                result.add((String) converter.convert(object));
+               result.add((String) converter.convert(object));
             }
-        }
+         }
+      }
 
-        return result;
-    }
+      return result;
+   }
 
-    public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, InputComponent input)
-    {
-        return createTextFieldWithAutoCompletion(context, hasCompletions(input));
-    }
+   public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, InputComponent input)
+   {
+      return createTextFieldWithAutoCompletion(context, hasCompletions(input));
+   }
 
-    public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context, boolean hasCompletions)
-    {
-        return TextFieldWithAutoCompletion.create(
-                IDEUtil.projectFromContext(context),
-                Collections.<String>emptyList(),
-                hasCompletions,
-                ""
-        );
-    }
+   public static TextFieldWithAutoCompletion createTextFieldWithAutoCompletion(UIContext context,
+            boolean hasCompletions)
+   {
+      return TextFieldWithAutoCompletion.create(
+               IDEUtil.projectFromContext(context),
+               Collections.<String> emptyList(),
+               hasCompletions,
+               "");
+   }
 }

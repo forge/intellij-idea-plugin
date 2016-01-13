@@ -30,90 +30,91 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
  */
 public abstract class ChooserComponent extends ForgeComponent
 {
-    private final UIContext context;
-    private final InputComponent<?, Object> input;
-    private final Converter<Object, String> converter;
+   private final UIContext context;
+   private final InputComponent<?, Object> input;
+   private final Converter<Object, String> converter;
 
-    private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
-    private TextFieldWithAutoCompletion inputField;
+   private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
+   private TextFieldWithAutoCompletion inputField;
 
-    public ChooserComponent(UIContext context,
-                            InputComponent<?, Object> input)
-    {
-        this.context = context;
-        this.input = input;
+   public ChooserComponent(UIContext context,
+            InputComponent<?, Object> input)
+   {
+      this.context = context;
+      this.input = input;
 
-        converter = converterFactory.getConverter(input.getValueType(), String.class);
-    }
+      converter = converterFactory.getConverter(input.getValueType(), String.class);
+   }
 
-    public abstract ActionListener createBrowseButtonActionListener(TextFieldWithAutoCompletion textField);
+   public abstract ActionListener createBrowseButtonActionListener(TextFieldWithAutoCompletion textField);
 
-    @Override
-    public void buildUI(Container container)
-    {
-        TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, input);
-        component = new ComponentWithBrowseButton<>(textField, createBrowseButtonActionListener(textField));
+   @Override
+   public void buildUI(Container container)
+   {
+      TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, input);
+      component = new ComponentWithBrowseButton<>(textField, createBrowseButtonActionListener(textField));
 
-        inputField = component.getChildComponent();
-        inputField.setToolTipText(input.getDescription());
-        component.setToolTipText(input.getDescription());
-        inputField.getDocument().addDocumentListener(new DocumentListener()
-        {
-            @Override
-            public void beforeDocumentChange(DocumentEvent event)
-            {
-            }
+      inputField = component.getChildComponent();
+      inputField.setToolTipText(input.getDescription());
+      component.setToolTipText(input.getDescription());
+      inputField.getDocument().addDocumentListener(new DocumentListener()
+      {
+         @Override
+         public void beforeDocumentChange(DocumentEvent event)
+         {
+         }
 
-            @Override
-            public void documentChanged(DocumentEvent event)
-            {
-                PluginService.getInstance().submitFormUpdate(
-                        new FormUpdateCallback(converterFactory, input, getValue(), valueChangeListener));
-            }
-        });
+         @Override
+         public void documentChanged(DocumentEvent event)
+         {
+            PluginService.getInstance().submitFormUpdate(
+                     new FormUpdateCallback(converterFactory, input, getValue(), valueChangeListener));
+         }
+      });
 
-        container.add(component);
-        component.setToolTipText(input.getDescription());
-        addNoteLabel(container, component).setText(input.getNote());
-    }
+      container.add(component);
+      component.setToolTipText(input.getDescription());
+      addNoteLabel(container, component).setText(input.getNote());
+   }
 
-    @Override
-    public void updateState()
-    {
-        component.setEnabled(input.isEnabled());
-        component.setToolTipText(input.getDescription());
-        inputField.setToolTipText(input.getDescription());
-        if (!getValue().equals(getInputValue()))
-        {
-            reloadValue();
-        }
+   @Override
+   public void updateState()
+   {
+      component.setEnabled(input.isEnabled());
+      component.setToolTipText(input.getDescription());
+      inputField.setToolTipText(input.getDescription());
+      if (!getValue().equals(getInputValue()))
+      {
+         reloadValue();
+      }
 
-        if (CompletionUtil.hasCompletions(input))
-        {
-            inputField.setVariants(getCompletions());
-        }
-        updateNote(component, input.getNote());
-    }
+      if (CompletionUtil.hasCompletions(input))
+      {
+         inputField.setVariants(getCompletions());
+      }
+      updateNote(component, input.getNote());
+   }
 
-    private void reloadValue()
-    {
-        String value = getInputValue();
-        inputField.setText(value == null ? "" : value);
-    }
+   private void reloadValue()
+   {
+      String value = getInputValue();
+      inputField.setText(value == null ? "" : value);
+   }
 
-    protected String getValue()
-    {
-        return inputField.getText();
-    }
+   protected String getValue()
+   {
+      return inputField.getText();
+   }
 
-    protected String getInputValue()
-    {
-        return converter.convert(InputComponents.getValueFor(input));
-    }
+   protected String getInputValue()
+   {
+      Object value = InputComponents.getValueFor(input);
+      return (value == null) ? null : converter.convert(value);
+   }
 
-    private List<String> getCompletions()
-    {
-        return CompletionUtil.getCompletions(converterFactory, context, input,
-                component != null ? inputField.getText() : null);
-    }
+   private List<String> getCompletions()
+   {
+      return CompletionUtil.getCompletions(converterFactory, context, input,
+               component != null ? inputField.getText() : null);
+   }
 }

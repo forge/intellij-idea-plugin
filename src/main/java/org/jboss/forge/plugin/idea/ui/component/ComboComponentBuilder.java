@@ -28,140 +28,145 @@ import com.intellij.openapi.ui.ComboBox;
 public class ComboComponentBuilder extends ComponentBuilder
 {
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
-    {
-        return new LabeledComponent(input, new ForgeComponent()
-        {
-            private ComboBox combo;
-            private UISelectOne<Object> selectOne = (UISelectOne) input;
-            private Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory, selectOne);
-            private DefaultComboBoxModel<String> model;
+   @SuppressWarnings("unchecked")
+   @Override
+   public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
+   {
+      return new LabeledComponent(input, new ForgeComponent()
+      {
+         private ComboBox combo;
+         private UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+         private Converter<Object, String> converter = InputComponents.getItemLabelConverter(converterFactory,
+                  selectOne);
+         private DefaultComboBoxModel<String> model;
 
-            @Override
-            public void buildUI(Container container)
+         @Override
+         public void buildUI(Container container)
+         {
+            model = new DefaultComboBoxModel<>();
+
+            combo = new ComboBox(model);
+            container.add(combo);
+            combo.addItemListener(new ItemListener()
             {
-                model = new DefaultComboBoxModel();
+               @Override
+               public void itemStateChanged(ItemEvent e)
+               {
+                  // To prevent nullifying input's value when model is cleared
+                  if (e.getStateChange() == ItemEvent.SELECTED)
+                  {
+                     Object selectedItem = model.getSelectedItem();
 
-                combo = new ComboBox(model);
-                container.add(combo);
-                combo.addItemListener(new ItemListener()
-                {
-                    @Override
-                    public void itemStateChanged(ItemEvent e)
-                    {
-                        // To prevent nullifying input's value when model is cleared
-                        if (e.getStateChange() == ItemEvent.SELECTED)
-                        {
-                            Object selectedItem = model.getSelectedItem();
+                     PluginService.getInstance().submitFormUpdate(
+                              new FormUpdateCallback(converterFactory, input,
+                                       selectedItem, valueChangeListener));
+                  }
+               }
+            });
+            combo.setToolTipText(input.getDescription());
+            addNoteLabel(container, combo).setText(input.getNote());
 
-                            PluginService.getInstance().submitFormUpdate(
-                                    new FormUpdateCallback(converterFactory, input,
-                                            selectedItem, valueChangeListener));
-                        }
-                    }
-                });
-                combo.setToolTipText(input.getDescription());
-                addNoteLabel(container, combo).setText(input.getNote());
+         }
 
+         @Override
+         public void updateState()
+         {
+            combo.setEnabled(input.isEnabled());
+            combo.setToolTipText(input.getDescription());
+
+            if (!getInputValueChoices().equals(getChoices()) ||
+                     !getInputValue().equals(getValue()))
+            {
+               reloadValue();
+            }
+            updateNote(combo, input.getNote());
+         }
+
+         private void reloadValue()
+         {
+            Iterable<Object> valueChoices = selectOne.getValueChoices();
+            if (valueChoices != null)
+            {
+               model.removeAllElements();
+               for (String choice : getInputValueChoices())
+               {
+                  model.addElement(choice);
+               }
             }
 
-            @Override
-            public void updateState()
+            // Set Default Value
+            Object value = InputComponents.getValueFor(input);
+            if (value == null)
             {
-                combo.setEnabled(input.isEnabled());
-                combo.setToolTipText(input.getDescription());
+               if (model.getSize() > 0)
+               {
+                  Object element = model.getElementAt(0);
+                  model.setSelectedItem(element);
+                  InputComponents.setDefaultValueFor(converterFactory, input, element);
+               }
+            }
+            else
+            {
+               String convertedValue = converter.convert(value);
+               model.setSelectedItem(convertedValue);
+            }
+         }
 
-                if (!getInputValueChoices().equals(getChoices()) ||
-                        !getInputValue().equals(getValue()))
-                {
-                    reloadValue();
-                }
-                updateNote(combo, input.getNote());
+         private List<String> getInputValueChoices()
+         {
+            List<String> list = new ArrayList<>();
+
+            for (Object item : selectOne.getValueChoices())
+            {
+               if (item != null)
+               {
+                  list.add(converter.convert(item));
+               }
             }
 
-            private void reloadValue()
-            {
-                Iterable<Object> valueChoices = selectOne.getValueChoices();
-                if (valueChoices != null)
-                {
-                    model.removeAllElements();
-                    for (String choice : getInputValueChoices())
-                    {
-                        model.addElement(choice);
-                    }
-                }
+            return list;
+         }
 
-                // Set Default Value
-                String value = converter.convert(InputComponents.getValueFor(input));
-                if (value == null)
-                {
-                    if (model.getSize() > 0)
-                    {
-                        Object element = model.getElementAt(0);
-                        model.setSelectedItem(element);
-                        InputComponents.setValueFor(converterFactory, input, element);
-                    }
-                }
-                else
-                {
-                    model.setSelectedItem(value);
-                }
+         private String getInputValue()
+         {
+            Object value = selectOne.getValue();
+            return value == null ? "" : converter.convert(value);
+         }
+
+         private List<String> getChoices()
+         {
+            List<String> result = new ArrayList<>();
+
+            for (int i = 0; i < model.getSize(); i++)
+            {
+               result.add(model.getElementAt(i));
             }
 
-            private List<String> getInputValueChoices()
-            {
-                List<String> list = new ArrayList<>();
+            return result;
+         }
 
-                for (Object item : selectOne.getValueChoices())
-                {
-                    list.add(converter.convert(item));
-                }
+         private String getValue()
+         {
+            return (String) model.getSelectedItem();
+         }
+      });
+   }
 
-                return list;
-            }
+   @Override
+   protected Class<Object> getProducedType()
+   {
+      return Object.class;
+   }
 
-            private String getInputValue()
-            {
-                String value = converter.convert(selectOne.getValue());
-                return value != null ? value : "";
-            }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.DROPDOWN;
+   }
 
-            private List<String> getChoices()
-            {
-                List<String> result = new ArrayList<>();
-
-                for (int i = 0; i < model.getSize(); i++)
-                {
-                    result.add(model.getElementAt(i));
-                }
-
-                return result;
-            }
-
-            private String getValue()
-            {
-                return (String) model.getSelectedItem();
-            }
-        });
-    }
-
-    @Override
-    protected Class<Object> getProducedType()
-    {
-        return Object.class;
-    }
-
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.DROPDOWN;
-    }
-
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UISelectOne.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UISelectOne.class };
+   }
 }

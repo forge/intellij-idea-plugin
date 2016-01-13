@@ -29,81 +29,82 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 public class CheckboxComponentBuilder extends ComponentBuilder
 {
 
-    @Override
-    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
-    {
-        return new ForgeComponent()
-        {
-            private JCheckBox checkbox;
-            private Converter<Object, Boolean> converter = converterFactory
-                    .getConverter(input.getValueType(), Boolean.class);
+   @Override
+   public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
+   {
+      return new ForgeComponent()
+      {
+         private JCheckBox checkbox;
+         private Converter<Object, Boolean> converter = converterFactory
+                  .getConverter(input.getValueType(), Boolean.class);
 
-            @Override
-            public void buildUI(Container container)
+         @Override
+         public void buildUI(Container container)
+         {
+            // Create the label
+            String text = (input.getLabel() == null ? input.getName() : input
+                     .getLabel());
+            checkbox = new JCheckBox(text);
+
+            checkbox.addActionListener(new ActionListener()
             {
-                // Create the label
-                String text = (input.getLabel() == null ? input.getName() : input
-                        .getLabel());
-                checkbox = new JCheckBox(text);
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  PluginService.getInstance().submitFormUpdate(
+                           new FormUpdateCallback(converterFactory, input,
+                                    checkbox.isSelected(), valueChangeListener));
+               }
+            });
 
-                checkbox.addActionListener(new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        PluginService.getInstance().submitFormUpdate(
-                                new FormUpdateCallback(converterFactory, input,
-                                        checkbox.isSelected(), valueChangeListener));
-                    }
-                });
+            container.add(checkbox, "skip");
+            checkbox.setToolTipText(input.getDescription());
+            addNoteLabel(container, checkbox).setText(input.getNote());
+         }
 
-                container.add(checkbox, "skip");
-                checkbox.setToolTipText(input.getDescription());
-                addNoteLabel(container, checkbox).setText(input.getNote());
-            }
+         @Override
+         public void updateState()
+         {
+            checkbox.setEnabled(input.isEnabled());
 
-            @Override
-            public void updateState()
+            if (checkbox.isSelected() != getInputValue())
             {
-                checkbox.setEnabled(input.isEnabled());
-
-                if (checkbox.isSelected() != getInputValue())
-                {
-                    reloadValue();
-                }
-                checkbox.setToolTipText(input.getDescription());
-                updateNote(checkbox, input.getNote());
+               reloadValue();
             }
+            checkbox.setToolTipText(input.getDescription());
+            updateNote(checkbox, input.getNote());
+         }
 
-            private void reloadValue()
-            {
-                Boolean value = getInputValue();
-                checkbox.setSelected(value == null ? false : value);
-            }
+         private void reloadValue()
+         {
+            Boolean value = getInputValue();
+            checkbox.setSelected(value == null ? false : value);
+         }
 
-            private boolean getInputValue()
-            {
-                return converter.convert(InputComponents.getValueFor(input));
-            }
-        };
-    }
+         private boolean getInputValue()
+         {
+            Object value = InputComponents.getValueFor(input);
+            return (value != null && converter.convert(value));
+         }
+      };
+   }
 
-    @Override
-    protected Class<Boolean> getProducedType()
-    {
-        return Boolean.class;
-    }
+   @Override
+   protected Class<Boolean> getProducedType()
+   {
+      return Boolean.class;
+   }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.CHECKBOX;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.CHECKBOX;
+   }
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInput.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInput.class };
+   }
 
 }

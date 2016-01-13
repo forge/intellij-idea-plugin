@@ -29,158 +29,165 @@ import com.intellij.ui.AddEditDeleteListPanel;
  */
 public abstract class ListComponent extends ForgeComponent
 {
-    private final UIInputMany<Object> input;
-    private Converter<Object, String> converter;
+   private final UIInputMany<Object> input;
+   private Converter<Object, String> converter;
 
-    private ListPanel panel;
+   private ListPanel panel;
 
-    // No need to make form update during value update
-    private boolean settingValue;
+   // No need to make form update during value update
+   private boolean settingValue;
 
-    public ListComponent(UIInputMany<Object> input)
-    {
-        this.input = input;
+   public ListComponent(UIInputMany<Object> input)
+   {
+      this.input = input;
 
-        converter = converterFactory.getConverter(input.getValueType(), String.class);
-    }
+      converter = converterFactory.getConverter(input.getValueType(), String.class);
+   }
 
-    @Override
-    public void buildUI(Container container)
-    {
-        String label = InputComponents.getLabelFor(input, false);
+   @Override
+   public void buildUI(Container container)
+   {
+      String label = InputComponents.getLabelFor(input, false);
 
-        List<String> initialValue = new ArrayList<>();
+      List<String> initialValue = new ArrayList<>();
 
-        Iterable inputValue = (Iterable) InputComponents.getValueFor(input);
-        if (inputValue != null)
-        {
-            for (Object item : inputValue)
-            {
-                initialValue.add((String) converter.convert(item));
-            }
-        }
+      Iterable inputValue = (Iterable) InputComponents.getValueFor(input);
+      if (inputValue != null)
+      {
+         for (Object item : inputValue)
+         {
+            initialValue.add(converter.convert(item));
+         }
+      }
 
-        panel = new ListPanel(label, initialValue);
-        container.add(panel, "span 2,growx");
-        panel.setToolTipText(input.getDescription());
-        addNoteLabel(container, panel).setText(input.getNote());
+      panel = new ListPanel(label, initialValue);
+      container.add(panel, "span 2,growx");
+      panel.setToolTipText(input.getDescription());
+      addNoteLabel(container, panel).setText(input.getNote());
 
-    }
+   }
 
-    @Override
-    public void updateState()
-    {
-        panel.setEnabled(input.isEnabled());
+   @Override
+   public void updateState()
+   {
+      panel.setEnabled(input.isEnabled());
 
-        if (!getInputValues().equals(panel.getValue()))
-        {
-            reloadValues();
-        }
-        panel.setToolTipText(input.getDescription());
-        updateNote(panel, input.getNote());
-    }
+      if (!getInputValues().equals(panel.getValue()))
+      {
+         reloadValues();
+      }
+      panel.setToolTipText(input.getDescription());
+      updateNote(panel, input.getNote());
+   }
 
-    protected abstract String editSelectedItem(String item);
+   protected abstract String editSelectedItem(String item);
 
-    protected abstract String findItemToAdd();
+   protected abstract String findItemToAdd();
 
-    protected void componentUpdated()
-    {
-        if (!settingValue)
-        {
-            PluginService.getInstance().submitFormUpdate(
-                    new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
-        }
-    }
+   protected void componentUpdated()
+   {
+      if (!settingValue)
+      {
+         PluginService.getInstance().submitFormUpdate(
+                  new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
+      }
+   }
 
-    public void reloadValues()
-    {
-        try
-        {
-            settingValue = true;
-            panel.setValue(getInputValues());
-        }
-        finally
-        {
-            settingValue = false;
-        }
-    }
+   public void reloadValues()
+   {
+      try
+      {
+         settingValue = true;
+         panel.setValue(getInputValues());
+      }
+      finally
+      {
+         settingValue = false;
+      }
+   }
 
-    private List<String> getInputValues()
-    {
-        List<String> list = new ArrayList<>();
+   private List<String> getInputValues()
+   {
+      List<String> list = new ArrayList<>();
 
-        for (Object item : input.getValue())
-        {
+      for (Object item : input.getValue())
+      {
+         if (item != null)
+         {
             list.add(converter.convert(item));
-        }
+         }
+      }
 
-        return list;
-    }
+      return list;
+   }
 
-    protected class ListPanel extends AddEditDeleteListPanel<String>
-    {
-        public ListPanel(String title, List<String> initialValue)
-        {
-            super(title, initialValue);
+   protected class ListPanel extends AddEditDeleteListPanel<String>
+   {
+      private static final long serialVersionUID = 1L;
 
-            myListModel.addListDataListener(new ListDataListener()
+      public ListPanel(String title, List<String> initialValue)
+      {
+         super(title, initialValue);
+
+         myListModel.addListDataListener(new ListDataListener()
+         {
+            @Override
+            public void intervalAdded(ListDataEvent e)
             {
-                @Override
-                public void intervalAdded(ListDataEvent e)
-                {
-                    ListComponent.this.componentUpdated();
-                }
-
-                @Override
-                public void intervalRemoved(ListDataEvent e)
-                {
-                    ListComponent.this.componentUpdated();
-                }
-
-                @Override
-                public void contentsChanged(ListDataEvent e)
-                {
-                    ListComponent.this.componentUpdated();
-                }
-            });
-        }
-
-        @Nullable
-        @Override
-        protected String editSelectedItem(String item)
-        {
-            return ListComponent.this.editSelectedItem(item);
-        }
-
-        @Nullable
-        @Override
-        protected String findItemToAdd()
-        {
-            return ListComponent.this.findItemToAdd();
-        }
-
-        public List<String> getValue()
-        {
-            List<String> value = new ArrayList<>();
-
-            Enumeration<String> elements = myListModel.elements();
-            while (elements.hasMoreElements())
-            {
-                value.add(elements.nextElement());
+               ListComponent.this.componentUpdated();
             }
 
-            return value;
-        }
-
-        public void setValue(List<String> value)
-        {
-            myListModel.removeAllElements();
-
-            for (String element : value)
+            @Override
+            public void intervalRemoved(ListDataEvent e)
             {
-                myListModel.addElement(element);
+               ListComponent.this.componentUpdated();
             }
-        }
-    }
+
+            @Override
+            public void contentsChanged(ListDataEvent e)
+            {
+               ListComponent.this.componentUpdated();
+            }
+         });
+      }
+
+      @Nullable
+      @Override
+      protected String editSelectedItem(String item)
+      {
+         return ListComponent.this.editSelectedItem(item);
+      }
+
+      @Nullable
+      @Override
+      protected String findItemToAdd()
+      {
+         return ListComponent.this.findItemToAdd();
+      }
+
+      @SuppressWarnings("unchecked")
+      public List<String> getValue()
+      {
+         List<String> value = new ArrayList<>();
+
+         Enumeration<String> elements = myListModel.elements();
+         while (elements.hasMoreElements())
+         {
+            value.add(elements.nextElement());
+         }
+
+         return value;
+      }
+
+      @SuppressWarnings("unchecked")
+      public void setValue(List<String> value)
+      {
+         myListModel.removeAllElements();
+
+         for (String element : value)
+         {
+            myListModel.addElement(element);
+         }
+      }
+   }
 }
