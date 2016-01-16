@@ -19,7 +19,7 @@
       <maven.compiler.source>1.8</maven.compiler.source>
       <idea.version>14.1.4</idea.version>
       <furnace.version>2.22.10.Final</furnace.version>
-      <forge.version>3.0.0.Beta1</forge.version>
+      <forge.version>3.0.0.Beta2</forge.version>
       <angularjs.version>2.1.5.Final</angularjs.version>
 
       <ij.plugin>true</ij.plugin>
