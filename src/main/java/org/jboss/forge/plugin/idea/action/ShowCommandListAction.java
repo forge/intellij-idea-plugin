@@ -14,6 +14,7 @@ import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -39,6 +40,8 @@ public class ShowCommandListAction extends AnAction
       {
          files = new VirtualFile[] { event.getData(DataKeys.PROJECT_FILE_DIRECTORY) };
       }
-      ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(project, files));
+      Editor editor = event.getData(DataKeys.EDITOR);
+      CommandListPopupCallBack callback = new CommandListPopupCallBack(project, editor, files);
+      ServiceHelper.loadFurnaceAndRun(callback);
    }
 }

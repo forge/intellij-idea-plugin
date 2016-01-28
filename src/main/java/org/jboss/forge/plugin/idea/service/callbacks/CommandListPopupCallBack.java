@@ -15,6 +15,7 @@ import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -24,19 +25,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 public class CommandListPopupCallBack implements Runnable
 {
    private final Project project;
+   private final Editor editor;
    private final VirtualFile[] selectedFiles;
 
-   public CommandListPopupCallBack(Project project, VirtualFile... selectedFiles)
+   public CommandListPopupCallBack(Project project, Editor editor, VirtualFile... selectedFiles)
    {
       this.project = project;
+      this.editor = editor;
       this.selectedFiles = selectedFiles;
-
    }
 
    @Override
    public void run()
    {
-      UIContext uiContext = UIContextFactory.create(project, selectedFiles);
+      UIContext uiContext = UIContextFactory.create(project, editor, selectedFiles);
 
       List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
 

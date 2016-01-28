@@ -20,6 +20,9 @@ import org.jboss.forge.addon.ui.util.Selections;
 import org.jboss.forge.plugin.idea.runtime.UIProviderImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
 
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -31,14 +34,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 @SuppressWarnings("rawtypes")
 public class UIContextFactory
 {
-   public static UIContext create(Project project, VirtualFile[] files)
+   public static UIContext create(Project project, Editor editor, VirtualFile[] files)
    {
       UIProvider provider = new UIProviderImpl();
-      UISelection<?> initialSelection = getSelection(files);
+      UISelection<?> initialSelection = getSelection(editor, files);
       return new UIContextImpl(project, initialSelection, provider);
    }
 
-   private static UISelection<?> getSelection(VirtualFile[] files)
+   private static UISelection<?> getSelection(Editor editor, VirtualFile[] files)
    {
       UISelection<?> selection;
       if (files == null || files.length == 0)
@@ -48,7 +51,18 @@ public class UIContextFactory
       else
       {
          List<Resource> resources = filesToResources(files);
-         selection = Selections.from(resources.toArray());
+         if (editor != null)
+         {
+            selection = Selections.from((resource) -> {
+               Document document = editor.getDocument();
+               SelectionModel selectionModel = editor.getSelectionModel();
+               return new UIRegionImpl(resource, document, selectionModel);
+            } , resources);
+         }
+         else
+         {
+            selection = Selections.<Resource> from(resources);
+         }
       }
       return selection;
    }
