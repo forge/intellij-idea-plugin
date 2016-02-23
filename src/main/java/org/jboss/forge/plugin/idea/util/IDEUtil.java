@@ -7,6 +7,7 @@
 package org.jboss.forge.plugin.idea.util;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.jboss.forge.addon.resource.FileResource;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -38,7 +39,9 @@ public class IDEUtil
 {
    public static void refreshProject(UIContext context)
    {
-      refreshProject(projectFromContext(context));
+      Project project = projectFromContext(context);
+      refreshProject(project);
+      refreshSelection(project, context);
    }
 
    public static void refreshProject(Project project)
@@ -49,22 +52,43 @@ public class IDEUtil
       }
    }
 
+   private static void refreshSelection(Project project, UIContext context)
+   {
+      if (!project.isDisposed())
+      {
+         java.util.List<File> files = new ArrayList<>();
+         for (Object selection : context.getSelection())
+         {
+            if (selection instanceof FileResource)
+            {
+               FileResource<?> resource = (FileResource<?>) selection;
+               File file = resource.getUnderlyingResourceObject();
+               files.add(file);
+            }
+         }
+         LocalFileSystem.getInstance().refreshIoFiles(files);
+      }
+   }
+
    public static void openSelection(UIContext context)
    {
       Project project = projectFromContext(context);
 
-      for (Object selection : context.getSelection())
+      if (!project.isDisposed())
       {
-         openSingleSelection(project, selection);
+         for (Object selection : context.getSelection())
+         {
+            openSingleSelection(project, selection);
+         }
       }
    }
 
    private static void openSingleSelection(Project project, Object selection)
    {
-      if (!project.isDisposed() && selection instanceof FileResource)
+      if (selection instanceof FileResource)
       {
          FileResource<?> resource = (FileResource<?>) selection;
-         File file = new File(resource.getFullyQualifiedName());
+         File file = resource.getUnderlyingResourceObject();
          openFile(project, file);
       }
    }
