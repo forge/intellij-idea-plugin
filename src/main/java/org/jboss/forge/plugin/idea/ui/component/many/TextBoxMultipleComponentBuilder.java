@@ -19,47 +19,49 @@ import com.intellij.openapi.ui.Messages;
 /**
  * @author Adam Wyłuda
  */
+@SuppressWarnings("unchecked")
 public class TextBoxMultipleComponentBuilder extends ComponentBuilder
 {
-    @Override
-    public ForgeComponent build(final UIContext context, final InputComponent<?, Object> input)
-    {
-        return new ListComponent((UIInputMany) input)
-        {
-            @Override
-            protected String editSelectedItem(String item)
-            {
-                return showEditDialog("Edit item", item);
-            }
+   @Override
+   public ForgeComponent build(final UIContext context, final InputComponent<?, Object> input)
+   {
+      return new ListComponent((UIInputMany<Object>) input)
+      {
+         @Override
+         protected String editSelectedItem(String item)
+         {
+            return showEditDialog("Edit item", item);
+         }
 
-            @Override
-            protected String findItemToAdd()
-            {
-                return showEditDialog("Add item", "");
-            }
+         @Override
+         protected String findItemToAdd()
+         {
+            return showEditDialog("Add item", "");
+         }
 
-            private String showEditDialog(String title, final String initialValue) {
-                return Messages.showInputDialog(IDEUtil.projectFromContext(context),
-                        "", title, Messages.getQuestionIcon(), initialValue, null);
-            }
-        };
-    }
+         private String showEditDialog(String title, final String initialValue)
+         {
+            return Messages.showInputDialog(IDEUtil.projectFromContext(context),
+                     "", title, Messages.getQuestionIcon(), initialValue, null);
+         }
+      };
+   }
 
-    @Override
-    protected Class<String> getProducedType()
-    {
-        return String.class;
-    }
+   @Override
+   protected Class<String> getProducedType()
+   {
+      return String.class;
+   }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.TEXTBOX;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.TEXTBOX;
+   }
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInputMany.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInputMany.class };
+   }
 }

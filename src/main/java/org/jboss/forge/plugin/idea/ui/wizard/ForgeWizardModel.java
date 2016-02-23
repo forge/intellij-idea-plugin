@@ -18,25 +18,24 @@ import com.intellij.ui.wizard.WizardModel;
  */
 public class ForgeWizardModel extends WizardModel
 {
-    private ForgeWizardDialog dialog;
+   private ForgeWizardDialog dialog;
 
-    @SuppressWarnings("unchecked")
-    public ForgeWizardModel(CommandController originalController)
-    {
-        super(originalController.getMetadata().getName());
+   public ForgeWizardModel(CommandController originalController)
+   {
+      super(originalController.getMetadata().getName());
 
-        ForgeWizardStep step = new ForgeWizardStep(this, originalController);
-        add(step);
-        step.refreshNavigationState();
-    }
+      ForgeWizardStep step = new ForgeWizardStep(this, originalController);
+      add(step);
+      step.refreshNavigationState();
+   }
 
-    public ForgeWizardDialog getDialog()
-    {
-        return dialog;
-    }
+   public ForgeWizardDialog getDialog()
+   {
+      return dialog;
+   }
 
-    public void setDialog(ForgeWizardDialog dialog)
-    {
-        this.dialog = dialog;
-    }
+   public void setDialog(ForgeWizardDialog dialog)
+   {
+      this.dialog = dialog;
+   }
 }

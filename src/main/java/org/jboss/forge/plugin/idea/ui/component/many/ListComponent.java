@@ -44,6 +44,7 @@ public abstract class ListComponent extends ForgeComponent
       converter = converterFactory.getConverter(input.getValueType(), String.class);
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    public void buildUI(Container container)
    {
@@ -51,7 +52,7 @@ public abstract class ListComponent extends ForgeComponent
 
       List<String> initialValue = new ArrayList<>();
 
-      Iterable inputValue = (Iterable) InputComponents.getValueFor(input);
+      Iterable<Object> inputValue = (Iterable<Object>) InputComponents.getValueFor(input);
       if (inputValue != null)
       {
          for (Object item : inputValue)

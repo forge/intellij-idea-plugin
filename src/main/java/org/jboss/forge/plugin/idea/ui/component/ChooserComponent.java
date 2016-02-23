@@ -34,8 +34,8 @@ public abstract class ChooserComponent extends ForgeComponent
    private final InputComponent<?, Object> input;
    private final Converter<Object, String> converter;
 
-   private ComponentWithBrowseButton<TextFieldWithAutoCompletion> component;
-   private TextFieldWithAutoCompletion inputField;
+   private ComponentWithBrowseButton<TextFieldWithAutoCompletion<String>> component;
+   private TextFieldWithAutoCompletion<String> inputField;
 
    public ChooserComponent(UIContext context,
             InputComponent<?, Object> input)
@@ -46,12 +46,12 @@ public abstract class ChooserComponent extends ForgeComponent
       converter = converterFactory.getConverter(input.getValueType(), String.class);
    }
 
-   public abstract ActionListener createBrowseButtonActionListener(TextFieldWithAutoCompletion textField);
+   public abstract ActionListener createBrowseButtonActionListener(TextFieldWithAutoCompletion<String> textField);
 
    @Override
    public void buildUI(Container container)
    {
-      TextFieldWithAutoCompletion textField = CompletionUtil.createTextFieldWithAutoCompletion(context, input);
+      TextFieldWithAutoCompletion<String> textField = CompletionUtil.createTextFieldWithAutoCompletion(context, input);
       component = new ComponentWithBrowseButton<>(textField, createBrowseButtonActionListener(textField));
 
       inputField = component.getChildComponent();

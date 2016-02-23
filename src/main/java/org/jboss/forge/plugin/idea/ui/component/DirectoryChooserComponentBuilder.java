@@ -24,63 +24,63 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
  */
 public class DirectoryChooserComponentBuilder extends ComponentBuilder
 {
-    @Override
-    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
-    {
-        return new LabeledComponent(input, new ChooserComponent(context, input)
-        {
-            @Override
-            public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion textField)
+   @Override
+   public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
+   {
+      return new LabeledComponent(input, new ChooserComponent(context, input)
+      {
+         @Override
+         public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion<String> textField)
+         {
+            return new ActionListener()
             {
-                return new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        String initialValue = textField.getText();
-                        String value = IDEUtil.chooseFile(
-                                context,
-                                FileChooserDescriptorFactory.createSingleFolderDescriptor(),
-                                initialValue);
-                        if (value != null)
-                        {
-                            textField.setText(new File(value).toString());
-                        }
-                    }
-                };
-            }
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  String initialValue = textField.getText();
+                  String value = IDEUtil.chooseFile(
+                           context,
+                           FileChooserDescriptorFactory.createSingleFolderDescriptor(),
+                           initialValue);
+                  if (value != null)
+                  {
+                     textField.setText(new File(value).toString());
+                  }
+               }
+            };
+         }
 
-            @Override
-            protected String getValue()
-            {
-                String value = super.getValue();
-                return (value != null && !value.isEmpty()) ? new File(value).toString() : "";
-            }
+         @Override
+         protected String getValue()
+         {
+            String value = super.getValue();
+            return (value != null && !value.isEmpty()) ? new File(value).toString() : "";
+         }
 
-            @Override
-            protected String getInputValue()
-            {
-                String inputValue = super.getInputValue();
-                return (inputValue != null && !inputValue.isEmpty()) ? new File(inputValue).toString() : "";
-            }
-        });
-    }
+         @Override
+         protected String getInputValue()
+         {
+            String inputValue = super.getInputValue();
+            return (inputValue != null && !inputValue.isEmpty()) ? new File(inputValue).toString() : "";
+         }
+      });
+   }
 
-    @Override
-    protected Class<?> getProducedType()
-    {
-        return File.class;
-    }
+   @Override
+   protected Class<?> getProducedType()
+   {
+      return File.class;
+   }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.DIRECTORY_PICKER;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.DIRECTORY_PICKER;
+   }
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInput.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInput.class };
+   }
 }

@@ -25,67 +25,62 @@ import com.intellij.openapi.progress.Task;
  */
 public class ForgeCommandTask extends Task.Backgroundable
 {
-    private final CommandController controller;
-    private final UIProgressMonitor monitor;
+   private final CommandController controller;
+   private final UIProgressMonitor monitor;
 
-    public ForgeCommandTask(CommandController controller)
-    {
-        super(IDEUtil.projectFromContext(controller.getContext()),
-                "Executing Forge command [" +
+   public ForgeCommandTask(CommandController controller)
+   {
+      super(IDEUtil.projectFromContext(controller.getContext()),
+               "Executing Forge command [" +
                         controller.getCommand().getMetadata(controller.getContext()).getName()
                         + "]",
-                true);
+               true);
 
-        this.controller = controller;
+      this.controller = controller;
 
-        this.monitor = IDEUtil.progressMonitorFromContext(controller.getContext());
-    }
+      this.monitor = IDEUtil.progressMonitorFromContext(controller.getContext());
+   }
 
-    @Override
-    public void run(@NotNull ProgressIndicator indicator)
-    {
-        ((UIProgressMonitorImpl) this.monitor).setIndicator(indicator);
-        indicator.setFraction(0.0);
+   @Override
+   public void run(@NotNull ProgressIndicator indicator)
+   {
+      ((UIProgressMonitorImpl) this.monitor).setIndicator(indicator);
+      indicator.setFraction(0.0);
 
-        final UIContext context = controller.getContext();
+      final UIContext context = controller.getContext();
 
-        try
-        {
+      try
+      {
 
-            Result result = controller.execute();
-            ForgeNotifications.showExecutionResult(result);
+         Result result = controller.execute();
+         ForgeNotifications.showExecutionResult(result);
 
-            ApplicationManager.getApplication().invokeLater(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    IDEUtil.refreshProject(context);
-                    IDEUtil.openSelection(context);
-                }
-            });
-        }
-        catch (Exception e)
-        {
+         ApplicationManager.getApplication().invokeLater(() -> {
+            IDEUtil.refreshProject(context);
+            IDEUtil.openSelection(context);
+         });
+      }
+      catch (Exception e)
+      {
+         ForgeNotifications.showErrorMessage(e);
+         e.printStackTrace();
+      }
+      finally
+      {
+         try
+         {
+            controller.close();
+         }
+         catch (Exception e)
+         {
             ForgeNotifications.showErrorMessage(e);
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                controller.close();
-            }
-            catch (Exception e)
-            {
-                ForgeNotifications.showErrorMessage(e);
-                e.printStackTrace();
-            }
+         }
 
-            // This command could enable/disable some commands, so the list should be reloaded
-            PluginService.getInstance().reloadCommands(context);
-        }
+         // This command could enable/disable some commands, so the list should be reloaded
+         PluginService.getInstance().reloadCommands(context);
+      }
 
-        monitor.done();
-    }
+      monitor.done();
+   }
 }

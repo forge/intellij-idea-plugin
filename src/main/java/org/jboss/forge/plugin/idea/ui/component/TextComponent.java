@@ -33,7 +33,7 @@ public class TextComponent extends ForgeComponent
    private final InputComponent<?, Object> input;
    private final boolean oneLineMode;
 
-   private TextFieldWithAutoCompletion component;
+   private TextFieldWithAutoCompletion<String> component;
    private Converter<Object, String> converter;
 
    public TextComponent(UIContext context, InputComponent<?, Object> input, boolean oneLineMode)
@@ -71,7 +71,6 @@ public class TextComponent extends ForgeComponent
       addNoteLabel(container, component).setText(input.getNote());
    }
 
-   @SuppressWarnings("unchecked")
    @Override
    public void updateState()
    {

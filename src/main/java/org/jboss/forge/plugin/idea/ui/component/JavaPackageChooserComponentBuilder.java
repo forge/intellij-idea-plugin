@@ -22,47 +22,46 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
  */
 public class JavaPackageChooserComponentBuilder extends ComponentBuilder
 {
-    @Override
-    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
-    {
-        return new LabeledComponent(input, new ChooserComponent(context, input)
-        {
-            @Override
-            public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion textField)
+   @Override
+   public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
+   {
+      return new LabeledComponent(input, new ChooserComponent(context, input)
+      {
+         @Override
+         public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion<String> textField)
+         {
+            return new ActionListener()
             {
-                return new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        String initialValue = textField.getText();
-                        String value = IDEUtil.choosePackage(context, initialValue);
-                        if (value != null)
-                        {
-                            textField.setText(value);
-                        }
-                    }
-                };
-            }
-        });
-    }
+               @Override
+               public void actionPerformed(ActionEvent e)
+               {
+                  String initialValue = textField.getText();
+                  String value = IDEUtil.choosePackage(context, initialValue);
+                  if (value != null)
+                  {
+                     textField.setText(value);
+                  }
+               }
+            };
+         }
+      });
+   }
 
+   @Override
+   protected Class<?> getProducedType()
+   {
+      return String.class;
+   }
 
-    @Override
-    protected Class<?> getProducedType()
-    {
-        return String.class;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.JAVA_PACKAGE_PICKER;
+   }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.JAVA_PACKAGE_PICKER;
-    }
-
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInput.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInput.class };
+   }
 }

@@ -102,14 +102,16 @@ public class CommandListPopupBuilder
       return popup;
    }
 
+   @SuppressWarnings("unchecked")
    private JBList buildJBList(List<Object> elements, final Map<UICommand, UICommandMetadata> metadataIndex)
    {
       final JBList list = new JBList();
-      DefaultListModel model = new DefaultListModel();
+      DefaultListModel<Object> model = new DefaultListModel<>();
       model.setSize(elements.size());
 
       list.setCellRenderer(new ListCellRendererWrapper<Object>()
       {
+         @SuppressWarnings("rawtypes")
          @Override
          public void customize(JList list, Object data, int index,
                   boolean selected, boolean hasFocus)
@@ -154,7 +156,7 @@ public class CommandListPopupBuilder
          @Override
          public void onClosed(LightweightWindowEvent event)
          {
-            CommandListPopupBuilder.this.active = false;
+            CommandListPopupBuilder.active = false;
          }
       });
       listPopupBuilder.setItemChoosenCallback(new Runnable()
@@ -183,7 +185,6 @@ public class CommandListPopupBuilder
             return filterIndex.get(object);
          }
       });
-
 
       return listPopupBuilder.createPopup();
    }

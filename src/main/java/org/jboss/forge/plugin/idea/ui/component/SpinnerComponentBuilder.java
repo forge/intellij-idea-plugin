@@ -28,7 +28,6 @@ import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 public class SpinnerComponentBuilder extends ComponentBuilder
 {
 
-   @SuppressWarnings("unchecked")
    @Override
    public ForgeComponent build(UIContext context, final InputComponent<?, Object> input)
    {

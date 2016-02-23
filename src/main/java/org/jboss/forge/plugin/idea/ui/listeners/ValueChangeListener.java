@@ -26,104 +26,105 @@ import com.intellij.openapi.application.ModalityState;
  */
 public class ValueChangeListener implements Runnable
 {
-    private final ForgeWizardModel model;
-    private final Map<String, ForgeComponent> components;
-    private final NavigationState navigationState;
+   private final ForgeWizardModel model;
+   private final Map<String, ForgeComponent> components;
+   private final NavigationState navigationState;
 
-    public ValueChangeListener(ForgeWizardModel model, Map<String, ForgeComponent> components, NavigationState navigationState)
-    {
-        this.model = model;
-        this.components = components;
-        this.navigationState = navigationState;
-    }
+   public ValueChangeListener(ForgeWizardModel model, Map<String, ForgeComponent> components,
+            NavigationState navigationState)
+   {
+      this.model = model;
+      this.components = components;
+      this.navigationState = navigationState;
+   }
 
-    @Override
-    public void run()
-    {
-        validate();
-    }
+   @Override
+   public void run()
+   {
+      validate();
+   }
 
-    public void updateComponentsState()
-    {
-        for (ForgeComponent component : components.values())
-        {
-            component.updateState();
-        }
-    }
+   public void updateComponentsState()
+   {
+      for (ForgeComponent component : components.values())
+      {
+         component.updateState();
+      }
+   }
 
-    private void validate()
-    {
-        final List<UIMessage> allMessages = navigationState.getController().validate();
+   private void validate()
+   {
+      final List<UIMessage> allMessages = navigationState.getController().validate();
 
-        final Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
-        final List<UIMessage> commandMessages = new ArrayList<>();
+      final Map<String, List<UIMessage>> messagesByInputName = new HashMap<>();
+      final List<UIMessage> commandMessages = new ArrayList<>();
 
-        for (String inputName : components.keySet())
-        {
-            messagesByInputName.put(inputName, new ArrayList<UIMessage>());
-        }
+      for (String inputName : components.keySet())
+      {
+         messagesByInputName.put(inputName, new ArrayList<UIMessage>());
+      }
 
-        for (UIMessage message : allMessages)
-        {
-            if (message.getSource() == null)
-            {
-                commandMessages.add(message);
-            }
-            else
-            {
-                InputComponent source = message.getSource();
-                messagesByInputName.get(source.getName()).add(message);
-            }
-        }
+      for (UIMessage message : allMessages)
+      {
+         if (message.getSource() == null)
+         {
+            commandMessages.add(message);
+         }
+         else
+         {
+            InputComponent<?, ?> source = message.getSource();
+            messagesByInputName.get(source.getName()).add(message);
+         }
+      }
 
-        // Must be invoked on UI thread
-        ApplicationManager.getApplication().invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                processComponentMessages(messagesByInputName);
-                processCommandMessages(commandMessages, allMessages);
+      // Must be invoked on UI thread
+      ApplicationManager.getApplication().invokeLater(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            processComponentMessages(messagesByInputName);
+            processCommandMessages(commandMessages, allMessages);
 
-                updateComponentsState();
+            updateComponentsState();
 
-                navigationState.refreshNavigationState();
-            }
-        }, ModalityState.any());
-    }
+            navigationState.refreshNavigationState();
+         }
+      }, ModalityState.any());
+   }
 
-    private void processComponentMessages(Map<String, List<UIMessage>> messages)
-    {
-        for (Map.Entry<String, List<UIMessage>> entry : messages.entrySet())
-        {
-            ForgeComponent builder = components.get(entry.getKey());
-            builder.displayMessages(entry.getValue());
-        }
-    }
+   private void processComponentMessages(Map<String, List<UIMessage>> messages)
+   {
+      for (Map.Entry<String, List<UIMessage>> entry : messages.entrySet())
+      {
+         ForgeComponent builder = components.get(entry.getKey());
+         builder.displayMessages(entry.getValue());
+      }
+   }
 
-    private void processCommandMessages(List<UIMessage> commandMessages, List<UIMessage> allMessages)
-    {
-        // Messages specific for command (not any input) should be displayed first
-        for (UIMessage message : commandMessages)
-        {
-            if (message.getSeverity() == UIMessage.Severity.ERROR)
-            {
-                model.getDialog().setErrorMessage(message.getDescription());
-                return;
-            }
-        }
+   private void processCommandMessages(List<UIMessage> commandMessages, List<UIMessage> allMessages)
+   {
+      // Messages specific for command (not any input) should be displayed first
+      for (UIMessage message : commandMessages)
+      {
+         if (message.getSeverity() == UIMessage.Severity.ERROR)
+         {
+            model.getDialog().setErrorMessage(message.getDescription());
+            return;
+         }
+      }
 
-        // Display first input validation error
-        for (UIMessage message : allMessages)
-        {
-            if (message.getSeverity() == UIMessage.Severity.ERROR)
-            {
-                model.getDialog().setErrorMessage(message.getDescription());
-                return;
-            }
-        }
+      // Display first input validation error
+      for (UIMessage message : allMessages)
+      {
+         if (message.getSeverity() == UIMessage.Severity.ERROR)
+         {
+            model.getDialog().setErrorMessage(message.getDescription());
+            return;
+         }
+      }
 
-        // If there are no errors
-        model.getDialog().setErrorMessage(null);
-    }
+      // If there are no errors
+      model.getDialog().setErrorMessage(null);
+   }
 }

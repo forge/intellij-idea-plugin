@@ -35,117 +35,117 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ForgeWizardStep extends WizardStep<ForgeWizardModel>
 {
-    private final ForgeWizardModel model;
-    private final NavigationState navigationState;
+   private final ForgeWizardModel model;
+   private final NavigationState navigationState;
 
-    public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
-    {
-        this.model = model;
-        this.navigationState = new NavigationState(model, controller);
+   public ForgeWizardStep(ForgeWizardModel model, CommandController controller)
+   {
+      this.model = model;
+      this.navigationState = new NavigationState(model, controller);
 
-        try
-        {
-            controller.initialize();
-        }
-        catch (Exception e)
-        {
-            ForgeNotifications.showErrorMessage(e);
-            e.printStackTrace();
-        }
-    }
+      try
+      {
+         controller.initialize();
+      }
+      catch (Exception e)
+      {
+         ForgeNotifications.showErrorMessage(e);
+         e.printStackTrace();
+      }
+   }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Override
-    public JComponent prepare(WizardNavigationState state)
-    {
-        JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
-                "[left]rel[grow,fill]"));
+   @SuppressWarnings({ "unchecked", "rawtypes" })
+   @Override
+   public JComponent prepare(WizardNavigationState state)
+   {
+      JPanel container = new JPanel(new MigLayout("fillx,wrap 2",
+               "[left]rel[grow,fill]"));
 
-        Map<String, ForgeComponent> components = new HashMap<>();
-        UIContext context = navigationState.getController().getContext();
-        ValueChangeListener listener = new ValueChangeListener(model, components, navigationState);
+      Map<String, ForgeComponent> components = new HashMap<>();
+      UIContext context = navigationState.getController().getContext();
+      ValueChangeListener listener = new ValueChangeListener(model, components, navigationState);
 
-        for (InputComponent input : navigationState.getController().getInputs().values())
-        {
-            ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
-            ForgeComponent component = builder.build(context, input);
-            component.buildUI(container);
-            component.setValueChangeListener(listener);
+      for (InputComponent input : navigationState.getController().getInputs().values())
+      {
+         ComponentBuilder builder = ComponentBuilderRegistry.INSTANCE.getBuilderFor(input);
+         ForgeComponent component = builder.build(context, input);
+         component.buildUI(container);
+         component.setValueChangeListener(listener);
 
-            components.put(input.getName(), component);
-        }
+         components.put(input.getName(), component);
+      }
 
-        navigationState.refreshNavigationState();
-        listener.updateComponentsState();
+      navigationState.refreshNavigationState();
+      listener.updateComponentsState();
 
-        return container;
-    }
+      return container;
+   }
 
-    @Override
-    public WizardStep onNext(ForgeWizardModel model)
-    {
-        return navigate(true);
-    }
+   @Override
+   public WizardStep<ForgeWizardModel> onNext(ForgeWizardModel model)
+   {
+      return navigate(true);
+   }
 
-    @Override
-    public WizardStep onPrevious(ForgeWizardModel model)
-    {
-        return navigate(false);
-    }
+   @Override
+   public WizardStep<ForgeWizardModel> onPrevious(ForgeWizardModel model)
+   {
+      return navigate(false);
+   }
 
-    private WizardStep navigate(boolean forward)
-    {
-        // If it's not a wizard, we don't care
-        if (!(navigationState.isWizardController()))
-        {
-            return null;
-        }
+   private WizardStep<ForgeWizardModel> navigate(boolean forward)
+   {
+      // If it's not a wizard, we don't care
+      if (!(navigationState.isWizardController()))
+      {
+         return null;
+      }
 
-        try
-        {
-            CommandController nextController;
+      try
+      {
+         CommandController nextController;
 
-            if (forward)
-            {
-                nextController = navigationState.getWizardCommandController().next();
-            }
-            else
-            {
-                nextController = navigationState.getWizardCommandController().previous();
-            }
+         if (forward)
+         {
+            nextController = navigationState.getWizardCommandController().next();
+         }
+         else
+         {
+            nextController = navigationState.getWizardCommandController().previous();
+         }
 
-            return new ForgeWizardStep(this.model, nextController);
-        }
-        catch (Exception e)
-        {
-            model.getDialog().setErrorMessage(e.getMessage());
-            e.printStackTrace();
-            return this;
-        }
-    }
+         return new ForgeWizardStep(this.model, nextController);
+      }
+      catch (Exception e)
+      {
+         model.getDialog().setErrorMessage(e.getMessage());
+         e.printStackTrace();
+         return this;
+      }
+   }
 
-    @Override
-    public boolean onFinish()
-    {
-        new ForgeCommandTask(navigationState.getController()).queue();
+   @Override
+   public boolean onFinish()
+   {
+      new ForgeCommandTask(navigationState.getController()).queue();
 
-        return true;
-    }
+      return true;
+   }
 
-    @Override
-    public Icon getIcon()
-    {
-        return null;
-    }
+   @Override
+   public Icon getIcon()
+   {
+      return null;
+   }
 
-    @Override
-    public String getExplanation()
-    {
-        return navigationState.getController().getMetadata().getDescription();
-    }
+   @Override
+   public String getExplanation()
+   {
+      return navigationState.getController().getMetadata().getDescription();
+   }
 
-    public void refreshNavigationState()
-    {
-        this.navigationState.refreshNavigationState();
-    }
+   public void refreshNavigationState()
+   {
+      this.navigationState.refreshNavigationState();
+   }
 }

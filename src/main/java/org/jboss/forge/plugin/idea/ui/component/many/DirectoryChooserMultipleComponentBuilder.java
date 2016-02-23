@@ -21,42 +21,43 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 /**
  * @author Adam Wyłuda
  */
+@SuppressWarnings("unchecked")
 public class DirectoryChooserMultipleComponentBuilder extends ComponentBuilder
 {
-    @Override
-    public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
-    {
-        return new ListComponent((UIInputMany) input)
-        {
-            @Override
-            protected String editSelectedItem(String item)
-            {
-                return IDEUtil.chooseFile(context, FileChooserDescriptorFactory.createSingleFolderDescriptor(), item);
-            }
+   @Override
+   public ForgeComponent build(final UIContext context, InputComponent<?, Object> input)
+   {
+      return new ListComponent((UIInputMany<Object>) input)
+      {
+         @Override
+         protected String editSelectedItem(String item)
+         {
+            return IDEUtil.chooseFile(context, FileChooserDescriptorFactory.createSingleFolderDescriptor(), item);
+         }
 
-            @Override
-            protected String findItemToAdd()
-            {
-                return IDEUtil.chooseFile(context, FileChooserDescriptorFactory.createSingleFolderDescriptor(), "");
-            }
-        };
-    }
+         @Override
+         protected String findItemToAdd()
+         {
+            return IDEUtil.chooseFile(context, FileChooserDescriptorFactory.createSingleFolderDescriptor(), "");
+         }
+      };
+   }
 
-    @Override
-    protected Class<?> getProducedType()
-    {
-        return File.class;
-    }
+   @Override
+   protected Class<?> getProducedType()
+   {
+      return File.class;
+   }
 
-    @Override
-    protected String getSupportedInputType()
-    {
-        return InputType.DIRECTORY_PICKER;
-    }
+   @Override
+   protected String getSupportedInputType()
+   {
+      return InputType.DIRECTORY_PICKER;
+   }
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes()
-    {
-        return new Class<?>[]{UIInputMany.class};
-    }
+   @Override
+   protected Class<?>[] getSupportedInputComponentTypes()
+   {
+      return new Class<?>[] { UIInputMany.class };
+   }
 }
