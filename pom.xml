@@ -17,7 +17,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.target>1.8</maven.compiler.target>
       <maven.compiler.source>1.8</maven.compiler.source>
-      <idea.version>14.1.4</idea.version>
+      <idea.version>15.0.4</idea.version>
       <furnace.version>2.23.2.Final</furnace.version>
       <forge.version>3.0.0.CR1</forge.version>
       <angularjs.version>2.1.5.Final</angularjs.version>
