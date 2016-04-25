@@ -96,7 +96,10 @@ public class IDEUtil
    public static void openFile(Project project, File file)
    {
       VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
-      FileEditorManager.getInstance(project).openFile(virtualFile, true);
+      if (virtualFile != null)
+      {
+         FileEditorManager.getInstance(project).openFile(virtualFile, true);
+      }
    }
 
    public static void openProject(String path)
