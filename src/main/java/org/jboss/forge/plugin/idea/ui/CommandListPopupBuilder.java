@@ -44,7 +44,6 @@ import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
-import com.intellij.util.Function;
 
 /**
  * Lists enabled UI commands.
@@ -177,14 +176,7 @@ public class CommandListPopupBuilder
             }
          }
       });
-      listPopupBuilder.setFilteringEnabled(new Function<Object, String>()
-      {
-         @Override
-         public String fun(Object object)
-         {
-            return filterIndex.get(object);
-         }
-      });
+      listPopupBuilder.setFilteringEnabled(filterIndex::get);
 
       return listPopupBuilder.createPopup();
    }
