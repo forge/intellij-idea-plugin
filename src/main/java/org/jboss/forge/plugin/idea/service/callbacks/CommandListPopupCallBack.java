@@ -9,15 +9,15 @@ package org.jboss.forge.plugin.idea.service.callbacks;
 
 import java.util.List;
 
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.popup.JBPopup;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
 import org.jboss.forge.plugin.idea.service.PluginService;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
-
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 
 /**
  * @author <a href="mailto:danielsoro@gmail.com">Daniel Cunha (soro)</a>
@@ -42,12 +42,16 @@ public class CommandListPopupCallBack implements Runnable
 
       List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
 
-      new CommandListPopupBuilder()
+      JBPopup list = new CommandListPopupBuilder()
                .setUIContext(uiContext)
                .setCommands(candidates)
                .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
-               .build()
-               .showCenteredInCurrentWindow(project);
+               .build();
+
+      if (project != null)
+      {
+         list.showCenteredInCurrentWindow(project);
+      }
    }
 
 }
