@@ -6,6 +6,8 @@
  */
 package org.jboss.forge.plugin.idea.action;
 
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.ui.awt.RelativePoint;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.plugin.idea.service.ServiceHelper;
 import org.jboss.forge.plugin.idea.service.callbacks.CommandListPopupCallBack;
@@ -34,22 +36,8 @@ public class ShowCommandListAction extends AnAction
       {
          return;
       }
-      Project project = event.getData(DataKeys.PROJECT);
-      VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
-      // If no file is selected, then set project directory as selection
-      if (files == null || files.length == 0)
-      {
-         files = new VirtualFile[] { event.getData(DataKeys.PROJECT_FILE_DIRECTORY) };
-      }
-      Editor editor = event.getData(DataKeys.EDITOR);
-      saveAllFiles();
-      CommandListPopupCallBack callback = new CommandListPopupCallBack(project, editor, files);
-      ServiceHelper.loadFurnaceAndRun(callback);
-   }
-
-   private void saveAllFiles()
-   {
-      FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
-      fileDocumentManager.saveAllDocuments();
+      // Save all files
+      FileDocumentManager.getInstance().saveAllDocuments();
+      ServiceHelper.loadFurnaceAndRun(new CommandListPopupCallBack(event));
    }
 }
