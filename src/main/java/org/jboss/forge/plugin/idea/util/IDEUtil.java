@@ -138,8 +138,8 @@ public class IDEUtil
    public static String chooseFile(Project project, FileChooserDescriptor descriptor, String initialValue)
    {
       VirtualFile initialFile = LocalFileSystem.getInstance().findFileByIoFile(new File(initialValue));
-      VirtualFile choosenFile = FileChooser.chooseFile(descriptor, project, initialFile);
-      return choosenFile != null ? choosenFile.getCanonicalPath() : (initialValue.isEmpty() ? null : initialValue);
+      VirtualFile chosenFile = FileChooser.chooseFile(descriptor, project, initialFile);
+      return chosenFile != null ? chosenFile.getCanonicalPath() : (initialValue.isEmpty() ? null : initialValue);
    }
 
    public static String chooseClass(UIContext context, String initialValue)
