@@ -10,7 +10,7 @@
           <small>Execute wizards and interact with the container.</small>
       </p>
       <p>
-          Press Ctrl+Alt+4 to show Forge commands.<br/>
+          Press <b>Ctrl+Alt+4</b> to show Forge commands. On MacOSX, use <b>Command + Option + 4</b>.<br/>
           Requires JDK1.8+ to run.<br/>
           Bundled with Forge ${forge.version}
       </p>
