@@ -1,6 +1,6 @@
 <idea-plugin version="2">
     <id>org.jboss.forge.plugin.idea</id>
-    <name>JBoss Forge Support</name>
+    <name>JBoss Forge IDEA Plugin</name>
     <version>${project.version}</version>
     <vendor email="forge@redhat.com" url="http://forge.jboss.org">Red Hat, Inc</vendor>
 
