@@ -42,8 +42,8 @@ public class CheckboxComponentBuilder extends ComponentBuilder
          public void buildUI(Container container)
          {
             // Create the label
-            String text = (input.getLabel() == null ? input.getName() : input
-                     .getLabel());
+            String text = input.getLabel() == null ? input.getName() : input
+                     .getLabel();
             checkbox = new JCheckBox(text);
 
             checkbox.addActionListener(new ActionListener()
@@ -84,7 +84,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
          private boolean getInputValue()
          {
             Object value = InputComponents.getValueFor(input);
-            return (value != null && converter.convert(value));
+            return value != null && converter.convert(value);
          }
       };
    }
