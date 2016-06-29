@@ -34,6 +34,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 @SuppressWarnings("rawtypes")
 public class UIContextFactory
 {
+   private UIContextFactory(){}
+
    public static UIContext create(Project project, Editor editor, VirtualFile[] files)
    {
       UIProvider provider = new UIProviderImpl();

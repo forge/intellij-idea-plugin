@@ -25,6 +25,8 @@ import com.intellij.ui.TextFieldWithAutoCompletion;
 @SuppressWarnings("unchecked")
 public class CompletionUtil
 {
+   private CompletionUtil(){}
+
    public static boolean hasCompletions(InputComponent<?, Object> input)
    {
       return input instanceof HasCompleter && ((HasCompleter<?, Object>) input).getCompleter() != null;

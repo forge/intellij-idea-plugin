@@ -30,6 +30,8 @@ import org.jboss.forge.plugin.idea.service.ForgeService;
  */
 public class CommandUtil
 {
+    private CommandUtil(){}
+
     private static final String RECENT_COMMANDS = "Recent Commands";
 
     public static List<UICommand> getAllCommands()
