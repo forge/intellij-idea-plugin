@@ -157,21 +157,16 @@ public class CommandListPopupBuilder
             CommandListPopupBuilder.active = false;
          }
       });
-      listPopupBuilder.setItemChoosenCallback(new Runnable()
-      {
-         @Override
-         public void run()
+      listPopupBuilder.setItemChoosenCallback((Runnable) () -> {
+         Object selectedObject = list.getSelectedValue();
+         if (selectedObject instanceof UICommand)
          {
-            Object selectedObject = list.getSelectedValue();
-            if (selectedObject instanceof UICommand)
-            {
-               UICommand selectedCommand = (UICommand) selectedObject;
+            UICommand selectedCommand = (UICommand) selectedObject;
 
-               // Make sure that this cached command is still enabled
-               if (selectedCommand.isEnabled(uiContext))
-               {
-                  openWizard(selectedCommand);
-               }
+            // Make sure that this cached command is still enabled
+            if (selectedCommand.isEnabled(uiContext))
+            {
+               openWizard(selectedCommand);
             }
          }
       });

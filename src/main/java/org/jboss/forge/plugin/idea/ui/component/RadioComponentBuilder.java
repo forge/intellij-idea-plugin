@@ -84,16 +84,9 @@ public class RadioComponentBuilder extends ComponentBuilder
                radio.setText(label);
                radio.setSelected(label.equals(value));
 
-               radio.addActionListener(new ActionListener()
-               {
-                  @Override
-                  public void actionPerformed(ActionEvent e)
-                  {
-                     PluginService.getInstance().submitFormUpdate(
-                              new FormUpdateCallback(converterFactory, input,
-                                       label, valueChangeListener));
-                  }
-               });
+               radio.addActionListener(e -> PluginService.getInstance().submitFormUpdate(
+                        new FormUpdateCallback(converterFactory, input,
+                                 label, valueChangeListener)));
 
                radioContainer.add(radio);
                group.add(radio);

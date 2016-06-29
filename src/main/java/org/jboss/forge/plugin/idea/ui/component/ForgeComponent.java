@@ -71,14 +71,7 @@ public abstract class ForgeComponent
     protected JLabel addNoteLabel(Container parent, JComponent component) {
         final JBLabel noteLabel = new JBLabel(UIUtil.ComponentStyle.SMALL);
         // Hide empty labels
-        noteLabel.addPropertyChangeListener("text", new PropertyChangeListener()
-        {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt)
-            {
-                noteLabel.setVisible(!Strings.isNullOrEmpty(noteLabel.getText()));
-            }
-        });
+        noteLabel.addPropertyChangeListener("text", (PropertyChangeListener) evt -> noteLabel.setVisible(!Strings.isNullOrEmpty(noteLabel.getText())));
         noteLabel.setAnchor(component);
         parent.add(noteLabel,"skip 1,hidemode 2");
         component.putClientProperty(NOTE_CLIENT_PROPERTY_KEY, noteLabel);

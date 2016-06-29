@@ -46,16 +46,10 @@ public class CheckboxComponentBuilder extends ComponentBuilder
                      .getLabel();
             checkbox = new JCheckBox(text);
 
-            checkbox.addActionListener(new ActionListener()
-            {
-               @Override
-               public void actionPerformed(ActionEvent e)
-               {
-                  PluginService.getInstance().submitFormUpdate(
-                           new FormUpdateCallback(converterFactory, input,
-                                    checkbox.isSelected(), valueChangeListener));
-               }
-            });
+            checkbox.addActionListener(e ->
+                    PluginService.getInstance().submitFormUpdate(
+                     new FormUpdateCallback(converterFactory, input,
+                              checkbox.isSelected(), valueChangeListener)));
 
             container.add(checkbox, "skip");
             checkbox.setToolTipText(input.getDescription());

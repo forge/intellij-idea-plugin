@@ -101,40 +101,29 @@ public class CommandUtil
         // Sort each entry and add to the result
         for (Map.Entry<String, List<UICommand>> entry : categories.entrySet())
         {
-            Collections.sort(entry.getValue(), new Comparator<UICommand>()
-            {
-                @Override
-                public int compare(UICommand o1, UICommand o2)
-                {
-                    return index.get(o1).getName().compareTo(
-                            index.get(o2).getName());
-                }
-            });
+            Collections.sort(entry.getValue(),
+                    (o1, o2) -> index.get(o1).getName().compareTo(
+                    index.get(o2).getName()));
 
             result.add(entry);
         }
 
         // Sort result
-        Collections.sort(result, new Comparator<Map.Entry<String, List<UICommand>>>()
-        {
-            @Override
-            public int compare(Map.Entry<String, List<UICommand>> o1, Map.Entry<String, List<UICommand>> o2)
+        Collections.sort(result, (o1, o2) -> {
+            String o1Name = o1.getKey();
+            String o2Name = o2.getKey();
+
+            if (o1Name.equals(RECENT_COMMANDS))
             {
-                String o1Name = o1.getKey();
-                String o2Name = o2.getKey();
-
-                if (o1Name.equals(RECENT_COMMANDS))
-                {
-                    return -1;
-                }
-
-                if (o2Name.equals(RECENT_COMMANDS))
-                {
-                    return 1;
-                }
-
-                return o1Name.compareTo(o2Name);
+                return -1;
             }
+
+            if (o2Name.equals(RECENT_COMMANDS))
+            {
+                return 1;
+            }
+
+            return o1Name.compareTo(o2Name);
         });
 
         return result;

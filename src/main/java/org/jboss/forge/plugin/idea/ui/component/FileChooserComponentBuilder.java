@@ -29,20 +29,15 @@ public class FileChooserComponentBuilder extends ComponentBuilder
          @Override
          public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion<String> textField)
          {
-            return new ActionListener()
-            {
-               @Override
-               public void actionPerformed(ActionEvent e)
+            return e -> {
+               String initialValue = textField.getText();
+               String value = IDEUtil.chooseFile(
+                        context,
+                        FileChooserDescriptorFactory.createSingleLocalFileDescriptor(),
+                        initialValue);
+               if (value != null)
                {
-                  String initialValue = textField.getText();
-                  String value = IDEUtil.chooseFile(
-                           context,
-                           FileChooserDescriptorFactory.createSingleLocalFileDescriptor(),
-                           initialValue);
-                  if (value != null)
-                  {
-                     textField.setText(new File(value).toString());
-                  }
+                  textField.setText(new File(value).toString());
                }
             };
          }

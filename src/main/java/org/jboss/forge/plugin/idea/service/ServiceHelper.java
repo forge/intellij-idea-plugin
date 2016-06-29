@@ -99,14 +99,7 @@ public class ServiceHelper
                 @Override
                 public void projectCreated(final Project project)
                 {
-                    ApplicationManager.getApplication().invokeLater(new Runnable()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            IDEUtil.openProject(project.getRoot().getFullyQualifiedName());
-                        }
-                    });
+                    ApplicationManager.getApplication().invokeLater((Runnable) () -> IDEUtil.openProject(project.getRoot().getFullyQualifiedName()));
                 }
             });
         }

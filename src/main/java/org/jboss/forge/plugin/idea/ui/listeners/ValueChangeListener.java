@@ -78,18 +78,13 @@ public class ValueChangeListener implements Runnable
       }
 
       // Must be invoked on UI thread
-      ApplicationManager.getApplication().invokeLater(new Runnable()
-      {
-         @Override
-         public void run()
-         {
-            processComponentMessages(messagesByInputName);
-            processCommandMessages(commandMessages, allMessages);
+      ApplicationManager.getApplication().invokeLater((Runnable) () -> {
+         processComponentMessages(messagesByInputName);
+         processCommandMessages(commandMessages, allMessages);
 
-            updateComponentsState();
+         updateComponentsState();
 
-            navigationState.refreshNavigationState();
-         }
+         navigationState.refreshNavigationState();
       }, ModalityState.any());
    }
 

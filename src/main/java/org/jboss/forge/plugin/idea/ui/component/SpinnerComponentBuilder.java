@@ -47,16 +47,11 @@ public class SpinnerComponentBuilder extends ComponentBuilder
             editor.getTextField().setHorizontalAlignment(JTextField.LEFT);
             spinner.setEditor(editor);
 
-            spinner.addChangeListener(new ChangeListener()
-            {
-               @Override
-               public void stateChanged(ChangeEvent e)
-               {
-                  Object selectedItem = spinner.getValue();
-                  PluginService.getInstance().submitFormUpdate(
-                           new FormUpdateCallback(converterFactory, input,
-                                    selectedItem, valueChangeListener));
-               }
+            spinner.addChangeListener(e -> {
+               Object selectedItem = spinner.getValue();
+               PluginService.getInstance().submitFormUpdate(
+                        new FormUpdateCallback(converterFactory, input,
+                                 selectedItem, valueChangeListener));
             });
             spinner.setToolTipText(input.getDescription());
             addNoteLabel(container, spinner).setText(input.getNote());
