@@ -37,12 +37,6 @@ public class ForgeWizardDialog extends WizardDialog<ForgeWizardModel>
         refreshTitle();
     }
 
-    @Override
-    public String getTitle()
-    {
-        return super.getTitle();
-    }
-
     public void refreshTitle()
     {
         Object selection = context.getSelection().get();

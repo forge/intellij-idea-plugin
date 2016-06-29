@@ -96,9 +96,8 @@ public class CommandListPopupBuilder
       Map<Object, String> filterIndex = indexFilterData(elements, categories, metadataIndex);
 
       JBList list = buildJBList(elements, metadataIndex);
-      JBPopup popup = buildPopup(list, filterIndex);
 
-      return popup;
+      return buildPopup(list, filterIndex);
    }
 
    @SuppressWarnings("unchecked")

@@ -53,7 +53,7 @@ public class UIContextFactory
          List<Resource> resources = filesToResources(files);
          if (editor != null)
          {
-            selection = Selections.from((resource) -> {
+            selection = Selections.from(resource -> {
                Document document = editor.getDocument();
                SelectionModel selectionModel = editor.getSelectionModel();
                return new UIRegionImpl(resource, document, selectionModel);

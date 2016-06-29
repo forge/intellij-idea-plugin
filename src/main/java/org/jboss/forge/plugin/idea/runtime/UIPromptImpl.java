@@ -23,9 +23,7 @@ public class UIPromptImpl implements UIPrompt
    @Override
    public String prompt(final String message)
    {
-      ApplicationManager.getApplication().invokeAndWait(() -> {
-         stringValue = Messages.showInputDialog("", message, Messages.getQuestionIcon());
-      } , ModalityState.any());
+      ApplicationManager.getApplication().invokeAndWait(() -> stringValue = Messages.showInputDialog("", message, Messages.getQuestionIcon()), ModalityState.any());
       return stringValue;
    }
 
@@ -39,9 +37,7 @@ public class UIPromptImpl implements UIPrompt
    @Override
    public boolean promptBoolean(final String message)
    {
-      ApplicationManager.getApplication().invokeAndWait(() -> {
-         booleanValue = Messages.showYesNoDialog(message, "", Messages.getQuestionIcon()) == Messages.YES;
-      } , ModalityState.any());
+      ApplicationManager.getApplication().invokeAndWait(() -> booleanValue = Messages.showYesNoDialog(message, "", Messages.getQuestionIcon()) == Messages.YES, ModalityState.any());
       return booleanValue;
 
    }
