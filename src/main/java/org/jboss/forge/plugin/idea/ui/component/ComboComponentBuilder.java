@@ -47,20 +47,15 @@ public class ComboComponentBuilder extends ComponentBuilder
 
             combo = new ComboBox(model);
             container.add(combo);
-            combo.addItemListener(new ItemListener()
-            {
-               @Override
-               public void itemStateChanged(ItemEvent e)
+            combo.addItemListener((ItemListener) e -> {
+               // To prevent nullifying input's value when model is cleared
+               if (e.getStateChange() == ItemEvent.SELECTED)
                {
-                  // To prevent nullifying input's value when model is cleared
-                  if (e.getStateChange() == ItemEvent.SELECTED)
-                  {
-                     Object selectedItem = model.getSelectedItem();
+                  Object selectedItem = model.getSelectedItem();
 
-                     PluginService.getInstance().submitFormUpdate(
-                              new FormUpdateCallback(converterFactory, input,
-                                       selectedItem, valueChangeListener));
-                  }
+                  PluginService.getInstance().submitFormUpdate(
+                           new FormUpdateCallback(converterFactory, input,
+                                    selectedItem, valueChangeListener));
                }
             });
             combo.setToolTipText(input.getDescription());

@@ -30,17 +30,12 @@ public class JavaPackageChooserComponentBuilder extends ComponentBuilder
          @Override
          public ActionListener createBrowseButtonActionListener(final TextFieldWithAutoCompletion<String> textField)
          {
-            return new ActionListener()
-            {
-               @Override
-               public void actionPerformed(ActionEvent e)
+            return e -> {
+               String initialValue = textField.getText();
+               String value = IDEUtil.choosePackage(context, initialValue);
+               if (value != null)
                {
-                  String initialValue = textField.getText();
-                  String value = IDEUtil.choosePackage(context, initialValue);
-                  if (value != null)
-                  {
-                     textField.setText(value);
-                  }
+                  textField.setText(value);
                }
             };
          }
