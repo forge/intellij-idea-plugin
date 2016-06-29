@@ -37,6 +37,8 @@ import com.intellij.psi.util.ClassUtil;
  */
 public class IDEUtil
 {
+   private IDEUtil(){}
+   
    public static void refreshProject(UIContext context)
    {
       Project project = projectFromContext(context);

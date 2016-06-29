@@ -21,6 +21,8 @@ import com.intellij.openapi.ui.MessageType;
  */
 public class ForgeNotifications
 {
+   private ForgeNotifications(){}
+   
    private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroup.balloonGroup("Forge Notifications");
 
    private static final String SUCCESS_MESSAGE = "Command executed successfully";
