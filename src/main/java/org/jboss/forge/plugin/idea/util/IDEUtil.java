@@ -8,20 +8,20 @@ package org.jboss.forge.plugin.idea.util;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import org.jboss.forge.addon.resource.FileResource;
-import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
-import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.furnace.util.Assert;
-import org.jboss.forge.plugin.idea.context.UIContextImpl;
+import java.util.Optional;
 
 import com.intellij.ide.impl.ProjectUtil;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeJavaClassChooserDialog;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.ScrollType;
+import com.intellij.openapi.editor.ScrollingModel;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -31,14 +31,24 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.ClassUtil;
+import org.jboss.forge.addon.resource.FileResource;
+import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.context.UIRegion;
+import org.jboss.forge.addon.ui.context.UISelection;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
+import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.forge.furnace.util.Assert;
+import org.jboss.forge.plugin.idea.context.UIContextImpl;
 
 /**
  * @author Adam Wyłuda
  */
 public class IDEUtil
 {
-   private IDEUtil(){}
-   
+   private IDEUtil()
+   {
+   }
+
    public static void refreshProject(UIContext context)
    {
       Project project = projectFromContext(context);
@@ -78,30 +88,49 @@ public class IDEUtil
 
       if (!project.isDisposed())
       {
-         for (Object selection : context.getSelection())
+         UISelection<Object> selection = context.getSelection();
+         Optional<UIRegion<Object>> region = selection.getRegion();
+         for (Object singleSelection : selection)
          {
-            openSingleSelection(project, selection);
+            openSingleSelection(project, singleSelection, region);
          }
       }
    }
 
-   private static void openSingleSelection(Project project, Object selection)
+   private static void openSingleSelection(Project project, Object selection, Optional<UIRegion<Object>> region)
    {
       if (selection instanceof FileResource)
       {
          FileResource<?> resource = (FileResource<?>) selection;
          File file = resource.getUnderlyingResourceObject();
-         openFile(project, file);
+         FileEditor[] fileEditors = openFile(project, file);
+         region.ifPresent(r ->
+         {
+            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            if (editor == null)
+            {
+               return;
+            }
+            SelectionModel selectionModel = editor.getSelectionModel();
+            ScrollingModel scrollingModel = editor.getScrollingModel();
+
+            LogicalPosition from = new LogicalPosition(r.getStartLine() - 1, r.getStartPosition());
+            LogicalPosition to = new LogicalPosition(r.getEndLine() - 1, r.getEndPosition(), true);
+
+            selectionModel.setBlockSelection(from, to);
+            scrollingModel.scrollTo(from, ScrollType.CENTER);
+         });
       }
    }
 
-   public static void openFile(Project project, File file)
+   private static FileEditor[] openFile(Project project, File file)
    {
       VirtualFile virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file);
       if (virtualFile != null)
       {
-         FileEditorManager.getInstance(project).openFile(virtualFile, true);
+         return FileEditorManager.getInstance(project).openFile(virtualFile, true);
       }
+      return null;
    }
 
    public static void openProject(String path)
