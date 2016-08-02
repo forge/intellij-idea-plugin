@@ -90,9 +90,12 @@ public class IDEUtil
       {
          UISelection<Object> selection = context.getSelection();
          Optional<UIRegion<Object>> region = selection.getRegion();
+         // selection.getRegion() returns only the first region.
+         boolean first = true;
          for (Object singleSelection : selection)
          {
-            openSingleSelection(project, singleSelection, region);
+            openSingleSelection(project, singleSelection, first ? region : Optional.empty());
+            first = false;
          }
       }
    }
@@ -103,7 +106,7 @@ public class IDEUtil
       {
          FileResource<?> resource = (FileResource<?>) selection;
          File file = resource.getUnderlyingResourceObject();
-         FileEditor[] fileEditors = openFile(project, file);
+         openFile(project, file);
          region.ifPresent(r ->
          {
             Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
