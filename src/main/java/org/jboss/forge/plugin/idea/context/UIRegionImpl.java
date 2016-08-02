@@ -25,13 +25,6 @@ public class UIRegionImpl implements UIRegion<Resource<?>>
    private final Document document;
    private final SelectionModel selectionModel;
 
-   public UIRegionImpl(Resource<?> resource)
-   {
-      this.resource = resource;
-      this.document = null;
-      this.selectionModel = null;
-   }
-
    public UIRegionImpl(Resource<?> resource, Document document, SelectionModel selectionModel)
    {
       this.resource = resource;
