@@ -48,5 +48,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
+        <moduleType id="Forge_Module" implementationClass="org.jboss.forge.plugin.idea.module.ForgeProjectModuleType"/>
+        <moduleConfigurationEditorProvider implementation="org.jboss.forge.plugin.idea.module.ForgeProjectConfigurationProvider"/>
     </extensions>
 </idea-plugin>
