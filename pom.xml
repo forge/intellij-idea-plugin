@@ -3,7 +3,7 @@
    <parent>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-parent</artifactId>
-      <version>20</version>
+      <version>26</version>
    </parent>
 
    <groupId>org.jboss.forge</groupId>
@@ -18,8 +18,8 @@
       <maven.compiler.target>1.8</maven.compiler.target>
       <maven.compiler.source>1.8</maven.compiler.source>
       <idea.version>2016.1.1</idea.version>
-      <furnace.version>2.26.2.Final</furnace.version>
-      <forge.version>3.7.2.Final</forge.version>
+      <furnace.version>2.28.1.Final</furnace.version>
+      <forge.version>3.9.0.Final</forge.version>
       <angularjs.version>2.1.7.Final</angularjs.version>
 
       <ij.plugin>true</ij.plugin>
