@@ -11,7 +11,8 @@ import java.awt.*;
 import java.util.List;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopup;
@@ -34,14 +35,14 @@ public class CommandListPopupCallBack implements Runnable
 
    public CommandListPopupCallBack(AnActionEvent event)
    {
-      this.project = event.getData(DataKeys.PROJECT);
-      this.editor = event.getData(DataKeys.EDITOR);
-      this.component = event.getData(DataKeys.CONTEXT_COMPONENT);
-      VirtualFile[] files = event.getData(DataKeys.VIRTUAL_FILE_ARRAY);
+      this.project = event.getData(CommonDataKeys.PROJECT);
+      this.editor = event.getData(CommonDataKeys.EDITOR);
+      this.component = event.getData(PlatformDataKeys.CONTEXT_COMPONENT);
+      VirtualFile[] files = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
       // If no file is selected, then set project directory as selection
       if (files == null || files.length == 0)
       {
-         files = new VirtualFile[] { event.getData(DataKeys.PROJECT_FILE_DIRECTORY) };
+         files = new VirtualFile[] { event.getData(PlatformDataKeys.PROJECT_FILE_DIRECTORY) };
       }
       this.selectedFiles = files;
    }
