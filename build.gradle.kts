@@ -102,12 +102,12 @@ tasks {
         }
     }
 
-    prepareSandbox {
-        dependsOn("extractAddons")
-        from("$buildDir/$addonsDir"){
-            into("$pluginName/$addonsDir")
-        }
-    }
+//    prepareSandbox {
+//        dependsOn("extractAddons")
+//        from("$buildDir/$addonsDir"){
+//            into("$pluginName/$addonsDir")
+//        }
+//    }
 
     patchPluginXml {
         version(pluginVersion)
