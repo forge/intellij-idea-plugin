@@ -9,6 +9,15 @@ package org.jboss.forge.plugin.idea.service;
 import java.io.File;
 import java.util.concurrent.Future;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.PathManager;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.extensions.PluginId;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
@@ -20,19 +29,7 @@ import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.util.AddonCompatibilityStrategies;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.PathManager;
-import com.intellij.openapi.components.ApplicationComponent;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.extensions.PluginId;
 
 /**
  * This is a singleton for the {@link Furnace} class.
@@ -44,9 +41,9 @@ import com.intellij.openapi.extensions.PluginId;
  * @author Adam Wyłuda
  */
 @State(name = "ForgeConfiguration", storages = {
-         @Storage(id = "other", file = StoragePathMacros.APP_CONFIG + "/other.xml")
+         @Storage("forge.xml")
 })
-public class ForgeService implements ApplicationComponent, PersistentStateComponent<ForgeService.State>
+public class ForgeService implements PersistentStateComponent<ForgeService.State>, Disposable
 {
    private transient Furnace furnace;
    private static final PluginId PLUGIN_ID = PluginId.getId("org.jboss.forge.plugin.idea");
@@ -62,7 +59,7 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
    }
 
    @Override
-   public void initComponent()
+   public void initializeComponent()
    {
       createFurnace();
       initializeAddonRepositories(true);
@@ -71,16 +68,9 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
    }
 
    @Override
-   public void disposeComponent()
+   public void dispose()
    {
       stop();
-   }
-
-   @NotNull
-   @Override
-   public String getComponentName()
-   {
-      return getClass().getSimpleName();
    }
 
    Future<Furnace> startAsync()
@@ -184,15 +174,18 @@ public class ForgeService implements ApplicationComponent, PersistentStateCompon
    public static String getForgeVersion()
    {
       IdeaPluginDescriptor plugin = PluginManager.getPlugin(PLUGIN_ID);
-      String description = plugin.getDescription();
+      String description = plugin.getChangeNotes();
       String version = "(unknown)";
       String str = "Bundled with Forge";
       int bundledIdx = description.indexOf(str);
       if (bundledIdx > -1)
       {
-         version = description.substring(bundledIdx + str.length(),
-                  description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx))
-                  .trim();
+         int endIndex = description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx);
+         if (endIndex == -1)
+         {
+            endIndex = description.length();
+         }
+         version = description.substring(bundledIdx + str.length(), endIndex).trim();
       }
       return version;
    }

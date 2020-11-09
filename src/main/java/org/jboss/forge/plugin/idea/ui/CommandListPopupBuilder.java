@@ -52,7 +52,7 @@ import com.intellij.ui.components.JBList;
  */
 public class CommandListPopupBuilder
 {
-   private static final Icon FORGE_ICON = new ImageIcon(CommandListPopupBuilder.class.getResource("/icons/forge.png"));
+   private static final Icon FORGE_ICON = new ImageIcon(CommandListPopupBuilder.class.getResource("/META-INF/pluginIcon.png"));
    private static volatile boolean active;
 
    private UIContext uiContext;
