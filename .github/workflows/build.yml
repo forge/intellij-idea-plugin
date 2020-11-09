@@ -115,15 +115,15 @@ jobs:
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           VERSION="$(echo "$PROPERTIES" | grep "^version:" | cut -f2- -d ' ')"
           NAME="$(echo "$PROPERTIES" | grep "^pluginName_:" | cut -f2- -d ' ')"
-          #CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
-          #CHANGELOG="${CHANGELOG//'%'/'%25'}"
-          #CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-          #CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          CHANGELOG="$(./gradlew getChangelog --unreleased --no-header --console=plain -q)"
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
           ARTIFACT="${NAME}-${VERSION}.zip"
 
           echo "::set-output name=version::$VERSION"
           echo "::set-output name=name::$NAME"
-          #echo "::set-output name=changelog::$CHANGELOG"
+          echo "::set-output name=changelog::$CHANGELOG"
           echo "::set-output name=artifact::$ARTIFACT"
 
       # Build artifact using buildPlugin Gradle task
