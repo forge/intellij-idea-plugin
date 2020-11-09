@@ -6,6 +6,18 @@
 ### Added
 
 ### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [3.0.0]
+### Added
+
+### Changed
 - Bundled with Forge 3.9.8.Final
 
 ### Deprecated
