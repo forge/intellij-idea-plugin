@@ -174,15 +174,18 @@ public class ForgeService implements PersistentStateComponent<ForgeService.State
    public static String getForgeVersion()
    {
       IdeaPluginDescriptor plugin = PluginManager.getPlugin(PLUGIN_ID);
-      String description = plugin.getDescription();
+      String description = plugin.getChangeNotes();
       String version = "(unknown)";
       String str = "Bundled with Forge";
       int bundledIdx = description.indexOf(str);
       if (bundledIdx > -1)
       {
-         version = description.substring(bundledIdx + str.length(),
-                  description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx))
-                  .trim();
+         int endIndex = description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx);
+         if (endIndex == -1)
+         {
+            endIndex = description.length();
+         }
+         version = description.substring(bundledIdx + str.length(), endIndex).trim();
       }
       return version;
    }
