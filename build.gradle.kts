@@ -60,7 +60,8 @@ dependencies {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName = pluginName_
+    // This creates the plugin using the ID as the base name
+    pluginName = pluginGroup
     version = platformVersion
     type = platformType
     downloadSources = platformDownloadSources.toBoolean()
@@ -84,6 +85,10 @@ tasks {
         into("$buildDir/$addonsDir")
     }
 
+//    buildSearchableOptions {
+//        enabled = false
+//    }
+
     // Set the compatibility versions to 1.8
     withType<JavaCompile> {
         sourceCompatibility = "1.8"
@@ -95,6 +100,13 @@ tasks {
         dependsOn("extractAddons")
         from("$buildDir/$addonsDir"){
             into(addonsDir)
+        }
+    }
+
+    prepareSandbox {
+        dependsOn("extractAddons")
+        from("$buildDir/$addonsDir"){
+            into("$pluginName/$addonsDir")
         }
     }
 
