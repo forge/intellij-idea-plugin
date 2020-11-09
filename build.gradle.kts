@@ -1,10 +1,12 @@
+import org.jetbrains.changelog.closure
+
 plugins {
     // Java support
     id("java")
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "0.6.2"
-//    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-//    id("org.jetbrains.changelog") version "0.6.2"
+    // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
+    id("org.jetbrains.changelog") version "0.6.2"
 }
 
 // Import variables from gradle.properties file
@@ -111,6 +113,12 @@ tasks {
         version(pluginVersion)
         sinceBuild(pluginSinceBuild)
         untilBuild(pluginUntilBuild)
+        // Get the latest available change notes from the changelog file
+        changeNotes(
+                closure {
+                    changelog.getLatest().toHTML()
+                }
+        )
         changeNotes("Bundled with Forge $forgeVersion");
     }
 
@@ -119,6 +127,7 @@ tasks {
     }
 
     publishPlugin {
+        dependsOn("patchChangelog")
         token(System.getenv("PUBLISH_TOKEN"))
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
