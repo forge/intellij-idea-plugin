@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.concurrent.Future;
 
 import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManager;
+import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
@@ -173,7 +173,7 @@ public class ForgeService implements PersistentStateComponent<ForgeService.State
     */
    public static String getForgeVersion()
    {
-      IdeaPluginDescriptor plugin = PluginManager.getPlugin(PLUGIN_ID);
+      IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PLUGIN_ID);
       String description = plugin.getChangeNotes();
       String version = "(unknown)";
       String str = "Bundled with Forge";
