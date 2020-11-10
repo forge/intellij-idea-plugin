@@ -7,6 +7,18 @@
 
 ### Changed
 
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [3.1.0]
+### Added
+
+### Changed
+
 - Minimum IntelliJ version is 2020.2
 
 ### Deprecated
