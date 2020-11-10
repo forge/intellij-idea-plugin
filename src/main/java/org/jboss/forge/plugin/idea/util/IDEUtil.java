@@ -60,7 +60,8 @@ public class IDEUtil
    {
       if (!project.isDisposed())
       {
-         project.getBaseDir().refresh(true, true);
+         VirtualFile projectDir = com.intellij.openapi.project.ProjectUtil.guessProjectDir(project);
+         projectDir.refresh(true, true);
       }
    }
 
