@@ -7,12 +7,16 @@
 
 ### Changed
 
+- Minimum IntelliJ version is 2020.2
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
-
+- Forge version resolves against the Forge JARs' MANIFEST.MF
+- Deprecated API usages in Intellij should be resolved now
+ 
 ### Security
 ## [3.0.0]
 ### Added
