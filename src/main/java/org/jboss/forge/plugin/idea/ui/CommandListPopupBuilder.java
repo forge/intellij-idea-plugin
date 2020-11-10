@@ -32,7 +32,7 @@ import org.jboss.forge.plugin.idea.context.UIContextImpl;
 import org.jboss.forge.plugin.idea.runtime.UIProgressMonitorImpl;
 import org.jboss.forge.plugin.idea.runtime.UIRuntimeImpl;
 import org.jboss.forge.plugin.idea.service.ForgeService;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeCommandTask;
 import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
@@ -183,9 +183,9 @@ public class CommandListPopupBuilder
                .getNewCommandByName(uiContext, name);
 
       // Since wizard will be able to modify Command state, the cache should be invalidated
-      PluginService.getInstance().invalidateAndReloadCommands(uiContext);
+      RecentCommandsPreloadingActivity.getInstance().invalidateAndReloadCommands(uiContext);
 
-      PluginService.getInstance().addRecentCommand(command, uiContext);
+      RecentCommandsPreloadingActivity.getInstance().addRecentCommand(command, uiContext);
 
       UIProgressMonitor monitor = new UIProgressMonitorImpl();
 

@@ -17,7 +17,7 @@ import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 public class PasswordComponentBuilder extends ComponentBuilder
@@ -46,7 +46,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                {
                   if (!settingValue)
                   {
-                     PluginService.getInstance().submitFormUpdate(
+                     RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                               new FormUpdateCallback(converterFactory, input,
                                        new String(component.getPassword()), valueChangeListener));
                   }
@@ -57,7 +57,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                {
                   if (!settingValue)
                   {
-                     PluginService.getInstance().submitFormUpdate(
+                     RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                               new FormUpdateCallback(converterFactory, input,
                                        new String(component.getPassword()), valueChangeListener));
                   }
@@ -66,7 +66,7 @@ public class PasswordComponentBuilder extends ComponentBuilder
                @Override
                public void changedUpdate(DocumentEvent e)
                {
-                  PluginService.getInstance().submitFormUpdate(
+                  RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                            new FormUpdateCallback(converterFactory, input,
                                     new String(component.getPassword()), valueChangeListener));
                }

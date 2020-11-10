@@ -11,12 +11,13 @@ import java.util.concurrent.Semaphore;
 
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.util.CommandUtil;
 
 /**
  * Asynchronously loads command list. <p/>
  *
- * Use {@link org.jboss.forge.plugin.idea.service.PluginService} to access command cache.
+ * Use {@link RecentCommandsPreloadingActivity} to access command cache.
  *
  * @author Adam Wyłuda
  */

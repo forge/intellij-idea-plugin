@@ -10,8 +10,6 @@ import java.awt.Container;
 
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -19,7 +17,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 /**
@@ -49,7 +47,7 @@ public class SpinnerComponentBuilder extends ComponentBuilder
 
             spinner.addChangeListener(e -> {
                Object selectedItem = spinner.getValue();
-               PluginService.getInstance().submitFormUpdate(
+               RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                         new FormUpdateCallback(converterFactory, input,
                                  selectedItem, valueChangeListener));
             });

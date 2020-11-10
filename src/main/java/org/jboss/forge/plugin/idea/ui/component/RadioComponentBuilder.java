@@ -8,8 +8,6 @@ package org.jboss.forge.plugin.idea.ui.component;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +22,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 import net.miginfocom.swing.MigLayout;
@@ -84,7 +82,7 @@ public class RadioComponentBuilder extends ComponentBuilder
                radio.setText(label);
                radio.setSelected(label.equals(value));
 
-               radio.addActionListener(e -> PluginService.getInstance().submitFormUpdate(
+               radio.addActionListener(e -> RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                         new FormUpdateCallback(converterFactory, input,
                                  label, valueChangeListener)));
 

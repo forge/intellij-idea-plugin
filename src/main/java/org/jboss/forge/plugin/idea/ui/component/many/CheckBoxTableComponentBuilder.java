@@ -26,7 +26,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.ui.component.ComponentBuilder;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
@@ -63,7 +63,7 @@ public class CheckBoxTableComponentBuilder extends ComponentBuilder
                @Override
                public void checkBoxSelectionChanged(int index, boolean value)
                {
-                  PluginService.getInstance().submitFormUpdate(
+                  RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                            new FormUpdateCallback(converterFactory, inputMany, getValue(),
                                     valueChangeListener));
                }

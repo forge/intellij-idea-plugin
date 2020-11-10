@@ -7,8 +7,6 @@
 package org.jboss.forge.plugin.idea.ui.component;
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 
@@ -18,7 +16,7 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
 /**
@@ -47,7 +45,7 @@ public class CheckboxComponentBuilder extends ComponentBuilder
             checkbox = new JCheckBox(text);
 
             checkbox.addActionListener(e ->
-                    PluginService.getInstance().submitFormUpdate(
+                    RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                      new FormUpdateCallback(converterFactory, input,
                               checkbox.isSelected(), valueChangeListener)));
 

@@ -17,7 +17,7 @@ import javax.swing.event.ListDataListener;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.input.UIInputMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.ui.component.ForgeComponent;
 import org.jetbrains.annotations.Nullable;
@@ -89,7 +89,7 @@ public abstract class ListComponent extends ForgeComponent
    {
       if (!settingValue)
       {
-         PluginService.getInstance().submitFormUpdate(
+         RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                   new FormUpdateCallback(converterFactory, input, panel.getValue(), valueChangeListener));
       }
    }

@@ -9,6 +9,8 @@ package org.jboss.forge.plugin.idea.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.intellij.openapi.application.PreloadingActivity;
+import com.intellij.openapi.progress.ProgressIndicator;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
@@ -20,14 +22,13 @@ import org.jboss.forge.plugin.idea.util.CommandUtil;
 import org.jetbrains.annotations.NotNull;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ApplicationComponent;
 
 /**
  * Maintains plugin state.
  *
  * @author Adam Wyłuda
  */
-public class PluginService implements ApplicationComponent
+public class RecentCommandsPreloadingActivity extends PreloadingActivity
 {
    private static final int RECENT_COMMANDS_LIMIT = 3;
 
@@ -35,32 +36,20 @@ public class PluginService implements ApplicationComponent
    private ValidationThread validationThread = new ValidationThread();
    private CommandLoadingThread commandLoadingThread = new CommandLoadingThread();
 
-   PluginService()
+   RecentCommandsPreloadingActivity()
    {
    }
 
-   public static PluginService getInstance()
+   public static RecentCommandsPreloadingActivity getInstance()
    {
-      return ApplicationManager.getApplication().getComponent(PluginService.class);
+      return ApplicationManager.getApplication().getComponent(RecentCommandsPreloadingActivity.class);
    }
 
    @Override
-   public void initComponent()
+   public void preload(@NotNull ProgressIndicator indicator)
    {
       validationThread.start();
       commandLoadingThread.start();
-   }
-
-   @Override
-   public void disposeComponent()
-   {
-   }
-
-   @NotNull
-   @Override
-   public String getComponentName()
-   {
-      return getClass().getSimpleName();
    }
 
    public synchronized void addRecentCommand(UICommand command, UIContext context)

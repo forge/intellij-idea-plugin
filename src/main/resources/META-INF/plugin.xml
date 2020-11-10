@@ -25,7 +25,7 @@
             <implementation-class>org.jboss.forge.plugin.idea.service.ForgeService</implementation-class>
         </component>
         <component>
-            <implementation-class>org.jboss.forge.plugin.idea.service.PluginService</implementation-class>
+            <implementation-class>org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity</implementation-class>
         </component>
     </application-components>
 
@@ -39,5 +39,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
+        <preloadingActivity implementation="org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity"/>
     </extensions>
 </idea-plugin>

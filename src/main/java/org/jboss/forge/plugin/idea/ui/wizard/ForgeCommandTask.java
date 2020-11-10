@@ -11,7 +11,7 @@ import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.plugin.idea.runtime.UIProgressMonitorImpl;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 import org.jboss.forge.plugin.idea.util.IDEUtil;
 import org.jetbrains.annotations.NotNull;
@@ -78,7 +78,7 @@ public class ForgeCommandTask extends Task.Backgroundable
          }
 
          // This command could enable/disable some commands, so the list should be reloaded
-         PluginService.getInstance().reloadCommands(context);
+         RecentCommandsPreloadingActivity.getInstance().reloadCommands(context);
       }
 
       monitor.done();

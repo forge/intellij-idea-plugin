@@ -20,7 +20,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.plugin.idea.context.UIContextFactory;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.ui.CommandListPopupBuilder;
 
 /**
@@ -52,12 +52,12 @@ public class CommandListPopupCallBack implements Runnable
    {
       UIContext uiContext = UIContextFactory.create(project, editor, selectedFiles);
 
-      List<UICommand> candidates = PluginService.getInstance().getEnabledCommands(uiContext);
+      List<UICommand> candidates = RecentCommandsPreloadingActivity.getInstance().getEnabledCommands(uiContext);
 
       JBPopup list = new CommandListPopupBuilder()
                .setUIContext(uiContext)
                .setCommands(candidates)
-               .setRecentCommands(PluginService.getInstance().getRecentCommands(candidates, uiContext))
+               .setRecentCommands(RecentCommandsPreloadingActivity.getInstance().getRecentCommands(candidates, uiContext))
                .build();
 
       if (project != null)

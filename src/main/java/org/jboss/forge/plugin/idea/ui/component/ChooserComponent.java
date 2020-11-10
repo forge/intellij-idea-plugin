@@ -14,7 +14,7 @@ import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.plugin.idea.service.PluginService;
+import org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity;
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 import org.jboss.forge.plugin.idea.util.CompletionUtil;
 
@@ -67,7 +67,7 @@ public abstract class ChooserComponent extends ForgeComponent
          @Override
          public void documentChanged(DocumentEvent event)
          {
-            PluginService.getInstance().submitFormUpdate(
+            RecentCommandsPreloadingActivity.getInstance().submitFormUpdate(
                      new FormUpdateCallback(converterFactory, input, getValue(), valueChangeListener));
          }
       });
