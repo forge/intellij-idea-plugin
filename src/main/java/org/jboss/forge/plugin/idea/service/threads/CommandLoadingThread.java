@@ -64,7 +64,7 @@ public class CommandLoadingThread extends Thread
     @Override
     public void run()
     {
-        while (true)
+        while (!isInterrupted())
         {
             try
             {

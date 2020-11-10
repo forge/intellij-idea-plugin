@@ -48,7 +48,7 @@ public class ValidationThread extends Thread
     @Override
     public void run()
     {
-        while (true)
+        while (!isInterrupted())
         {
             try
             {
