@@ -9,8 +9,6 @@ package org.jboss.forge.plugin.idea.service;
 import java.io.File;
 import java.util.concurrent.Future;
 
-import com.intellij.ide.plugins.IdeaPluginDescriptor;
-import com.intellij.ide.plugins.PluginManagerCore;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.PathManager;
@@ -20,6 +18,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.extensions.PluginId;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.command.CommandFactory;
+import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.addons.Addon;
@@ -168,26 +167,9 @@ public class ForgeService implements PersistentStateComponent<ForgeService.State
       }
    }
 
-   /**
-    * Ugly hack. Versions.getImplementationVersionFor does not work here
-    */
    public static String getForgeVersion()
    {
-      IdeaPluginDescriptor plugin = PluginManagerCore.getPlugin(PLUGIN_ID);
-      String description = plugin.getChangeNotes();
-      String version = "(unknown)";
-      String str = "Bundled with Forge";
-      int bundledIdx = description.indexOf(str);
-      if (bundledIdx > -1)
-      {
-         int endIndex = description.indexOf(OperatingSystemUtils.isWindows() ? "\n" : System.lineSeparator(), bundledIdx);
-         if (endIndex == -1)
-         {
-            endIndex = description.length();
-         }
-         version = description.substring(bundledIdx + str.length(), endIndex).trim();
-      }
-      return version;
+      return UICommand.class.getPackage().getImplementationVersion();
    }
 
    @Nullable
