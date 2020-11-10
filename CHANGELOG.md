@@ -13,6 +13,8 @@
 
 ### Fixed
 
+- Fixed deprecated class usages from the IntelliJ API
+
 ### Security
 ## [3.1.0]
 ### Added

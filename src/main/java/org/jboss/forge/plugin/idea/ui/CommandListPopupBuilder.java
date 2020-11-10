@@ -12,6 +12,7 @@ import static org.jboss.forge.plugin.idea.util.CommandUtil.indexFilterData;
 import static org.jboss.forge.plugin.idea.util.CommandUtil.indexMetadata;
 import static org.jboss.forge.plugin.idea.util.CommandUtil.sortCategories;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,11 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JList;
 
+import com.intellij.openapi.ui.popup.JBPopupListener;
+import com.intellij.ui.SimpleListCellRenderer;
+import com.intellij.ui.TitledSeparator;
+import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -38,12 +44,10 @@ import org.jboss.forge.plugin.idea.ui.wizard.ForgeWizardDialog;
 import org.jboss.forge.plugin.idea.util.ForgeNotifications;
 
 import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupAdapter;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBList;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Lists enabled UI commands.
@@ -107,8 +111,31 @@ public class CommandListPopupBuilder
       DefaultListModel<Object> model = new DefaultListModel<>();
       model.setSize(elements.size());
 
-      list.setCellRenderer(new ListCellRendererWrapper<Object>()
+      list.setCellRenderer(new SimpleListCellRenderer()
       {
+
+         @Override
+         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                 boolean cellHasFocus)
+         {
+            if (value instanceof String)
+            {
+               return createSeparator((String) value);
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+         }
+
+         private Component createSeparator(@Nullable String text)
+         {
+            TitledSeparator separator = new TitledSeparator(text);
+            separator.setBorder(JBUI.Borders.emptyLeft(2));
+            separator.setOpaque(false);
+            separator.setBackground(UIUtil.TRANSPARENT_COLOR);
+            separator.getLabel().setOpaque(false);
+            separator.getLabel().setBackground(UIUtil.TRANSPARENT_COLOR);
+            return separator;
+         }
+
          @SuppressWarnings("rawtypes")
          @Override
          public void customize(JList list, Object data, int index,
@@ -123,13 +150,6 @@ public class CommandListPopupBuilder
 
                setText(metadata.getName());
                setToolTipText(metadata.getDescription());
-            }
-            else if (data instanceof String)
-            {
-               String string = (String) data;
-
-               setText(string);
-               setSeparator();
             }
          }
       });
@@ -146,10 +166,10 @@ public class CommandListPopupBuilder
    private JBPopup buildPopup(final JBList list,
             final Map<Object, String> filterIndex)
    {
-      final PopupChooserBuilder listPopupBuilder = JBPopupFactory.getInstance().createListPopupBuilder(list);
+      final PopupChooserBuilder listPopupBuilder = new PopupChooserBuilder(list);
       listPopupBuilder.setTitle("Run a Forge command");
       listPopupBuilder.setResizable(true);
-      listPopupBuilder.addListener(new JBPopupAdapter()
+      listPopupBuilder.addListener(new JBPopupListener()
       {
          @Override
          public void onClosed(LightweightWindowEvent event)
