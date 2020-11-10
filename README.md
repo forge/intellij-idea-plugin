@@ -31,14 +31,3 @@ This plugin should work with *JDK 8* and above.
 ### Building
 
 This plugin uses Gradle as the build tool and the Intellij Gradle plugin.
-
-### Debugging
-
-To debug the plugin in IntelliJ IDEA, you need to install `Intellij plugin development with Maven` plugin first.
-That will allow you to run a second instance of the IDE, in which you can test and debug the plugin.
-
-After installing this plugin, you can add a plugin run/debug configuration.
-To do that, go to `Run -> Edit Configurations...` and add _Plugin_ configuration.
-
-This configuration should start a new IntelliJ window. In case the plugin is not installed, you will need
-to install it manually in IDE settings and run it again.
