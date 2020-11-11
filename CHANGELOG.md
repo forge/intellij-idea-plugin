@@ -12,8 +12,10 @@
 ### Removed
 
 ### Fixed
+- Changelog is now correctly set inside plugin
 
 ### Security
+
 ## [3.1.1]
 ### Added
 

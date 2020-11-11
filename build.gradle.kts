@@ -102,6 +102,7 @@ tasks {
         }
     }
 
+    // Uncomment this if you're running "gradle runIde"
 //    prepareSandbox {
 //        dependsOn("extractAddons")
 //        from("$buildDir/$addonsDir"){
@@ -119,7 +120,6 @@ tasks {
                     changelog.getLatest().toHTML()
                 }
         )
-        changeNotes("Bundled with Forge $forgeVersion");
     }
 
     runPluginVerifier {
