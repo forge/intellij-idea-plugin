@@ -15,7 +15,7 @@ To show a list of commands press `Ctrl+Alt+4`. On MacOSX, use `Command + Option 
 
 - Manually:
 
-  Download the [latest release](https://github.com/%REPOSITORY%/releases/latest) and install it manually using
+  Download the [latest release](https://github.com/forge/intellij-idea-plugin/releases/latest) and install it manually using
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 ---
