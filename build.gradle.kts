@@ -32,7 +32,6 @@ version = pluginVersion
 // Configure project's dependencies
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
