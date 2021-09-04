@@ -1,5 +1,3 @@
-import org.jetbrains.changelog.closure
-
 fun properties(key: String) = project.findProperty(key).toString()
 
 plugins {
@@ -85,10 +83,6 @@ tasks {
         into("$buildDir/$addonsDir")
     }
 
-//    buildSearchableOptions {
-//        enabled = false
-//    }
-
     // Set the compatibility versions to 11
     withType<JavaCompile> {
         sourceCompatibility = "11"
@@ -109,6 +103,10 @@ tasks {
 //        from("$buildDir/$addonsDir"){
 //            into("$pluginName/$addonsDir")
 //        }
+//    }
+
+//    buildSearchableOptions {
+//        enabled = false
 //    }
 
     patchPluginXml {
