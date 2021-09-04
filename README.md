@@ -31,3 +31,8 @@ This plugin should work with *JDK 8* and above.
 ### Building
 
 This plugin uses Gradle as the build tool and the Intellij Gradle plugin.
+
+### Releasing
+
+The release is performed using GitHub Actions. Once any changes are committed to the master branch, [a changelog and a release draft are created](https://github.com/forge/intellij-idea-plugin/releases).
+Once the release is marked as published, the plugin is published to the [Intellij Plugins repository](https://plugins.jetbrains.com/plugin/7515-jboss-forge-idea-plugin/)
