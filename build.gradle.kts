@@ -1,12 +1,14 @@
 import org.jetbrains.changelog.closure
 
+fun properties(key: String) = project.findProperty(key).toString()
+
 plugins {
     // Java support
     id("java")
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
-    id("org.jetbrains.intellij") version "0.6.2"
+    id("org.jetbrains.intellij") version "1.1.5"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "0.6.2"
+    id("org.jetbrains.changelog") version "1.1.2"
 }
 
 // Import variables from gradle.properties file
@@ -26,8 +28,8 @@ val platformDownloadSources: String by project
 val addons: Configuration by configurations.creating
 val addonsDir by extra("addon-repository")
 
-group = pluginGroup
-version = pluginVersion
+group = properties("pluginGroup")
+version = properties("pluginVersion")
 
 // Configure project's dependencies
 repositories {
@@ -60,13 +62,13 @@ dependencies {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    version = platformVersion
-    type = platformType
-    downloadSources = platformDownloadSources.toBoolean()
-    updateSinceUntilBuild = true
+    version.set(properties("platformVersion"))
+    type.set(properties("platformType"))
+    downloadSources.set(properties("platformDownloadSources").toBoolean())
+    updateSinceUntilBuild.set(true)
 
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    setPlugins(*platformPlugins.split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+    plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }
 
 tasks {
@@ -110,27 +112,23 @@ tasks {
 //    }
 
     patchPluginXml {
-        version(pluginVersion)
-        sinceBuild(pluginSinceBuild)
-//        untilBuild(pluginUntilBuild)
+        version.set(properties("pluginVersion"))
+        sinceBuild.set(properties("pluginSinceBuild"))
+//        untilBuild.set(properties("pluginUntilBuild"))
         // Get the latest available change notes from the changelog file
-        changeNotes(
-                closure {
-                    changelog.getLatest().toHTML()
-                }
-        )
+        changeNotes.set(provider { changelog.getLatest().toHTML() })
     }
 
     runPluginVerifier {
-        ideVersions(pluginVerifierIdeVersions)
+        ideVersions.set(properties("pluginVerifierIdeVersions").split(',').map(String::trim).filter(String::isNotEmpty))
     }
 
     publishPlugin {
         dependsOn("patchChangelog")
-        token(System.getenv("PUBLISH_TOKEN"))
+        token.set(System.getenv("PUBLISH_TOKEN"))
         // pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://jetbrains.org/intellij/sdk/docs/tutorials/build_system/deployment.html#specifying-a-release-channel
-        channels(pluginVersion.split('-').getOrElse(1) { "default" }.split('.').first())
+        channels.set(listOf(properties("pluginVersion").split('-').getOrElse(1) { "default" }.split('.').first()))
     }
 }

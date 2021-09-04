@@ -40,5 +40,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable implementation="org.jboss.forge.plugin.idea.ui.ForgePreferencePage"/>
         <preloadingActivity implementation="org.jboss.forge.plugin.idea.service.RecentCommandsPreloadingActivity"/>
+        <notificationGroup id="Forge Notifications" displayType="BALLOON" key="org.jboss.forge.notifications"/>
     </extensions>
+
 </idea-plugin>
