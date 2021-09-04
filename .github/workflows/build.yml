@@ -182,8 +182,6 @@ jobs:
           PROPERTIES="$(./gradlew properties --console=plain -q)"
           IDE_VERSIONS="$(echo "$PROPERTIES" | grep "^pluginVerifierIdeVersions:" | base64)"
 
-          mkdir -p ~/.pluginVerifier/ides
-
           echo "::set-output name=ideVersions::$IDE_VERSIONS"
           echo "::set-output name=pluginVerifierHomeDir::~/.pluginVerifier"
 
@@ -193,6 +191,11 @@ jobs:
         with:
           path: ${{ steps.properties.outputs.pluginVerifierHomeDir }}/ides
           key: ${{ runner.os }}-plugin-verifier-${{ steps.properties.outputs.ideVersions }}
+
+      # Create ~/.pluginVerifier/ides directory
+      - name: Create ~/.pluginVerifier/ides directory
+        shell: bash
+        run: mkdir -p ~/.pluginVerifier/ides
 
       # Run IntelliJ Plugin Verifier action using GitHub Action
       - name: Verify Plugin
