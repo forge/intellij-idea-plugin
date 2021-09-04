@@ -13,7 +13,7 @@ plugins {
 val pluginGroup: String by project
 val pluginVersion: String by project
 val pluginSinceBuild: String by project
-val pluginUntilBuild: String by project
+//val pluginUntilBuild: String by project
 val pluginVerifierIdeVersions: String by project
 
 val forgeVersion: String by project
@@ -112,7 +112,7 @@ tasks {
     patchPluginXml {
         version(pluginVersion)
         sinceBuild(pluginSinceBuild)
-        untilBuild(pluginUntilBuild)
+//        untilBuild(pluginUntilBuild)
         // Get the latest available change notes from the changelog file
         changeNotes(
                 closure {
