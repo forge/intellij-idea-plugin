@@ -12,50 +12,35 @@
 ### Removed
 
 ### Fixed
+
+### Security
+
+## [3.1.4]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
 - Changelog is now correctly set inside plugin
 
 ### Security
 
 ## [3.1.1]
-### Added
-
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
-
 - Fixed deprecated class usages from the IntelliJ API
 
-### Security
 ## [3.1.0]
-### Added
-
 ### Changed
-
 - Minimum IntelliJ version is 2020.2
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Forge version resolves against the Forge JARs' MANIFEST.MF
 - Deprecated API usages in Intellij should be resolved now
- 
-### Security
-## [3.0.0]
-### Added
 
+## [3.0.0]
 ### Changed
 - Bundled with Forge 3.9.8.Final
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
