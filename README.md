@@ -26,7 +26,7 @@ This plugin based on the [IntelliJ Platform Plugin Template][template].
 
 ### JDK Version
 
-This plugin should work with *JDK 8* and above.
+This plugin should work with *JDK 11* and above.
 
 ### Building
 
