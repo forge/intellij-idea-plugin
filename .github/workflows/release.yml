@@ -3,6 +3,7 @@
 
 name: Release
 on:
+  workflow_dispatch:    
   release:
     types: [prereleased, released]
 
