@@ -8,6 +8,7 @@ package org.jboss.forge.plugin.idea.service.threads;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.jboss.forge.plugin.idea.service.callbacks.FormUpdateCallback;
 
@@ -52,7 +53,11 @@ public class ValidationThread extends Thread
         {
             try
             {
-                queue.take().run();
+                FormUpdateCallback callback = queue.poll(1, TimeUnit.SECONDS);
+                if (callback != null)
+                {
+                    callback.run();
+                }
             }
             catch (Exception ex)
             {

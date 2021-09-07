@@ -32,9 +32,11 @@ public class RecentCommandsPreloadingActivity extends PreloadingActivity
 {
    private static final int RECENT_COMMANDS_LIMIT = 3;
 
-   private List<String> recentCommands = new ArrayList<>();
-   private ValidationThread validationThread = new ValidationThread();
-   private CommandLoadingThread commandLoadingThread = new CommandLoadingThread();
+   private List<String> recentCommands;
+   private ValidationThread validationThread;
+   private CommandLoadingThread commandLoadingThread;
+
+   private boolean initialized;
 
    RecentCommandsPreloadingActivity()
    {
@@ -42,14 +44,31 @@ public class RecentCommandsPreloadingActivity extends PreloadingActivity
 
    public static RecentCommandsPreloadingActivity getInstance()
    {
-      return ApplicationManager.getApplication().getComponent(RecentCommandsPreloadingActivity.class);
+      RecentCommandsPreloadingActivity component = ApplicationManager.getApplication()
+              .getComponent(RecentCommandsPreloadingActivity.class);
+      if (!component.initialized) {
+         component.init();
+      }
+      return component;
    }
 
    @Override
    public void preload(@NotNull ProgressIndicator indicator)
    {
+      //FIXME: This class is instantiated twice, therefore you can't assume it will be a singleton.
+      // This class needs to be renamed or be declared as a different plugin service type
+      // see https://plugins.jetbrains.com/docs/intellij/plugin-services.html
+      // and https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html
+   }
+
+   private void init() {
+      recentCommands = new ArrayList<>();
+      validationThread = new ValidationThread();
+      commandLoadingThread = new CommandLoadingThread();
+
       validationThread.start();
       commandLoadingThread.start();
+      initialized = true;
    }
 
    public synchronized void addRecentCommand(UICommand command, UIContext context)

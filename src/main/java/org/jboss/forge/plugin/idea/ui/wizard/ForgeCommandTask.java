@@ -44,6 +44,7 @@ public class ForgeCommandTask extends Task.Backgroundable
    @Override
    public void run(@NotNull ProgressIndicator indicator)
    {
+      indicator.setIndeterminate(false);
       ((UIProgressMonitorImpl) this.monitor).setIndicator(indicator);
       indicator.setFraction(0.0);
 
