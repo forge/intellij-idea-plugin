@@ -3,12 +3,6 @@
 # JBoss Forge IDEA Plugin Changelog
 
 ## [Unreleased]
-
-### Fixed
-- Validation messages are now displayed again
-- Finish button wasn't enabled in wizards due to a behavior change in recent IDEA versions
-
-## [3.1.4]
 ### Added
 
 ### Changed
@@ -18,9 +12,17 @@
 ### Removed
 
 ### Fixed
-- Changelog is now correctly set inside plugin
 
 ### Security
+
+## [3.1.5]
+### Fixed
+- Validation messages are now displayed again
+- Finish button wasn't enabled in wizards due to a behavior change in recent IDEA versions
+
+## [3.1.4]
+### Fixed
+- Changelog is now correctly set inside plugin
 
 ## [3.1.1]
 ### Fixed
