@@ -54,6 +54,7 @@ public class ServiceHelper
         {
             public void run(ProgressIndicator indicator)
             {
+                indicator.setIndeterminate(false);
                 indicator.setText("Loading JBoss Forge "+ ForgeService.getForgeVersion());
                 indicator.setFraction(0.0);
                 try
