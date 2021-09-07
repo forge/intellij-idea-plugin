@@ -101,7 +101,7 @@ tasks {
 //    prepareSandbox {
 //        dependsOn("extractAddons")
 //        from("$buildDir/$addonsDir"){
-//            into("$pluginName/$addonsDir")
+//            into("${pluginName.get()}/$addonsDir")
 //        }
 //    }
 
