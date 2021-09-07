@@ -24,15 +24,13 @@ public class ForgeNotifications
 {
    private ForgeNotifications(){}
    
-   private static final NotificationGroup NOTIFICATION_GROUP = NotificationGroupManager.getInstance().getNotificationGroup("Forge Notifications");
-
    private static final String SUCCESS_MESSAGE = "Command executed successfully";
    private static final String FAILURE_MESSAGE = "Command execution failed";
 
    public static void showExecutionResult(Result result)
    {
       result = getFirstResult(result);
-      NOTIFICATION_GROUP.createNotification(messageFrom(result), messageTypeOf(result)).notify(null);
+      getNotificationGroup().createNotification(messageFrom(result), messageTypeOf(result)).notify(null);
    }
 
    public static void showErrorMessage(Exception ex)
@@ -41,7 +39,7 @@ public class ForgeNotifications
       {
          String message = ex.getMessage();
          message = message != null ? message : ex.getClass().getCanonicalName();
-         NOTIFICATION_GROUP.createNotification(message, MessageType.ERROR).notify(null);
+         getNotificationGroup().createNotification(message, MessageType.ERROR).notify(null);
       }
       catch (Exception anotherException)
       {
@@ -85,5 +83,10 @@ public class ForgeNotifications
       }
 
       return result;
+   }
+   
+   private static NotificationGroup getNotificationGroup()
+   {
+      return NotificationGroupManager.getInstance().getNotificationGroup("Forge Notifications");
    }
 }
