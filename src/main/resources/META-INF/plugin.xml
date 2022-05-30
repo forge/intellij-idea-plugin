@@ -15,7 +15,7 @@
       </p>
       <p>
           Press <b>Ctrl+Alt+4</b> to show Forge commands. On MacOSX, use <b>Command + Option + 4</b>.<br/>
-          Requires JDK1.8+ to run.<br/>
+          Requires JDK11+ to run.<br/>
       </p>
       ]]></description>
 
