@@ -14,7 +14,14 @@
 ## JBIJPPTPL
 
 name: Build
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+    - master
+  push:
+    branches:
+    - master
+
 jobs:
 
   # Run Gradle Wrapper Validation Action to verify the wrapper's checksum
