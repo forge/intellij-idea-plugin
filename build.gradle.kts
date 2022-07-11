@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
     implementation(enforcedPlatform("org.jboss.forge:forge-bom:${forgeVersion}"))
-    implementation("com.miglayout:miglayout-swing:4.2")
+    implementation("com.miglayout:miglayout-swing:11.0")
     implementation("org.jboss.logmanager:jboss-logmanager:1.4.1.Final")
     implementation("org.jboss.forge.furnace:furnace-se")
     implementation("org.jboss.forge.addon:facets-api")
