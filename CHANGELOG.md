@@ -15,7 +15,7 @@
 
 ### Security
 
-## [3.2.0]
+## [3.2.1]
 ### Added
 
 ### Changed
@@ -27,6 +27,8 @@
 ### Fixed
 
 ### Security
+
+## [3.2.0]
 
 ## [3.1.5]
 ### Fixed
