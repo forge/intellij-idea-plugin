@@ -15,6 +15,19 @@
 
 ### Security
 
+## [3.2.0]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
 ## [3.1.5]
 ### Fixed
 - Validation messages are now displayed again
